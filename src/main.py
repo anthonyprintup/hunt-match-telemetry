@@ -19,7 +19,7 @@ TEAM_HASHES: list[int] = []
 def main():
     # Setup logging
     logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
-                        datefmt="%H:%M", level=logging.DEBUG, stream=sys.stdout)
+                        datefmt="%H:%M", level=logging.INFO, stream=sys.stdout)
 
     # Locate the attributes file
     attributes_path: str = find_hunt_attributes_path()
