@@ -1,6 +1,10 @@
 # Hunt MMR
 This tool is intended to be used for automatically logging match data provided by the game.
 
+# Installation
+- Clone the repository (preferably to a new Python 3.10 virtual environment),
+- run `pip install -r requirements.txt` from the root directory.
+
 # Instructions
 - Start the Python script (main.py),
 - join a match from the game,
