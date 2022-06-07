@@ -125,7 +125,7 @@ def log_player_data(teams: tuple[Team]):
         steam_username: str = fetch_steam_username()
         user = next(filter(lambda player: player.name == steam_username, players), None)
     except RuntimeError as exception:
-        logging.warning("Failed to locate the user by their profile id.")
+        logging.warning("Failed to locate the user by their username.")
         logging.debug(f"Failed to fetch the user's Steam username: {exception=}")
 
     if user:
