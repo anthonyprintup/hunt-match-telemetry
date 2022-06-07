@@ -8,10 +8,10 @@ from datetime import datetime
 
 from colorama import Fore, Style
 
-from src.hunt.utilities.hunt import find_hunt_attributes_path, format_mmr
+from src.hunt.utilities.hunt import fetch_hunt_attributes_path, fetch_steam_username, format_mmr
 from src.hunt.utilities.file_watcher import FileWatchdog
 from src.hunt.attributes_parser import ElementTree, Team, Player, parse_teams
-from src.hunt.constants import USER_PROFILE_ID, RESOURCES_PATH
+from src.hunt.constants import RESOURCES_PATH
 
 TEAM_HASHES: list[int] = []
 
@@ -22,7 +22,7 @@ def main():
                         datefmt="%H:%M", level=logging.INFO, stream=sys.stdout)
 
     # Locate the attributes file
-    attributes_path: str = find_hunt_attributes_path()
+    attributes_path: str = fetch_hunt_attributes_path()
     assert os.path.exists(attributes_path), "Attributes file does not exist."
 
     # Set up a file watcher to listen for changes on the attributes file
@@ -119,12 +119,17 @@ def log_player_data(teams: tuple[Team]):
     players: tuple[Player] = tuple(player for team in teams for player in team.players)
     players_killed: tuple[Player] = tuple(filter(lambda player: player.killed_by_me, players))
     players_killed_me: tuple[Player] = tuple(filter(lambda player: player.killed_me, players))
-    user: Player | None = next(filter(lambda player: player.profile_id == USER_PROFILE_ID, players), None)
+
+    user: Player | None = None
+    try:
+        steam_username: str = fetch_steam_username()
+        user = next(filter(lambda player: player.name == steam_username, players), None)
+    except RuntimeError as exception:
+        logging.warning("Failed to locate the user by their profile id.")
+        logging.debug(f"Failed to fetch the user's Steam username: {exception=}")
 
     if user:
         logging.info(f"User MMR: {format_mmr(user.mmr)}")
-    else:
-        logging.warning("Failed to locate the user by their profile id.")
     player: Player
     for player in players_killed_me:
         logging.info(f"  Killed by {Fore.RED}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)})")
