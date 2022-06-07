@@ -6,7 +6,7 @@ This tool is intended to be used for automatically logging match data provided b
 - run `pip install -r requirements.txt` from the root directory.
 
 # Instructions
-- Set your profile id in src/hunt/constants.py (USER_PROFILE_ID),
+- Set your profile id in [src/hunt/constants.py](/src/hunt/constants.py#L4) (USER_PROFILE_ID),
 - start the Python script (main.py),
 - join a match from the game,
 - finish the game (extract, die, etc.),
