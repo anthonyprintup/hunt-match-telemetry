@@ -28,12 +28,15 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
         for player_id in range(number_of_players):
             player_prefix: str = f"MissionBagPlayer_{team_id}_{player_id}"
             name: str = root.find(f"Attr[@name='{player_prefix}_blood_line_name']").attrib["value"]
+            had_wellspring: bool = root.find(f"Attr[@name='{player_prefix}_hadWellspring']").attrib["value"] == "1"
+            had_bounty: bool = root.find(f"Attr[@name='{player_prefix}_hadbounty']").attrib["value"] == "1"
             killed_by_me: bool = root.find(f"Attr[@name='{player_prefix}_killedbyme']").attrib["value"] == "1"
             killed_me: bool = root.find(f"Attr[@name='{player_prefix}_killedme']").attrib["value"] == "1"
             player_mmr: int = int(root.find(f"Attr[@name='{player_prefix}_mmr']").attrib["value"])
             profile_id: int = int(root.find(f"Attr[@name='{player_prefix}_profileid']").attrib["value"])
 
-            players.append(Player(name=name, killed_by_me=killed_by_me, killed_me=killed_me, mmr=player_mmr,
+            players.append(Player(name=name, had_wellspring=had_wellspring, had_bounty=had_bounty,
+                                  killed_by_me=killed_by_me, killed_me=killed_me, mmr=player_mmr,
                                   profile_id=profile_id))
 
         # Guarantee that the expected number of players were parsed
