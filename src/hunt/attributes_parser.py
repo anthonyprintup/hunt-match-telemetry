@@ -11,6 +11,7 @@ def parse_match(root: ElementTree.Element) -> Match:
     Parse the element tree for match data.
     :param root: the root element tree
     :return: a Match object
+    :throws: AttributeError if an expected value is not found
     """
     entries: list[Entry] = []
 
