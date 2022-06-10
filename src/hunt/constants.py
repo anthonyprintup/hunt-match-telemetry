@@ -12,6 +12,5 @@ MMR_RANGES: tuple[int, ...] = (0, 2000, 2300, 2600, 2750, 3000)
 # Database
 DATABASE_PATH: str = os.path.join(RESOURCES_PATH, "match_data.db")
 HASH_TABLE_NAME: str = "match_hashes"
-HASH_COLUMN_NAME: str = "hash"
 CREATE_TABLE_QUERY: str = f"CREATE TABLE if NOT EXISTS {HASH_TABLE_NAME}" \
-                          f"(id INTEGER PRIMARY KEY, {HASH_COLUMN_NAME} varchar(64) NOT NULL)"
+                          f"(id INTEGER PRIMARY KEY, hash varchar(64) NOT NULL, quickplay BOOLEAN NOT NULL)"
