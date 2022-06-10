@@ -1,6 +1,40 @@
 import xml.etree.ElementTree as ElementTree
 from .types.team import Team
 from .types.player import Player
+from .types.match import Match
+from .types.match import Entry
+from .utilities.hunt import fetch_steam_username
+
+
+def parse_match(root: ElementTree.Element) -> Match:
+    """
+    Parse the element tree for match data.
+    :param root: the root element tree
+    :return: a Match object
+    """
+    entries: list[Entry] = []
+
+    # Determine the expected number of entries to iterate over
+    entries_count: int = int(root.find(path="Attr[@name='MissionBagNumEntries']").attrib["value"])
+    for entry_id in range(entries_count):
+        # Parse each entry
+        entry_prefix: str = f"MissionBagEntry_{entry_id}"
+        amount: int = int(root.find(path=f"Attr[@name='{entry_prefix}_amount']").attrib["value"])
+        category: str = root.find(path=f"Attr[@name='{entry_prefix}_category']").attrib["value"]
+        descriptor_name: str = root.find(path=f"Attr[@name='{entry_prefix}_descriptorName']").attrib["value"]
+        descriptor_score: str = root.find(path=f"Attr[@name='{entry_prefix}_descriptorScore']").attrib["value"]
+        descriptor_type: str = root.find(path=f"Attr[@name='{entry_prefix}_descriptorType']").attrib["value"]
+        reward_type: int = int(root.find(path=f"Attr[@name='{entry_prefix}_reward']").attrib["value"])
+        reward_size: int = int(root.find(path=f"Attr[@name='{entry_prefix}_rewardSize']").attrib["value"])
+
+        # Append a new Entry object to the list of entries
+        entries.append(Entry(amount, category,
+                             descriptor_name, descriptor_score, descriptor_type,
+                             reward_type, reward_size))
+
+    hunter_survived: bool = root.find(path="Attr[@name='MissionBagIsHunterDead']").attrib["value"] == "false"
+    is_quickplay: bool = root.find(path="Attr[@name='MissionBagIsQuickPlay']").attrib["value"] == "false"
+    return Match(fetch_steam_username(), hunter_survived, is_quickplay, tuple(entries), parse_teams(root=root))
 
 
 def parse_teams(root: ElementTree.Element) -> tuple[Team]:
@@ -16,7 +50,7 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
     # Determine the expected team count and iterate over the teams
     expected_team_count: int = int(root.find(path="Attr[@name='MissionBagNumTeams']").attrib["value"])
     for team_id in range(expected_team_count):
-        # Parse each team's properties
+        # Parse each team
         team_prefix: str = f"MissionBagTeam_{team_id}"
         randoms: bool = root.find(f"Attr[@name='{team_prefix}_isinvite']").attrib["value"] == "false"
         team_mmr: int = int(root.find(f"Attr[@name='{team_prefix}_mmr']").attrib["value"])
@@ -35,12 +69,11 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
             player_mmr: int = int(root.find(f"Attr[@name='{player_prefix}_mmr']").attrib["value"])
             profile_id: int = int(root.find(f"Attr[@name='{player_prefix}_profileid']").attrib["value"])
 
-            players.append(Player(name=name, had_wellspring=had_wellspring, had_bounty=had_bounty,
-                                  killed_by_me=killed_by_me, killed_me=killed_me, mmr=player_mmr,
-                                  profile_id=profile_id))
+            # Append a new Player object to the list of players
+            players.append(Player(name, had_wellspring, had_bounty, killed_by_me, killed_me, player_mmr, profile_id))
 
         # Guarantee that the expected number of players were parsed
         assert len(players) == number_of_players, "Mismatch between the number of parsed players and the expected " \
                                                   "number of players. "
-        teams.append(Team(randoms=randoms, mmr=team_mmr, own_team=own_team, players=tuple(players)))
+        teams.append(Team(randoms, team_mmr, own_team, tuple(players)))
     return tuple(teams)
