@@ -13,7 +13,7 @@ class Database:
 
     def __post_init__(self):
         """Setup the database connection."""
-        self._connection = sqlite3.connect(f"file:{self.file_path}", uri=True)
+        self._connection = sqlite3.connect(f"file:{self.file_path}", check_same_thread=False, uri=True)
         self._setup_database()
 
     def _setup_database(self):
