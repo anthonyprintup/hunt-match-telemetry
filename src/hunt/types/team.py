@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from .player import Player
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class Team:
     randoms: bool
     mmr: int
