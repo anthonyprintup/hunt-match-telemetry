@@ -34,7 +34,7 @@ def parse_match(root: ElementTree.Element) -> Match:
                              reward_type, reward_size))
 
     hunter_survived: bool = root.find(path="Attr[@name='MissionBagIsHunterDead']").attrib["value"] == "false"
-    is_quickplay: bool = root.find(path="Attr[@name='MissionBagIsQuickPlay']").attrib["value"] == "false"
+    is_quickplay: bool = root.find(path="Attr[@name='MissionBagIsQuickPlay']").attrib["value"] == "true"
     return Match(fetch_steam_username(), hunter_survived, is_quickplay, tuple(entries), parse_teams(root=root))
 
 
