@@ -12,6 +12,7 @@ def parse_match(root: ElementTree.Element) -> Match:
     :param root: the root element tree
     :return: a Match object
     :throws: AttributeError if an expected value is not found
+    :throws: AssertionError if an unexpected amount of players was parsed
     """
     entries: list[Entry] = []
 
