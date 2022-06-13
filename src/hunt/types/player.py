@@ -10,3 +10,5 @@ class Player:
     killed_me: int
     mmr: int
     profile_id: int
+    used_proximity_chat: bool
+    is_skillbased: bool

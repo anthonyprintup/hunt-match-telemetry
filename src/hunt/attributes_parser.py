@@ -64,15 +64,18 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
         for player_id in range(number_of_players):
             player_prefix: str = f"MissionBagPlayer_{team_id}_{player_id}"
             name: str = root.find(f"Attr[@name='{player_prefix}_blood_line_name']").attrib["value"]
-            had_wellspring: bool = root.find(f"Attr[@name='{player_prefix}_hadWellspring']").attrib["value"] == "1"
-            had_bounty: bool = root.find(f"Attr[@name='{player_prefix}_hadbounty']").attrib["value"] == "1"
+            had_wellspring: bool = root.find(f"Attr[@name='{player_prefix}_hadWellspring']").attrib["value"] == "true"
+            had_bounty: bool = root.find(f"Attr[@name='{player_prefix}_hadbounty']").attrib["value"] == "true"
             killed_by_me: int = int(root.find(f"Attr[@name='{player_prefix}_killedbyme']").attrib["value"])
             killed_me: int = int(root.find(f"Attr[@name='{player_prefix}_killedme']").attrib["value"])
             player_mmr: int = int(root.find(f"Attr[@name='{player_prefix}_mmr']").attrib["value"])
             profile_id: int = int(root.find(f"Attr[@name='{player_prefix}_profileid']").attrib["value"])
+            used_proximity_chat: bool = root.find(f"Attr[@name='{player_prefix}_proximity']").attrib["value"] == "true"
+            is_skillbased: bool = root.find(f"Attr[@name='{player_prefix}_skillbased']").attrib["value"] == "true"
 
             # Append a new Player object to the list of players
-            players.append(Player(name, had_wellspring, had_bounty, killed_by_me, killed_me, player_mmr, profile_id))
+            players.append(Player(name, had_wellspring, had_bounty, killed_by_me, killed_me, player_mmr, profile_id,
+                                  used_proximity_chat, is_skillbased))
 
         # Guarantee that the expected number of players were parsed
         assert len(players) == number_of_players, "Mismatch between the number of parsed players and the expected " \
