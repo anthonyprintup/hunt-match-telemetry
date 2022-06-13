@@ -39,8 +39,11 @@ class Match:
         if match_hash_exists(database, match_hash=match_hash):
             return True
 
+        # Generate the file path
+        generated_file_path: str = self._generate_file_path()
+
         # Save the hash to the database
-        insert_match_hash(database, match_hash=match_hash, is_quickplay=self.is_quickplay)
+        insert_match_hash(database, match_hash=match_hash, file_path=generated_file_path)
 
         # Update the player log
         player: Player
@@ -48,13 +51,11 @@ class Match:
             update_player_data(database, profile_id=player.profile_id, name=player.name, mmr=player.mmr,
                                times_killed=player.killed_by_me, times_died=player.killed_me)
 
-        # Save the data to a file
-        generated_file_path: str = self._generate_file_path()
-
         # Create the directories
         directory_path: str = os.path.dirname(generated_file_path)
         os.makedirs(name=directory_path, exist_ok=True)
 
+        # Save the data to a file
         with open(self._generate_file_path(), mode="w") as file:
             file.write(match_data)
         return False

@@ -16,17 +16,17 @@ def match_hash_exists(database: Database, match_hash: str) -> bool:
         return cursor.execute(query, (match_hash,)).fetchone()[0] >= 1
 
 
-def insert_match_hash(database: Database, match_hash: str, is_quickplay: bool):
+def insert_match_hash(database: Database, match_hash: str, file_path: str):
     """
     Saves a match hash to the database.
     :param database: a Database instance
     :param match_hash: the hash to save
-    :param is_quickplay: quickplay match indicator
+    :param file_path: the path to the file
     """
     cursor: Cursor
     with closing(database.cursor()) as cursor:
-        query: str = "INSERT INTO match_hashes(hash, is_quickplay) VALUES (?, ?)"
-        cursor.execute(query, (match_hash, is_quickplay))
+        query: str = "INSERT INTO match_hashes(hash, file_path) VALUES (?, ?)"
+        cursor.execute(query, (match_hash, file_path))
     database.save()
 
 
