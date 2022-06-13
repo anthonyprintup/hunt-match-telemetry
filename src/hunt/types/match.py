@@ -2,13 +2,12 @@ import json
 import os.path
 from hashlib import sha256
 from datetime import datetime
-from contextlib import closing
 from dataclasses import dataclass
 
 from .entry import Entry
-from .team import Team
-from ..constants import RESOURCES_PATH, HASH_TABLE_NAME
-from ..utilities.database import Database, Cursor
+from .team import Team, Player
+from ..constants import RESOURCES_PATH
+from ..utilities.database_queries import Database, match_hash_exists, insert_match_hash, update_player_data
 
 
 @dataclass(frozen=True)
@@ -18,20 +17,6 @@ class Match:
     is_quickplay: bool
     entries: tuple[Entry]
     teams: tuple[Team]
-
-    @staticmethod
-    def _hash_exists_in_database(database: Database, match_hash: str) -> bool:
-        cursor: Cursor
-        with closing(database.cursor()) as cursor:
-            query: str = f"SELECT EXISTS(SELECT 1 FROM {HASH_TABLE_NAME} WHERE hash=?)"
-            return cursor.execute(query, (match_hash,)).fetchone()[0] >= 1
-
-    def _save_hash_to_database(self, database: Database, match_hash: str):
-        cursor: Cursor
-        with closing(database.cursor()) as cursor:
-            cursor.execute(f"INSERT INTO {HASH_TABLE_NAME}(hash, quickplay) VALUES (?, ?)",
-                           (match_hash, self.is_quickplay))
-        database.save()
 
     def _generate_file_path(self) -> str:
         now: datetime = datetime.now()
@@ -51,11 +36,17 @@ class Match:
         match_hash: str = sha256(match_data.encode()).hexdigest()
 
         # Check if the hash already exists in the database to prevent duplicates
-        if self._hash_exists_in_database(database, match_hash=match_hash):
+        if match_hash_exists(database, match_hash=match_hash):
             return True
 
         # Save the hash to the database
-        self._save_hash_to_database(database, match_hash=match_hash)
+        insert_match_hash(database, match_hash=match_hash, is_quickplay=self.is_quickplay)
+
+        # Update the player log
+        player: Player
+        for player in (player for team in self.teams for player in team.players):
+            update_player_data(database, profile_id=player.profile_id, name=player.name,
+                               times_killed=player.killed_by_me, times_died=player.killed_me)
 
         # Save the data to a file
         generated_file_path: str = self._generate_file_path()
