@@ -24,6 +24,6 @@ DATABASE_TABLE_QUERIES: tuple[str, ...] = (
     create_table_helper("match_hashes", ("id INTEGER PRIMARY KEY", "hash varchar(64) UNIQUE",
                                          "is_quickplay BOOLEAN NOT NULL")),
     create_table_helper("player_log", ("id INTEGER PRIMARY KEY", "profile_id INTEGER UNIQUE",
-                                       "latest_name varchar(32) NOT NULL", "times_killed INTEGER NOT NULL",
-                                       "times_died INTEGER NOT NULL"))
+                                       "latest_name varchar(32) NOT NULL", "times_killed INTEGER DEFAULT 0 NOT NULL",
+                                       "times_died INTEGER DEFAULT 0 NOT NULL"))
 )

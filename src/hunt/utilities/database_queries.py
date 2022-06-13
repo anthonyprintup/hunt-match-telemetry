@@ -42,8 +42,7 @@ def update_player_data(database: Database, profile_id: int, name: str, times_kil
     cursor: Cursor
     with closing(database.cursor()) as cursor:
         # Insert the data if it doesn't exist
-        insert_query: str = "INSERT OR IGNORE INTO player_log (profile_id, latest_name, times_killed, times_died) " \
-                            "VALUES (?, ?, 0, 0)"
+        insert_query: str = "INSERT OR IGNORE INTO player_log (profile_id, latest_name) VALUES (?, ?)"
         cursor.execute(insert_query, (profile_id, name))
 
         # Increase the times_killed and times_died values
