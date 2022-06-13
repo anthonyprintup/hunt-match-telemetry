@@ -66,8 +66,8 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
             name: str = root.find(f"Attr[@name='{player_prefix}_blood_line_name']").attrib["value"]
             had_wellspring: bool = root.find(f"Attr[@name='{player_prefix}_hadWellspring']").attrib["value"] == "1"
             had_bounty: bool = root.find(f"Attr[@name='{player_prefix}_hadbounty']").attrib["value"] == "1"
-            killed_by_me: bool = root.find(f"Attr[@name='{player_prefix}_killedbyme']").attrib["value"] == "1"
-            killed_me: bool = root.find(f"Attr[@name='{player_prefix}_killedme']").attrib["value"] == "1"
+            killed_by_me: int = int(root.find(f"Attr[@name='{player_prefix}_killedbyme']").attrib["value"])
+            killed_me: int = int(root.find(f"Attr[@name='{player_prefix}_killedme']").attrib["value"])
             player_mmr: int = int(root.find(f"Attr[@name='{player_prefix}_mmr']").attrib["value"])
             profile_id: int = int(root.find(f"Attr[@name='{player_prefix}_profileid']").attrib["value"])
 
