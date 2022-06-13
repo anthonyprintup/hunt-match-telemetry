@@ -12,6 +12,18 @@ MMR_RANGES: tuple[int, ...] = (0, 2000, 2300, 2600, 2750, 3000)
 
 # Database
 DATABASE_PATH: str = os.path.join(RESOURCES_PATH, "match_data.db")
-HASH_TABLE_NAME: str = "match_hashes"
-CREATE_TABLE_QUERY: str = f"CREATE TABLE if NOT EXISTS {HASH_TABLE_NAME}" \
-                          f"(id INTEGER PRIMARY KEY, hash varchar(64) NOT NULL, quickplay BOOLEAN NOT NULL)"
+
+
+# Helper function to generate create table queries
+def create_table_helper(table_name: str, fields: tuple[str, ...]) -> str:
+    return f"CREATE TABLE IF NOT EXISTS {table_name} ({', '.join(fields)})"
+
+
+# Tables
+DATABASE_TABLE_QUERIES: tuple[str, ...] = (
+    create_table_helper("match_hashes", ("id INTEGER PRIMARY KEY", "hash varchar(64) UNIQUE",
+                                         "is_quickplay BOOLEAN NOT NULL")),
+    create_table_helper("player_log", ("id INTEGER PRIMARY KEY", "profile_id INTEGER UNIQUE",
+                                       "latest_name varchar(32) NOT NULL", "times_killed INTEGER NOT NULL",
+                                       "times_died INTEGER NOT NULL"))
+)
