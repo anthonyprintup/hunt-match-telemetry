@@ -29,6 +29,9 @@ def main():
         file_watchdog: FileWatchdog = FileWatchdog(file_path=attributes_path,
                                                    callback=partial(attributes_file_modified, database=database))
         file_watchdog.start()
+
+        # Inform the user that the program has started
+        logging.info("Watching for matches, good luck and have fun!")
         try:
             while True:
                 time.sleep(1)
