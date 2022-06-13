@@ -12,15 +12,21 @@ This tool is intended to be used for automatically logging match data provided b
 - return to the lobby screen (or any UI element that updates the last match information).
 
 # Screenshots
+<!--suppress CheckImageSize, HtmlDeprecatedAttribute -->
 <p align="center">
     Console log:
     <br/>
-    <img alt="IAT Scan" src="/assets/console_log_example.png">
+    <img alt="Console Log" src="./assets/console_log_example.png" />
 </p>
 <p align="center">
     Match log:
     <br/>
-    <img alt="IAT Scan" src="/assets/match_log_example.png">
+    <img alt="Match Log" src="./assets/match_log_example.png" />
+</p>
+<p align="center">
+    Player log:
+    <br/>
+    <img alt="Player Log" src="./assets/player_log_example.png" width="715"/>
 </p>
 
 # Notice of Non-Affiliation and Disclaimer
