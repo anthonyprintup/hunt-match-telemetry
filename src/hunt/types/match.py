@@ -45,7 +45,7 @@ class Match:
         # Update the player log
         player: Player
         for player in (player for team in self.teams for player in team.players):
-            update_player_data(database, profile_id=player.profile_id, name=player.name,
+            update_player_data(database, profile_id=player.profile_id, name=player.name, mmr=player.mmr,
                                times_killed=player.killed_by_me, times_died=player.killed_me)
 
         # Save the data to a file

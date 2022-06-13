@@ -30,11 +30,12 @@ def insert_match_hash(database: Database, match_hash: str, is_quickplay: bool):
     database.save()
 
 
-def update_player_data(database: Database, profile_id: int, name: str, times_killed: int, times_died: int):
+def update_player_data(database: Database, profile_id: int, name: str, mmr: int, times_killed: int, times_died: int):
     """
     Inserts and updates a player's data in the database.
     :param database: a Database instance
     :param profile_id: the profile id of the player
+    :param mmr: the current NNR of the player
     :param name: the name of the player
     :param times_killed: the times the player was killed by us
     :param times_died: the times we died to the player
@@ -46,7 +47,7 @@ def update_player_data(database: Database, profile_id: int, name: str, times_kil
         cursor.execute(insert_query, (profile_id, name))
 
         # Increase the times_killed and times_died values
-        update_query: str = "UPDATE player_log SET latest_name = ?, times_killed = times_killed + ?, " \
-                            "times_died = times_died + ? WHERE profile_id = ?"
-        cursor.execute(update_query, (name, times_killed, times_died, profile_id))
+        update_query: str = "UPDATE player_log SET latest_name = ?, latest_mmr = ?, " \
+                            "times_killed = times_killed + ?, times_died = times_died + ? WHERE profile_id = ?"
+        cursor.execute(update_query, (name, mmr, times_killed, times_died, profile_id))
     database.save()
