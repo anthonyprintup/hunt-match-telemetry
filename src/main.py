@@ -97,7 +97,7 @@ def log_player_data(match: Match):
         logging.info(f"  Killed {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){kill_count}")
     for player in players_killed_me:
         death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
-        logging.info(f"  Killed {Fore.RED}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){death_count}")
+        logging.info(f"  Killed by {Fore.RED}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){death_count}")
 
 
 if __name__ == "__main__":
