@@ -3,7 +3,7 @@ from sqlite3 import Connection, Cursor
 from dataclasses import dataclass
 from contextlib import closing
 
-from ..constants import CREATE_TABLE_QUERY
+from ..constants import DATABASE_TABLE_QUERIES
 
 
 @dataclass(kw_only=True)
@@ -20,7 +20,10 @@ class Database:
         """Sets up the database by creating the required tables."""
         cursor: Cursor
         with closing(self.cursor()) as cursor:
-            cursor.execute(CREATE_TABLE_QUERY)
+            # Setup each table
+            table: str
+            for table_query in DATABASE_TABLE_QUERIES:
+                cursor.execute(table_query)
         self.save()
 
     def cursor(self) -> Cursor:
