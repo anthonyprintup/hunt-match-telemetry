@@ -1,2 +1,8 @@
 [flake8]
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    assets,
+    resources
 max-line-length = 120
