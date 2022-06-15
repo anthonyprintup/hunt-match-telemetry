@@ -1,10 +1,5 @@
 repos:
-  - repo: local
+  - repo: https://github.com/pycqa/flake8
+    rev: 4.0.1
     hooks:
       - id: flake8
-        name: flake8
-        entry: flake8 src
-        language: system
-        types: [python]
-        stages:
-          - commit
