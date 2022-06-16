@@ -3,7 +3,7 @@ from .types.team import Team
 from .types.player import Player
 from .types.match import Match
 from .types.match import Entry
-from .utilities.hunt import fetch_steam_username
+from .utilities.steam import fetch_steam_username
 
 
 def parse_match(root: ElementTree.Element) -> Match:

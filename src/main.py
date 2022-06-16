@@ -8,7 +8,8 @@ from contextlib import closing
 
 from colorama import Fore, Style
 
-from src.hunt.utilities.hunt import fetch_hunt_attributes_path, format_mmr
+from src.hunt.utilities.steam import fetch_hunt_attributes_path
+from src.hunt.utilities.hunt import format_mmr
 from src.hunt.utilities.file_watcher import FileWatchdog
 from src.hunt.attributes_parser import ElementTree, Match, Player, parse_match
 from src.hunt.constants import DATABASE_PATH
