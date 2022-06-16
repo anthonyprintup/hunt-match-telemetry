@@ -61,7 +61,7 @@ def attributes_file_modified(file_path: str, database: Database):
     # Parse the teams from the attributes file
     try:
         match: Match = parse_match(root=parsed_attributes.getroot())
-    except (AttributeError, AssertionError) as exception:
+    except AttributeError as exception:
         logging.debug(f"Failed to parse the attributes file: {exception=}")
         return
 

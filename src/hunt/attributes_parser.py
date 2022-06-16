@@ -12,7 +12,6 @@ def parse_match(root: ElementTree.Element) -> Match:
     :param root: the root element tree
     :return: a Match object
     :throws: AttributeError if an expected value is not found
-    :throws: AssertionError if an unexpected amount of players was parsed
     """
     entries: list[Entry] = []
 
@@ -45,7 +44,6 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
     :param root: the root element tree
     :return: a tuple of Team objects
     :throws: AttributeError if an expected value is not found
-    :throws: AssertionError if an unexpected amount of players was parsed
     """
     teams: list[Team] = []
 
@@ -77,8 +75,5 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
             players.append(Player(name, had_wellspring, had_bounty, killed_by_me, killed_me, player_mmr, profile_id,
                                   used_proximity_chat, is_skillbased))
 
-        # Guarantee that the expected number of players were parsed
-        assert len(players) == number_of_players, "Mismatch between the number of parsed players and the expected " \
-                                                  "number of players. "
         teams.append(Team(randoms, team_mmr, own_team, tuple(players)))
     return tuple(teams)
