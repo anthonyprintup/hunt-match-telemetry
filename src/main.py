@@ -81,16 +81,13 @@ def log_player_data(match: Match):
     """
     players: Generator = (player for team in match.teams for player in team.players)
 
-    user: Player | None = None
-    try:
-        user = next(filter(lambda player: player.name == match.player_name, players), None)
-    except RuntimeError as exception:
-        logging.warning("Failed to locate the user by their username.")
-        logging.debug(f"Failed to fetch the user's Steam username: {exception=}")
+    user: Player | None = next(filter(lambda player: player.name == match.player_name, players), None)
 
     # Print the user's MMR
     if user:
         logging.info(f"User MMR: {format_mmr(user.mmr)}")
+    else:
+        logging.warning("Failed to locate the user by their username.")
 
     # Print player data
     player: Player
