@@ -1,10 +1,14 @@
 class Error(Exception):
-    """Generic error exception."""
+    """Generic error exceptions."""
+
+
+class UnsupportedPlatformError(Error):
+    """Raised when the platform isn't supported."""
 
 
 class ParserError(Error):
-    """Parser-related exception."""
+    """Parser-related exceptions."""
 
 
 class SteamworksError(Error):
-    """Steamworks API-related exception."""
+    """Steamworks API-related exceptions."""
