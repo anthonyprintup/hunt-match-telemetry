@@ -8,12 +8,13 @@ from contextlib import closing
 
 from colorama import Fore, Style
 
-from src.hunt.utilities.steam import fetch_hunt_attributes_path
+from src.hunt.constants import DATABASE_PATH
+from src.hunt.utilities.steam import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 from src.hunt.utilities.hunt import format_mmr
 from src.hunt.utilities.file_watcher import FileWatchdog
-from src.hunt.attributes_parser import ElementTree, Match, Player, parse_match
-from src.hunt.constants import DATABASE_PATH
 from src.hunt.utilities.database import Database
+from src.hunt.attributes_parser import ElementTree, Match, Player, parse_match
+from src.hunt.exceptions import SteamworksError, ParserError
 
 
 def main():
@@ -21,32 +22,52 @@ def main():
     logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
                         datefmt="%H:%M", level=logging.INFO, stream=sys.stdout)
 
-    # Locate the attributes file
-    attributes_path: str = fetch_hunt_attributes_path()
-    assert os.path.exists(attributes_path), "Attributes file does not exist."
+    # Extract the Steamworks binaries to disk
+    try:
+        steamworks_api_path: str = try_extract_steamworks_binaries()
+    except SteamworksError as exception:
+        logging.critical("Failed to extract the Steamworks binaries, are you missing the Steamworks SDK?")
+        logging.debug(f"Steamworks error: {exception=}")
+        return
 
-    database: Database
-    with closing(Database(file_path=DATABASE_PATH)) as database:
-        # Set up a file watcher to listen for changes on the attributes file
-        file_watchdog: FileWatchdog = FileWatchdog(file_path=attributes_path,
-                                                   callback=partial(attributes_file_modified, database=database))
-        file_watchdog.start()
+    try:
+        # Initialize the Steamworks API
+        steamworks_api: SteamworksApi = SteamworksApi.prepare_and_initialize(api_binary_path=steamworks_api_path)
+        logging.info("Steamworks API initialized.")
 
-        # Inform the user that the program has started
-        logging.info("Watching for matches, good luck and have fun!")
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            # Stop the file watcher if a keyboard interrupt is received
-            file_watchdog.stop()
-        file_watchdog.join()
+        # Locate the attributes file
+        attributes_path: str = fetch_hunt_attributes_path(steamworks_api)
+        assert os.path.exists(attributes_path), "Attributes file does not exist."
 
-    # Signal to the user that we're shutting down
-    logging.info("Shutting down.")
+        database: Database
+        with closing(Database(file_path=DATABASE_PATH)) as database:
+            # Set up a file watcher to listen for changes on the attributes file
+            file_watchdog: FileWatchdog = FileWatchdog(
+                file_path=attributes_path,
+                callback=partial(attributes_file_modified, database=database, steamworks_api=steamworks_api))
+            file_watchdog.start()
+
+            # Inform the user that the program has started
+            logging.info("Watching for matches, good luck and have fun!")
+            try:
+                while True:
+                    time.sleep(1)
+            except KeyboardInterrupt:
+                # Stop the file watcher if a keyboard interrupt is received
+                file_watchdog.stop()
+            file_watchdog.join()
+
+        # Signal to the user that we're shutting down
+        logging.info("Shutting down.")
+    except SteamworksError as exception:
+        logging.critical("A Steamworks API error occurred, is Steam running?")
+        logging.debug(f"Steamworks error: {exception=}")
+    finally:
+        # noinspection PyUnboundLocalVariable
+        steamworks_api.shutdown()
 
 
-def attributes_file_modified(file_path: str, database: Database):
+def attributes_file_modified(file_path: str, database: Database, steamworks_api: SteamworksApi):
     try:
         # Attempt to parse the attributes file;
         #  when the file is being written to by the game
@@ -60,8 +81,11 @@ def attributes_file_modified(file_path: str, database: Database):
 
     # Parse the teams from the attributes file
     try:
-        match: Match = parse_match(root=parsed_attributes.getroot())
-    except AttributeError as exception:
+        match: Match = parse_match(root=parsed_attributes.getroot(), steam_name=steamworks_api.get_persona_name())
+    except SteamworksError as exception:
+        logging.debug(f"Failed to get the user's display name: {exception=}")
+        return
+    except ParserError as exception:
         logging.debug(f"Failed to parse the attributes file: {exception=}")
         return
 
