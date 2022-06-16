@@ -75,23 +75,23 @@ def attributes_file_modified(file_path: str, database: Database):
 
 def log_player_data(match: Match):
     """
-    Logs the user's MMR, the players they were killed by,
-      and the players they killed.
+    Logs the players on the local team, and all enemies that
+      were killed by or killed the local player.
     :param match: a parsed Match instance
     """
-    players: Generator = (player for team in match.teams for player in team.players)
+    teammates: Generator = (player for team in match.teams for player in team.players if team.own_team)
+    enemies: Generator = (player for team in match.teams for player in team.players if not team.own_team)
 
-    user: Player | None = next(filter(lambda player: player.name == match.player_name, players), None)
-
-    # Print the user's MMR
-    if user:
-        logging.info(f"User MMR: {format_mmr(user.mmr)}")
-    else:
-        logging.warning("Failed to locate the user by their username.")
-
-    # Print player data
+    # Log the teammates
+    logging.info("Teammates")
     player: Player
-    for player in players:
+    for player in teammates:
+        local_player_marker: str = " (you)" if player.name == match.player_name else ""
+        logging.info(f"  {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){local_player_marker}")
+
+    # Log the enemies
+    logging.info("Enemies")
+    for player in enemies:
         if player.killed_by_me:
             kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
             logging.info(f"  Killed {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){kill_count}")
