@@ -6,6 +6,11 @@ HUNT_SHOWDOWN_STEAM_ID: int = 594650  # Hunt: Showdown team ID (to locate the ga
 RESOURCES_PATH: str = os.path.realpath(os.path.join(os.path.dirname(__file__), r"../../resources"))
 os.makedirs(name=RESOURCES_PATH, exist_ok=True)  # Create the resource directory if it doesn't exist
 
+# Steam
+STEAMWORKS_BINARIES_PATH: str = os.path.join(RESOURCES_PATH, "steam")
+STEAMWORKS_SDK_PATH: str = os.path.join(STEAMWORKS_BINARIES_PATH, "steamworks_sdk.zip")
+os.makedirs(name=STEAMWORKS_BINARIES_PATH, exist_ok=True)  # Create the bin directory if it doesn't exist
+
 # Formatting
 STAR_SYMBOL: str = "★"
 MMR_RANGES: tuple[int, ...] = (0, 2000, 2300, 2600, 2750, 3000)
