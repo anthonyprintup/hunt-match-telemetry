@@ -83,14 +83,14 @@ def log_player_data(match: Match):
     enemies: Generator = (player for team in match.teams for player in team.players if not team.own_team)
 
     # Log the teammates
-    logging.info("Teammates")
+    logging.info("Teammates:")
     player: Player
     for player in teammates:
         local_player_marker: str = " (you)" if player.name == match.player_name else ""
         logging.info(f"  {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){local_player_marker}")
 
     # Log the enemies
-    logging.info("Enemies")
+    logging.info("Enemies:")
     for player in enemies:
         if player.killed_by_me:
             kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
