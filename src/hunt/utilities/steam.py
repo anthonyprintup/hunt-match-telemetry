@@ -7,7 +7,7 @@ def fetch_hunt_attributes_path() -> str:
     """
     Locates the game's install path and appends the attributes file path to it.
     :return: A path to the attributes file
-    :throws: RuntimeError if the attributes file cannot be found.
+    :raises RuntimeError: if the attributes file cannot be found.
     """
     registry_location: str = fr"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App {HUNT_SHOWDOWN_STEAM_ID}"
     try:
@@ -24,7 +24,7 @@ def fetch_steam_username() -> str:
     """
     Gets the user's Steam username.
     :return: The last game username used by Steam.
-    :throws: RuntimeError if the username cannot be located.
+    :raises RuntimeError: if the username cannot be located.
     """
     try:
         steam_key: HKEYType

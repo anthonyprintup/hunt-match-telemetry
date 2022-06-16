@@ -11,7 +11,8 @@ def parse_match(root: ElementTree.Element) -> Match:
     Parse the element tree for match data.
     :param root: the root element tree
     :return: a Match object
-    :throws: AttributeError if an expected value is not found
+    :raises AttributeError: if an expected value is not found
+    :raises RuntimeError: if fetch_steam_username failed
     """
     entries: list[Entry] = []
 
@@ -43,7 +44,7 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
     Parse the element tree for the available teams.
     :param root: the root element tree
     :return: a tuple of Team objects
-    :throws: AttributeError if an expected value is not found
+    :raises AttributeError: if an expected value is not found
     """
     teams: list[Team] = []
 
