@@ -2,6 +2,7 @@ import sys
 import time
 import os.path
 import logging
+from typing import Generator
 from functools import partial
 from contextlib import closing
 
@@ -77,9 +78,7 @@ def log_player_data(match: Match):
       and the players they killed.
     :param match: a parsed Match instance
     """
-    players: tuple[Player] = tuple(player for team in match.teams for player in team.players)
-    players_killed: tuple[Player] = tuple(filter(lambda player: player.killed_by_me, players))
-    players_killed_me: tuple[Player] = tuple(filter(lambda player: player.killed_me, players))
+    players: Generator = (player for team in match.teams for player in team.players)
 
     user: Player | None = None
     try:
@@ -91,13 +90,16 @@ def log_player_data(match: Match):
     # Print the user's MMR
     if user:
         logging.info(f"User MMR: {format_mmr(user.mmr)}")
+
+    # Print player data
     player: Player
-    for player in players_killed:
-        kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
-        logging.info(f"  Killed {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){kill_count}")
-    for player in players_killed_me:
-        death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
-        logging.info(f"  Died to {Fore.RED}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){death_count}")
+    for player in players:
+        if player.killed_by_me:
+            kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
+            logging.info(f"  Killed {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){kill_count}")
+        if player.killed_me:
+            death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
+            logging.info(f"  Died to {Fore.RED}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){death_count}")
 
 
 if __name__ == "__main__":
