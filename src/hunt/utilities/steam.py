@@ -147,6 +147,7 @@ def generate_api_binary_path() -> str:
     """
     Generates a path to the Steamworks API binary depending on the platform.
     :return: a path to the Steamworks API binary
+    :raises UnsupportedPlatformError: if the current platform isn't supported
     """
     file_name: str
     bits: str = "64" if ctypes.sizeof(void_pointer) == 8 else ""
@@ -168,6 +169,7 @@ def try_extract_steamworks_binaries() -> str:
     Downloads the Steamworks SDK and extracts the API binary to the API path.
     :return: a path to the Steamworks API binary
     :raises SteamworksError: if the Steamworks SDK is missing from disk at STEAMWORKS_SDK_PATH
+    :raises UnsupportedPlatformError: if the current platform isn't supported (generate_api_binary_path)
     """
     # Check if the binary has already been downloaded
     expected_api_binary_path: str = generate_api_binary_path()

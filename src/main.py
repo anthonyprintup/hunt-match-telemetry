@@ -14,7 +14,7 @@ from src.hunt.utilities.database import Database
 from src.hunt.utilities.file_watcher import FileWatchdog
 from src.hunt.utilities.steam import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 from src.hunt.attributes_parser import ElementTree, Match, Player, parse_match
-from src.hunt.exceptions import SteamworksError, ParserError
+from src.hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
 
 
 def main():
@@ -28,6 +28,10 @@ def main():
     except SteamworksError as exception:
         logging.critical("Failed to extract the Steamworks binaries, are you missing the Steamworks SDK?")
         logging.debug(f"Steamworks error: {exception=}")
+        return
+    except UnsupportedPlatformError as exception:
+        logging.critical("The current platform isn't supported.")
+        logging.debug(f"Unsupported platform error: {exception=}")
         return
 
     try:
