@@ -88,10 +88,11 @@ class SteamworksApi:
         install_directory_buffer: char * max_path_size = ctypes.create_string_buffer(max_path_size)
 
         # Invoke SteamAPI_ISteamApps_GetAppInstallDir
-        bytes_written: uint32 = self._api.SteamAPI_ISteamApps_GetAppInstallDir(steam_apps,
-                                                                               AppId_t(HUNT_SHOWDOWN_STEAM_ID),
-                                                                               install_directory_buffer,
-                                                                               len(install_directory_buffer))
+        bytes_written: uint32 = self._api.SteamAPI_ISteamApps_GetAppInstallDir(
+            steam_apps,
+            AppId_t(HUNT_SHOWDOWN_STEAM_ID),
+            install_directory_buffer,
+            len(install_directory_buffer))
         if not bytes_written:
             raise SteamworksError("ISteamApps::GetAppInstallDir returned zero bytes.")
 
