@@ -1,6 +1,6 @@
 import os.path
 
-HUNT_SHOWDOWN_STEAM_ID: int = 594650  # Hunt: Showdown team ID (to locate the game's install path)
+HUNT_SHOWDOWN_STEAM_ID: int = 594650  # Hunt: Showdown Steam ID
 
 # The path (directory) to where match logs are stored
 RESOURCES_PATH: str = os.path.realpath(os.path.join(os.path.dirname(__file__), r"../../resources"))
