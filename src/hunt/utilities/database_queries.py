@@ -48,6 +48,7 @@ def update_player_data(database: Database, profile_id: int, name: str, mmr: int,
 
         # Increase the times_killed and times_died values
         update_query: str = "UPDATE player_log SET latest_name = ?, latest_mmr = ?, " \
-                            "times_killed = times_killed + ?, times_died = times_died + ? WHERE profile_id = ?"
+                            "times_killed = times_killed + ?, times_died = times_died + ?, " \
+                            "times_seen = times_seen + 1 WHERE profile_id = ?"
         cursor.execute(update_query, (name, mmr, times_killed, times_died, profile_id))
     database.save()

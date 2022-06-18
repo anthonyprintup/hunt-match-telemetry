@@ -31,5 +31,6 @@ DATABASE_TABLE_QUERIES: tuple[str, ...] = (
     create_table_helper("player_log", ("id INTEGER PRIMARY KEY", "profile_id INTEGER UNIQUE",
                                        "latest_name varchar(32) NOT NULL", "latest_mmr INTEGER DEFAULT 0 NOT NULL",
                                        "times_killed INTEGER DEFAULT 0 NOT NULL",
-                                       "times_died INTEGER DEFAULT 0 NOT NULL"))
+                                       "times_died INTEGER DEFAULT 0 NOT NULL",
+                                       "times_seen INTEGER DEFAULT 0 NOT NULL"))
 )
