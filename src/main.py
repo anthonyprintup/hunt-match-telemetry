@@ -22,8 +22,8 @@ def main():
     logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
                         datefmt="%H:%M", level=logging.INFO, stream=sys.stdout)
 
-    # Extract the Steamworks binaries to disk
     try:
+        # Extract the Steamworks binaries to disk
         steamworks_api_path: str = try_extract_steamworks_binaries()
     except SteamworksError as exception:
         logging.critical("Failed to extract the Steamworks binaries, are you missing the Steamworks SDK?")
@@ -33,38 +33,40 @@ def main():
     try:
         # Initialize the Steamworks API
         steamworks_api: SteamworksApi = SteamworksApi.prepare_and_initialize(api_binary_path=steamworks_api_path)
-        logging.info("Steamworks API initialized.")
-
-        # Locate the attributes file
-        attributes_path: str = fetch_hunt_attributes_path(steamworks_api)
-        assert os.path.exists(attributes_path), "Attributes file does not exist."
-
-        database: Database
-        with closing(Database(file_path=DATABASE_PATH)) as database:
-            # Set up a file watcher to listen for changes on the attributes file
-            file_watchdog: FileWatchdog = FileWatchdog(
-                file_path=attributes_path,
-                callback=partial(attributes_file_modified, database=database, steamworks_api=steamworks_api))
-            file_watchdog.start()
-
-            # Inform the user that the program has started
-            logging.info("Watching for matches, good luck and have fun!")
-            try:
-                while True:
-                    time.sleep(1)
-            except KeyboardInterrupt:
-                # Stop the file watcher if a keyboard interrupt is received
-                file_watchdog.stop()
-            file_watchdog.join()
-
-        # Signal to the user that we're shutting down
-        logging.info("Shutting down.")
     except SteamworksError as exception:
         logging.critical("A Steamworks API error occurred, is Steam running?")
         logging.debug(f"Steamworks error: {exception=}")
-    finally:
-        # noinspection PyUnboundLocalVariable
-        steamworks_api.shutdown()
+        return
+    else:
+        logging.info("Steamworks API initialized.")
+
+    # Locate the attributes file
+    attributes_path: str = fetch_hunt_attributes_path(steamworks_api)
+    assert os.path.exists(attributes_path), "Attributes file does not exist."
+
+    database: Database
+    with closing(Database(file_path=DATABASE_PATH)) as database:
+        # Set up a file watcher to listen for changes on the attributes file
+        file_watchdog: FileWatchdog = FileWatchdog(
+            file_path=attributes_path,
+            callback=partial(attributes_file_modified, database=database, steamworks_api=steamworks_api))
+        file_watchdog.start()
+
+        # Inform the user that the program has started
+        logging.info("Watching for matches, good luck and have fun!")
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            # Stop the file watcher if a keyboard interrupt is received
+            file_watchdog.stop()
+        file_watchdog.join()
+
+    # Cleanup/shutdown the Steamworks API
+    steamworks_api.shutdown()
+
+    # Signal to the user that we're shutting down
+    logging.info("Shutting down.")
 
 
 def attributes_file_modified(file_path: str, database: Database, steamworks_api: SteamworksApi):
