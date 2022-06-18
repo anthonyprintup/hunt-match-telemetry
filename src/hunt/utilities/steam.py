@@ -130,7 +130,14 @@ class SteamworksApi:
         # Initialize the api
         api: "SteamworksApi" = SteamworksApi(api_binary_path=api_binary_path)
         api.setup_types()
-        api.init()
+
+        try:
+            # Wrap SteamworksApi.init to guarantee that SteamAPI_Shutdown is invoked
+            api.init()
+        except SteamworksError:
+            # Cleanup/shutdown the Steamworks API
+            api.shutdown()
+            raise
 
         # Return the api instance
         return api
