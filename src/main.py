@@ -9,10 +9,10 @@ from contextlib import closing
 from colorama import Fore, Style
 
 from src.hunt.constants import DATABASE_PATH
-from src.hunt.utilities.steam import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 from src.hunt.utilities.hunt import format_mmr
-from src.hunt.utilities.file_watcher import FileWatchdog
 from src.hunt.utilities.database import Database
+from src.hunt.utilities.file_watcher import FileWatchdog
+from src.hunt.utilities.steam import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 from src.hunt.attributes_parser import ElementTree, Match, Player, parse_match
 from src.hunt.exceptions import SteamworksError, ParserError
 

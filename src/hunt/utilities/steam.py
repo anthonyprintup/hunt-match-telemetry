@@ -197,7 +197,7 @@ def try_extract_steamworks_binaries() -> str:
 
         # Open the binary file and write it to disk
         with zip_file.open(name=file_name) as zip_binary_file:
-            with open(expected_api_binary_path, "wb") as disk_binary_file:
+            with open(expected_api_binary_path, mode="wb") as disk_binary_file:
                 disk_binary_file.write(zip_binary_file.read())
 
     # Return the Steamworks API binary path
