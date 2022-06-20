@@ -3,7 +3,8 @@ This tool is intended to be used for automatically logging match data provided b
 
 # Installation
 - Clone the repository (preferably to a new Python 3.10 virtual environment),
-- run `pip install -r requirements.txt` from the root directory.
+- run `pip install -r requirements.txt` from the root directory,
+- download the [Steamworks SDK](https://partner.steamgames.com/downloads/steamworks_sdk.zip) and place it in `root/resources/steam` as `steamworks_sdk.zip`.
 
 # Instructions
 - Start the Python script (main.py),
