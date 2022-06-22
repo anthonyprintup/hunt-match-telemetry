@@ -2,6 +2,7 @@ import sqlite3
 from sqlite3 import Connection, Cursor
 from dataclasses import dataclass
 from contextlib import closing
+from types import TracebackType
 
 from ..constants import DATABASE_TABLE_QUERIES
 
@@ -37,3 +38,13 @@ class Database:
     def close(self):
         """Closes the connection."""
         self._connection.close()
+
+    # Context manager support
+    def __enter__(self) -> "Database":
+        """Return self when entering the scope."""
+        return self
+
+    def __exit__(self, exc_type: type(BaseException) | None, exc_val: BaseException | None,
+                 exc_tb: TracebackType | None):
+        """Close the database connection when exiting the scope."""
+        self.close()
