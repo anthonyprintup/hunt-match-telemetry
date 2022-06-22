@@ -4,7 +4,6 @@ import os.path
 import logging
 from typing import Generator
 from functools import partial
-from contextlib import closing
 
 from colorama import Fore, Style
 
@@ -49,7 +48,7 @@ def main():
     assert os.path.exists(attributes_path), "Attributes file does not exist."
 
     database: Database
-    with closing(Database(file_path=DATABASE_PATH)) as database:
+    with Database(file_path=DATABASE_PATH) as database:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
             file_path=attributes_path,
