@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import sys
 import ctypes
+from typing import TypeAlias
 from zipfile import ZipFile
 from ctypes import cdll, CDLL
 
@@ -11,13 +12,13 @@ from ..exceptions import UnsupportedPlatformError, SteamworksError
 
 
 # Native types
-char = ctypes.c_char
-char_pointer = ctypes.c_char_p
-void_pointer = ctypes.c_void_p
-uint32 = ctypes.c_uint32
+char: TypeAlias = ctypes.c_char
+char_pointer: TypeAlias = ctypes.c_char_p
+void_pointer: TypeAlias = ctypes.c_void_p
+uint32: TypeAlias = ctypes.c_uint32
 
 # Steamworks API types
-AppId_t = uint32
+AppId_t: TypeAlias = uint32
 
 
 class SteamworksApi:
