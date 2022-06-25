@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sqlite3
 from sqlite3 import Connection, Cursor
 from dataclasses import dataclass
@@ -40,7 +42,7 @@ class Database:
         self._connection.close()
 
     # Context manager support
-    def __enter__(self) -> "Database":
+    def __enter__(self) -> Database:
         """Return self when entering the scope."""
         return self
 

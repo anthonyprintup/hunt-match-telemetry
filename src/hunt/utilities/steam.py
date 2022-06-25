@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import sys
 import ctypes
@@ -116,7 +118,7 @@ class SteamworksApi:
         self._api.SteamAPI_Shutdown()
 
     @staticmethod
-    def prepare_and_initialize(api_binary_path: str) -> "SteamworksApi":
+    def prepare_and_initialize(api_binary_path: str) -> SteamworksApi:
         """
         This function will set up everything required to use the Steamworks API.
         :return: a new SteamworksApi instance
@@ -129,7 +131,7 @@ class SteamworksApi:
         os.environ["SteamAppId"] = f"{HUNT_SHOWDOWN_STEAM_ID}"
 
         # Initialize the api
-        api: "SteamworksApi" = SteamworksApi(api_binary_path=api_binary_path)
+        api: SteamworksApi = SteamworksApi(api_binary_path=api_binary_path)
         api.setup_types()
 
         try:
