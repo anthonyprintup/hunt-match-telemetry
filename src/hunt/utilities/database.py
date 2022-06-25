@@ -46,7 +46,7 @@ class Database:
         """Return self when entering the scope."""
         return self
 
-    def __exit__(self, exc_type: type(BaseException) | None, exc_val: BaseException | None,
+    def __exit__(self, exc_type: type[BaseException] | None, exc_val: BaseException | None,
                  exc_tb: TracebackType | None):
         """Close the database connection when exiting the scope."""
         self.close()
