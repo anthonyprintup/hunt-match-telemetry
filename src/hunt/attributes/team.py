@@ -4,7 +4,8 @@ from .player import Player
 
 @dataclass(frozen=True)
 class Team:
-    randoms: bool
+    handicap: int
+    is_invite: bool
     mmr: int
     own_team: bool
     players: tuple[Player]
