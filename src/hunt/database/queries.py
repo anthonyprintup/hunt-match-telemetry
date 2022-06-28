@@ -12,7 +12,7 @@ def match_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
     """
     cursor: Cursor
     with closing(database.cursor()) as cursor:
-        query: str = "SELECT EXISTS(SELECT 1 FROM match_hashes WHERE hash = ?)"
+        query: str = "SELECT EXISTS(SELECT 1 FROM data_hashes WHERE hash = ?)"
         return cursor.execute(query, (match_hash,)).fetchone()[0] >= 1
 
 
@@ -25,7 +25,7 @@ def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str)
     """
     cursor: Cursor
     with closing(database.cursor()) as cursor:
-        query: str = "INSERT INTO match_hashes(hash, file_path) VALUES (?, ?)"
+        query: str = "INSERT INTO data_hashes (hash, path) VALUES (?, ?)"
         cursor.execute(query, (match_hash, file_path))
     database.save()
 
