@@ -1,11 +1,11 @@
 import logging
 import xml.etree.ElementTree as ElementTree
 
-from .types.team import Team
-from .types.player import Player
-from .types.match import Match
-from .types.match import Entry
-from .exceptions import ParserError
+from .team import Team
+from .player import Player
+from .match import Match
+from .match import Entry
+from ..exceptions import ParserError
 
 
 def fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = "") -> str:
