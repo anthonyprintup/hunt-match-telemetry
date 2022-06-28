@@ -114,10 +114,10 @@ def attributes_file_modified(file_path: str, database: DatabaseClient, steamwork
         return  # Skip printing an already existing entry
 
     # Print useful data from the match
-    log_player_data(match)
+    log_match_data(match)
 
 
-def log_player_data(match: Match):
+def log_match_data(match: Match):
     """
     Logs the players on the local team, and all enemies that
       were killed by or killed the local player.
