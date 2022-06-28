@@ -3,22 +3,12 @@ from __future__ import annotations
 import os
 import sys
 import ctypes
-from typing import TypeAlias
 from zipfile import ZipFile
 from ctypes import cdll, CDLL
 
 from ..constants import HUNT_SHOWDOWN_STEAM_ID, STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
 from ..exceptions import UnsupportedPlatformError, SteamworksError
-
-
-# Native types
-char: TypeAlias = ctypes.c_char
-char_pointer: TypeAlias = ctypes.c_char_p
-void_pointer: TypeAlias = ctypes.c_void_p
-uint32: TypeAlias = ctypes.c_uint32
-
-# Steamworks API types
-AppId_t: TypeAlias = uint32
+from .type_aliases import char, char_pointer, void_pointer, uint32, AppId_t
 
 
 class SteamworksApi:
