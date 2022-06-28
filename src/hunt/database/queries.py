@@ -6,7 +6,7 @@ from .client import Client as DatabaseClient, Cursor
 def data_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
     """
     Checks if a match hash already exists in the database
-    :param database: a Database instance
+    :param database: a DatabaseClient instance
     :param match_hash: the hash to check for
     :return: True if a hash is already in the database, otherwise False
     """
@@ -19,7 +19,7 @@ def data_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
 def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str):
     """
     Saves a match hash to the database.
-    :param database: a Database instance
+    :param database: a DatabaseClient instance
     :param match_hash: the hash to save
     :param file_path: the path to the file
     """
@@ -34,7 +34,7 @@ def update_player_data(database: DatabaseClient, profile_id: int, name: str, mmr
                        times_killed: int, times_died: int):
     """
     Inserts and updates a player's data in the database.
-    :param database: a Database instance
+    :param database: a a DatabaseClient instance
     :param profile_id: the profile id of the player
     :param mmr: the current NNR of the player
     :param name: the name of the player

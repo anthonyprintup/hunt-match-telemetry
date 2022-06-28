@@ -33,7 +33,7 @@ class Match:
         """
         Converts the match data to json and saves it to the file path,
           if the match data hasn't already been saved.
-        :param database: a Database instance
+        :param database: a DatabaseClient instance
         :return: True if this entry already exists in the database, otherwise False.
         """
         # Generate the match data and its hash
