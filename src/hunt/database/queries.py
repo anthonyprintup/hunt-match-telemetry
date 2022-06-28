@@ -34,7 +34,7 @@ def update_player_data(database: DatabaseClient, profile_id: int, name: str, mmr
                        times_killed: int, times_died: int):
     """
     Inserts and updates a player's data in the database.
-    :param database: a a DatabaseClient instance
+    :param database: a DatabaseClient instance
     :param profile_id: the profile id of the player
     :param mmr: the current NNR of the player
     :param name: the name of the player
