@@ -10,7 +10,7 @@ from ..constants import DATABASE_TABLE_QUERIES
 
 
 @dataclass(kw_only=True)
-class Database:
+class Client:
     file_path: str
     _connection: Connection = None
 
@@ -42,7 +42,7 @@ class Database:
         self._connection.close()
 
     # Context manager support
-    def __enter__(self) -> Database:
+    def __enter__(self) -> Client:
         """Return self when entering the scope."""
         return self
 

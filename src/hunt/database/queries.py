@@ -1,9 +1,9 @@
 from contextlib import closing
 
-from src.hunt.utilities.database import Database, Cursor
+from .client import Client as DatabaseClient, Cursor
 
 
-def match_hash_exists(database: Database, match_hash: str) -> bool:
+def match_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
     """
     Checks if a match hash already exists in the database
     :param database: a Database instance
@@ -16,7 +16,7 @@ def match_hash_exists(database: Database, match_hash: str) -> bool:
         return cursor.execute(query, (match_hash,)).fetchone()[0] >= 1
 
 
-def insert_match_hash(database: Database, match_hash: str, file_path: str):
+def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str):
     """
     Saves a match hash to the database.
     :param database: a Database instance
@@ -30,7 +30,8 @@ def insert_match_hash(database: Database, match_hash: str, file_path: str):
     database.save()
 
 
-def update_player_data(database: Database, profile_id: int, name: str, mmr: int, times_killed: int, times_died: int):
+def update_player_data(database: DatabaseClient, profile_id: int, name: str, mmr: int,
+                       times_killed: int, times_died: int):
     """
     Inserts and updates a player's data in the database.
     :param database: a Database instance

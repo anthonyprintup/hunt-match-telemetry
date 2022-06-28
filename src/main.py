@@ -9,7 +9,7 @@ from colorama import Fore, Style
 
 from src.hunt.constants import DATABASE_PATH
 from src.hunt.formats import format_mmr
-from src.hunt.utilities.database import Database
+from src.hunt.database.client import Client as DatabaseClient
 from src.hunt.utilities.file_watcher import FileWatchdog
 from src.hunt.utilities.steam import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 from src.hunt.attributes_parser import ElementTree, Match, Player, parse_match
@@ -47,8 +47,8 @@ def main():
     attributes_path: str = fetch_hunt_attributes_path(steamworks_api)
     assert os.path.exists(attributes_path), "Attributes file does not exist."
 
-    database: Database
-    with Database(file_path=DATABASE_PATH) as database:
+    database: DatabaseClient
+    with DatabaseClient(file_path=DATABASE_PATH) as database:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
             file_path=attributes_path,
@@ -72,7 +72,7 @@ def main():
     logging.info("Shutting down.")
 
 
-def attributes_file_modified(file_path: str, database: Database, steamworks_api: SteamworksApi):
+def attributes_file_modified(file_path: str, database: DatabaseClient, steamworks_api: SteamworksApi):
     try:
         # Attempt to parse the attributes file;
         #  when the file is being written to by the game

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from .entry import Entry
 from .team import Team, Player
 from ..constants import RESOURCES_PATH
-from ..utilities.database_queries import Database, match_hash_exists, insert_match_hash, update_player_data
+from ..database.queries import DatabaseClient, match_hash_exists, insert_match_hash, update_player_data
 
 
 @dataclass(frozen=True)
@@ -25,7 +25,7 @@ class Match:
                             f"{'quickplay' if self.is_quickplay else 'bounty_hunt'}",
                             f"{now.hour:02d}-{now.minute:02d}-{now.second:02d}.json")
 
-    def try_save_to_file(self, database: Database) -> bool:
+    def try_save_to_file(self, database: DatabaseClient) -> bool:
         """
         Converts the match data to json and saves it to the file path,
           if the match data hasn't already been saved.
