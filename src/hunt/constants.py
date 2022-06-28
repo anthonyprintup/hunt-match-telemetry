@@ -3,7 +3,8 @@ import os.path
 HUNT_SHOWDOWN_STEAM_ID: int = 594650  # Hunt: Showdown Steam ID
 
 # The path (directory) to where match logs are stored
-RESOURCES_PATH: str = os.path.realpath(os.path.join(os.path.dirname(__file__), r"../../resources"))
+WORKING_DIRECTORY: str = os.getcwd()
+RESOURCES_PATH: str = os.path.realpath(os.path.join(WORKING_DIRECTORY, "resources"))
 os.makedirs(name=RESOURCES_PATH, exist_ok=True)  # Create the resource directory if it doesn't exist
 
 # Steam
