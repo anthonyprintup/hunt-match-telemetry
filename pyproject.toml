@@ -17,6 +17,7 @@ flake8 = "^4.0.1"
 pyupgrade = "^2.34.0"
 pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
+pytest-custom-exit-code = "^0.3.0"
 
 [tool.poetry.scripts]
 hunt-mmr-cli = "hunt.cli.app:main"
