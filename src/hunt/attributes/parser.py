@@ -75,7 +75,8 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
         for team_id in range(expected_team_count):
             # Parse each team
             team_prefix: str = f"MissionBagTeam_{team_id}"
-            randoms: bool = fetch_xpath_value(root, team_prefix, "isinvite") == "false"
+            handicap: int = int(fetch_xpath_value(root, team_prefix, "handicap"))
+            is_invite: bool = fetch_xpath_value(root, team_prefix, "isinvite") == "true"
             team_mmr: int = int(fetch_xpath_value(root, team_prefix, "mmr"))
             number_of_players: int = int(fetch_xpath_value(root, team_prefix, "numplayers"))
             own_team: bool = fetch_xpath_value(root, team_prefix, "ownteam") == "true"
@@ -98,7 +99,7 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team]:
                 players.append(Player(name, had_wellspring, had_bounty, killed_by_me, killed_me,
                                       player_mmr, profile_id, used_proximity_chat, is_skillbased))
 
-            teams.append(Team(randoms, team_mmr, own_team, tuple(players)))
+            teams.append(Team(handicap, is_invite, team_mmr, own_team, tuple(players)))
         return tuple(teams)
     except AttributeError as exception:
         logging.debug(f"AttributeError when parsing team data: {exception=}")
