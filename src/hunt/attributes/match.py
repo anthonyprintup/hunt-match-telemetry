@@ -19,6 +19,10 @@ class Match:
     teams: tuple[Team]
 
     def _generate_file_path(self) -> str:
+        """
+        Generates a file path for the match.
+        :return: the file path for the match data
+        """
         now: datetime = datetime.now()
         return os.path.join(RESOURCES_PATH,
                             f"{now.year}-{now.month:02d}-{now.day:02d}",
@@ -29,6 +33,7 @@ class Match:
         """
         Converts the match data to json and saves it to the file path,
           if the match data hasn't already been saved.
+        :param database: a Database instance
         :return: True if this entry already exists in the database, otherwise False.
         """
         # Generate the match data and its hash
