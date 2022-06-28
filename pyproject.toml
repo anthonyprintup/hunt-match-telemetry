@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "hunt-mmr"
+version = "1.0.0"
+description = "Automatically extract match data from Hunt: Showdown matches."
+authors = ["Anthony Printup <anthony@printup.io>"]
+packages = [{include = "hunt", from = "src"}]
+repository = "https://github.com/anthonyprintup/hunt-mmr"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+watchdog = "^2.1.9"
+colorama = "^0.4.5"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.19.0"
+flake8 = "^4.0.1"
+pyupgrade = "^2.34.0"
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+
+[tool.poetry.scripts]
+hunt-mmr-cli = "hunt.cli.app:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
