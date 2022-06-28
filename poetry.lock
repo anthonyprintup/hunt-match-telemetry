@@ -32,7 +32,7 @@ python-versions = ">=3.6.1"
 name = "colorama"
 version = "0.4.5"
 description = "Cross-platform colored terminal text."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
@@ -323,7 +323,7 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "bdbd2a602dc684f63739319453012533f6bf75d79f0610108c42fd662642ed8d"
+content-hash = "e3ccd288ddb6d00610bcf82c71741e34e0beb8cf4190f7695df9fdbd5a0c9427"
 
 [metadata.files]
 atomicwrites = [
