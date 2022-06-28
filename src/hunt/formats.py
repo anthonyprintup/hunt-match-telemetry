@@ -1,6 +1,6 @@
 from colorama import Fore, Style
 
-from ..constants import MMR_RANGES, STAR_SYMBOL
+from .constants import MMR_RANGES, STAR_SYMBOL
 
 
 def format_mmr(mmr: int) -> str:

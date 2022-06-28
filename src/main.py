@@ -8,7 +8,7 @@ from functools import partial
 from colorama import Fore, Style
 
 from src.hunt.constants import DATABASE_PATH
-from src.hunt.utilities.hunt import format_mmr
+from src.hunt.formats import format_mmr
 from src.hunt.utilities.database import Database
 from src.hunt.utilities.file_watcher import FileWatchdog
 from src.hunt.utilities.steam import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
