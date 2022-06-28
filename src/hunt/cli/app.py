@@ -74,20 +74,26 @@ def main():
 
 
 def attributes_file_modified(file_path: str, database: DatabaseClient, steamworks_api: SteamworksApi):
+    # Read the file contents and create a sha256 hash of them
+    with open(file_path, "rb") as file:
+        file_contents: bytes = file.read()
+
+    # If the file contents are empty, skip parsing
+    if not file_contents:
+        return
+
     try:
-        # Attempt to parse the attributes file;
-        #  when the file is being written to by the game
-        #  it usually has a step where it contains garbage
-        #  data (empty?), which will throw an exception.
-        parsed_attributes: ElementTree = ElementTree.parse(source=file_path)
+        # Attempt to parse the attributes file
+        parsed_attributes: ElementTree.Element = ElementTree.fromstring(file_contents)
     except ElementTree.ParseError as exception:
         # Skip the update
+        logging.critical("Failed to parse the attributes file.")
         logging.debug(f"Failed to parse the attributes file: {exception=}")
         return
 
     # Parse the teams from the attributes file
     try:
-        match: Match = parse_match(root=parsed_attributes.getroot(), steam_name=steamworks_api.get_persona_name())
+        match: Match = parse_match(root=parsed_attributes, steam_name=steamworks_api.get_persona_name())
     except SteamworksError as exception:
         logging.debug(f"Failed to get the user's display name: {exception=}")
         return
