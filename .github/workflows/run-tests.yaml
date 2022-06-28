@@ -24,6 +24,6 @@ jobs:
       - name: Install the package
         run: poetry install -vvv
       - name: Lint using flake8
-        run: flake8 src tests --show-source
+        run: poetry run flake8 src tests --show-source
       - name: Test using pytest
-        run: pytest
+        run: poetry run pytest --suppress-no-test-exit-code
