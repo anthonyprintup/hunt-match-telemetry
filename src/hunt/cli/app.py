@@ -7,7 +7,7 @@ from functools import partial
 
 from colorama import Fore, Style
 
-from hunt.constants import DATABASE_PATH
+from hunt.constants import DATABASE_PATH, STEAMWORKS_SDK_PATH
 from hunt.formats import format_mmr
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
@@ -26,6 +26,7 @@ def main():
         steamworks_api_path: str = try_extract_steamworks_binaries()
     except SteamworksError as exception:
         logging.critical("Failed to extract the Steamworks binaries, are you missing the Steamworks SDK?")
+        logging.info(f"The Steamworks SDK should be located at: {STEAMWORKS_SDK_PATH!r}")
         logging.debug(f"Steamworks error: {exception=}")
         return
     except UnsupportedPlatformError as exception:
