@@ -74,7 +74,15 @@ def main():
 
 
 def attributes_file_modified(file_path: str, database: DatabaseClient, steamworks_api: SteamworksApi):
-    # Read the file contents and create a sha256 hash of them
+    """
+    Invoked when the attributes file is modified;
+      Parses the match data from the attributes file and
+      saves it to disk.
+    :param file_path: the path of the file to parse
+    :param database: a DatabaseClient instance
+    :param steamworks_api: a SteamworksApi instance
+    """
+    # Read the file contents
     with open(file_path, "rb") as file:
         file_contents: bytes = file.read()
 
