@@ -3,7 +3,7 @@ from contextlib import closing
 from .client import Client as DatabaseClient, Cursor
 
 
-def match_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
+def data_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
     """
     Checks if a match hash already exists in the database
     :param database: a Database instance

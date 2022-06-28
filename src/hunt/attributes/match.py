@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from .entry import Entry
 from .team import Team, Player
 from ..constants import RESOURCES_PATH
-from ..database.queries import DatabaseClient, match_hash_exists, insert_match_hash, update_player_data
+from ..database.queries import DatabaseClient, data_hash_exists, insert_match_hash, update_player_data
 
 
 @dataclass(frozen=True)
@@ -36,7 +36,7 @@ class Match:
         match_hash: str = sha256(match_data.encode()).hexdigest()
 
         # Check if the hash already exists in the database to prevent duplicates
-        if match_hash_exists(database, match_hash=match_hash):
+        if data_hash_exists(database, match_hash=match_hash):
             return True
 
         # Generate the file path
