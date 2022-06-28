@@ -1,2 +1,0 @@
-watchdog==2.1.9
-colorama==0.4.5
