@@ -7,13 +7,13 @@ from functools import partial
 
 from colorama import Fore, Style
 
-from src.hunt.constants import DATABASE_PATH
-from src.hunt.formats import format_mmr
-from src.hunt.database.client import Client as DatabaseClient
-from src.hunt.filesystem.watchdog import FileWatchdog
-from src.hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
-from src.hunt.attributes.parser import ElementTree, Match, Player, parse_match
-from src.hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
+from ..constants import DATABASE_PATH
+from ..formats import format_mmr
+from ..database.client import Client as DatabaseClient
+from ..filesystem.watchdog import FileWatchdog
+from ..steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
+from ..attributes.parser import ElementTree, Match, Player, parse_match
+from ..exceptions import SteamworksError, UnsupportedPlatformError, ParserError
 
 
 def main():
