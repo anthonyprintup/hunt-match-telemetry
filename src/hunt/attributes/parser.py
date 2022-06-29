@@ -1,8 +1,11 @@
 import logging
 import xml.etree.ElementTree as ElementTree
 
-from .match import Match, Entry, Team, Player
+from .match import Match, Entry, Rewards, Team, Player
 from ..exceptions import ParserError
+from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
+    HUNTER_XP_CATEGORY, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
+    UPGRADE_POINTS_DESCRIPTOR_NAME, BLOODLINE_DESCRIPTOR_NAME
 
 
 def fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = "") -> str:
@@ -15,6 +18,27 @@ def fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = "")
     :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist
     """
     return element.find(path=f"Attr[@name='{name}{'_' + suffix if suffix else ''}']").attrib["value"]
+
+
+def _calculate_rewards(entries: tuple[Entry, ...]) -> Rewards:
+    """
+    Calculates all the rewards collected from a match.
+    :param entries: a tuple of Entry instances
+    :return: a Rewards instance
+    """
+    bounty: int = sum(entry.reward_size for entry in entries if entry.category in BOUNTY_CATEGORIES)
+    xp: int = sum(entry.reward_size for entry in entries if entry.category in XP_CATEGORIES)
+    hunt_dollars: int = sum(entry.reward_size for entry in entries if entry.category == HUNT_DOLLARS_CATEGORY)
+    bloodbonds: int = sum(entry.reward_size for entry in entries if entry.category == BLOODBONDS_CATEGORY)
+    hunter_xp: int = sum(entry.reward_size for entry in entries
+                         if entry.category == HUNTER_XP_CATEGORY and entry.reward_type == HUNTER_XP_REWARD_TYPE)
+    hunter_levels: int = sum(entry.reward_size for entry in entries if entry.category == HUNTER_LEVELS_CATEGORY)
+    upgrade_points: int = sum(entry.reward_size for entry in entries
+                              if entry.descriptor_name == UPGRADE_POINTS_DESCRIPTOR_NAME)
+    bloodline_xp: int = sum(entry.reward_size for entry in entries
+                            if entry.descriptor_name == BLOODLINE_DESCRIPTOR_NAME)
+
+    return Rewards(bounty, xp, hunt_dollars, bloodbonds, hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
 
 
 def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
@@ -48,7 +72,9 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
 
         hunter_survived: bool = fetch_xpath_value(root, "MissionBagIsHunterDead") == "false"
         is_quickplay: bool = fetch_xpath_value(root, "MissionBagIsQuickPlay") == "true"
-        return Match(steam_name, hunter_survived, is_quickplay, tuple(entries), parse_teams(root=root))
+        return Match(steam_name, hunter_survived, is_quickplay,
+                     tuple(entries), _calculate_rewards(tuple(entries)),
+                     parse_teams(root=root))
     except AttributeError as exception:
         logging.debug(f"AttributeError when parsing match data: {exception=}")
         raise ParserError("Failed to parse match data.")
