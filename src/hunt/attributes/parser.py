@@ -39,8 +39,8 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
             amount: int = int(fetch_xpath_value(root, entry_prefix, "amount"))
             category: str = fetch_xpath_value(root, entry_prefix, "category")
             descriptor_name: str = fetch_xpath_value(root, entry_prefix, "descriptorName")
-            descriptor_score: str = fetch_xpath_value(root, entry_prefix, "descriptorScore")
-            descriptor_type: str = fetch_xpath_value(root, entry_prefix, "descriptorType")
+            descriptor_score: int = int(fetch_xpath_value(root, entry_prefix, "descriptorScore"))
+            descriptor_type: int = int(fetch_xpath_value(root, entry_prefix, "descriptorType"))
             reward_type: int = int(fetch_xpath_value(root, entry_prefix, "reward"))
             reward_size: int = int(fetch_xpath_value(root, entry_prefix, "rewardSize"))
 
