@@ -5,6 +5,7 @@ from datetime import datetime
 from dataclasses import dataclass
 
 from .entry import Entry
+from .rewards import Rewards
 from .team import Team, Player
 from ..constants import RESOURCES_PATH
 from ..database.queries import DatabaseClient, data_hash_exists, insert_match_hash, update_player_data
@@ -16,6 +17,7 @@ class Match:
     hunter_survived: bool
     is_quickplay: bool
     entries: tuple[Entry]
+    rewards: Rewards
     teams: tuple[Team]
 
     def _generate_file_path(self) -> str:
