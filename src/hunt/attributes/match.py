@@ -16,9 +16,9 @@ class Match:
     player_name: str
     hunter_survived: bool
     is_quickplay: bool
-    entries: tuple[Entry]
+    entries: tuple[Entry, ...]
     rewards: Rewards
-    teams: tuple[Team]
+    teams: tuple[Team, ...]
 
     def _generate_file_path(self) -> str:
         """
