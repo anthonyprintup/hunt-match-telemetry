@@ -21,7 +21,7 @@ DATABASE_PATH: str = os.path.join(RESOURCES_PATH, "match_data.db")
 
 
 # Helper function to generate create table queries
-def create_table_helper(table_name: str, fields: tuple[str, ...]) -> str:
+def _create_table_helper(table_name: str, fields: tuple[str, ...]) -> str:
     return f"CREATE TABLE IF NOT EXISTS {table_name} ({', '.join(fields)})"
 
 
@@ -31,7 +31,7 @@ _PLAYER_LOG_COLUMNS = ("id INTEGER PRIMARY KEY",
                        "kills INTEGER DEFAULT 0 NOT NULL", "deaths INTEGER DEFAULT 0 NOT NULL",
                        "encounters INTEGER DEFAULT 0 NOT NULL")
 DATABASE_TABLE_QUERIES: tuple[str, ...] = (
-    create_table_helper("data_hashes", ("id INTEGER PRIMARY KEY", "hash varchar(64) UNIQUE", "path TEXT NOT NULL")),
-    create_table_helper("player_log_bountyhunt", _PLAYER_LOG_COLUMNS),
-    create_table_helper("player_log_quickplay", _PLAYER_LOG_COLUMNS)
+    _create_table_helper("data_hashes", ("id INTEGER PRIMARY KEY", "hash varchar(64) UNIQUE", "path TEXT NOT NULL")),
+    _create_table_helper("player_log_bountyhunt", _PLAYER_LOG_COLUMNS),
+    _create_table_helper("player_log_quickplay", _PLAYER_LOG_COLUMNS)
 )
