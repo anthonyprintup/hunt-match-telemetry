@@ -14,6 +14,7 @@ BOUNTY_CATEGORIES: tuple[str, ...] = (
 XP_CATEGORIES: tuple[str, ...] = (
     "accolade_reviver",
     *(f"accolade_banished_{boss_name}" for boss_name in _BOSS_NAMES),
+    "accolade_partner_killed",
     "accolade_players_killed",
     "accolade_monsters_killed")
 
