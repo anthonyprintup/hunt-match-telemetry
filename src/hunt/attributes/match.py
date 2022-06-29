@@ -54,7 +54,7 @@ class Match:
         player: Player
         for player in (player for team in self.teams for player in team.players):
             update_player_data(database, profile_id=player.profile_id, name=player.name, mmr=player.mmr,
-                               times_killed=player.killed_by_me, times_died=player.killed_me)
+                               kills=player.killed_by_me, deaths=player.killed_me, is_quickplay=self.is_quickplay)
 
         # Create the directories
         directory_path: str = os.path.dirname(generated_file_path)
