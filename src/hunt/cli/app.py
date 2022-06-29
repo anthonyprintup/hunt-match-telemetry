@@ -119,29 +119,61 @@ def attributes_file_modified(file_path: str, database: DatabaseClient, steamwork
 
 def log_match_data(match: Match):
     """
-    Logs the players on the local team, and all enemies that
-      were killed by or killed the local player.
+    Logs interesting data about the match such as:
+      - rewards collected from the match,
+      - players in the team, and
+      - enemy players that the player interacted with.
     :param match: a parsed Match instance
     """
-    teammates: Generator = (player for team in match.teams for player in team.players if team.own_team)
-    enemies: Generator = (player for team in match.teams for player in team.players if not team.own_team)
+    # Log interesting rewards
+    def _log_rewards():
+        logging.info("Rewards:")
 
-    # Log the teammates
-    logging.info("Teammates:")
-    player: Player
-    for player in teammates:
-        local_player_marker: str = " (you)" if player.name == match.player_name else ""
-        logging.info(f"  {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){local_player_marker}")
+        # Hunt dollars
+        total_hunt_dollars: int = match.rewards.bounty + match.rewards.hunt_dollars
+        if total_hunt_dollars:
+            logging.info(f"  Collected {total_hunt_dollars} hunt dollars.")
 
-    # Log the enemies
-    logging.info("Enemies:")
-    for player in enemies:
-        if player.killed_by_me:
-            kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
-            logging.info(f"  Killed {Fore.GREEN}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){kill_count}")
-        if player.killed_me:
-            death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
-            logging.info(f"  Died to {Fore.RED}{player.name}{Style.RESET_ALL} ({format_mmr(player.mmr)}){death_count}")
+        # Hunter-related rewards
+        total_xp: int = match.rewards.xp + match.rewards.hunter_xp + match.rewards.bounty * 4
+        if total_xp:
+            logging.info(f"  Received {total_xp} hunter XP.")
+        if match.rewards.hunter_levels:
+            logging.info(f"  Leveled up the current hunter by {match.rewards.hunter_levels} levels.")
+        if match.rewards.upgrade_points:
+            logging.info(f"  Collected {match.rewards.upgrade_points} upgrade points.")
+
+        # Bloodline XP
+        if match.rewards.bloodline_xp:
+            logging.info(f"  Collected {match.rewards.bloodline_xp} bloodline XP.")
+    _log_rewards()
+
+    # Log players
+    def _log_players():
+        teammates: Generator = (player for team in match.teams for player in team.players if team.own_team)
+        enemies: Generator = (player for team in match.teams for player in team.players if not team.own_team)
+
+        # Log information about the local team
+        logging.info("Team:")
+        player: Player
+        for player in teammates:
+            name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
+            local_player_marker: str = " (you)" if player.name == match.player_name else ""
+            logging.info(f"  {name} ({format_mmr(player.mmr)}){local_player_marker}")
+
+        # Log information about the players the local player interacted with
+        if tuple(enemies):
+            logging.info("Enemies:")
+        for player in enemies:
+            if player.killed_by_me:
+                name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
+                kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
+                logging.info(f"  Killed {name} ({format_mmr(player.mmr)}){kill_count}")
+            if player.killed_me:
+                name: str = f"{Fore.RED}{player.name}{Style.RESET_ALL}"
+                death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
+                logging.info(f"  Died to {name} ({format_mmr(player.mmr)}){death_count}")
+    _log_players()
 
 
 if __name__ == "__main__":
