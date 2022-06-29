@@ -34,15 +34,3 @@ DATABASE_TABLE_QUERIES: tuple[str, ...] = (
     _create_table_helper("data_hashes", ("id INTEGER PRIMARY KEY", "hash varchar(64) UNIQUE", "path TEXT NOT NULL")),
     _create_table_helper("player_log_bountyhunt", _PLAYER_LOG_COLUMNS),
     _create_table_helper("player_log_quickplay", _PLAYER_LOG_COLUMNS))
-
-# Entry categories
-_BOSS_NAMES: tuple[str, ...] = ("assassin", "spider", "butcher", "scrapbeak")
-BOUNTY_CATEGORIES: tuple[str, ...] = (
-    "accolade_bad_luck",
-    "accolade_clues_found",
-    *(f"accolade_found_{boss_name}" for boss_name in _BOSS_NAMES),
-    *(f"accolade_killed_{boss_name}" for boss_name in _BOSS_NAMES),
-    *(f"accolade_contract_{boss_name}" for boss_name in _BOSS_NAMES),
-    *(f"accolade_clean_sweep_{boss_name}" for boss_name in _BOSS_NAMES),
-    "accolade_trophy_extraction_bonus",
-    "accolade_quickplay_wellsprings_found")
