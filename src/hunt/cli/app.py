@@ -162,8 +162,7 @@ def log_match_data(match: Match):
             logging.info(f"  {name} ({format_mmr(player.mmr)}){local_player_marker}")
 
         # Log information about the players the local player interacted with
-        if tuple(enemies):
-            logging.info("Enemies:")
+        logging.info("Enemies:")
         for player in enemies:
             if player.killed_by_me:
                 name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
