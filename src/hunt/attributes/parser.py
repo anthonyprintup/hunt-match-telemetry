@@ -1,10 +1,7 @@
 import logging
 import xml.etree.ElementTree as ElementTree
 
-from .team import Team
-from .player import Player
-from .match import Match
-from .match import Entry
+from .match import Match, Entry, Team, Player
 from ..exceptions import ParserError
 
 
