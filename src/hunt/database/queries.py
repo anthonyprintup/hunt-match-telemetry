@@ -31,25 +31,33 @@ def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str)
 
 
 def update_player_data(database: DatabaseClient, profile_id: int, name: str, mmr: int,
-                       times_killed: int, times_died: int):
+                       kills: int, deaths: int, is_quickplay: bool):
     """
     Inserts and updates a player's data in the database.
     :param database: a DatabaseClient instance
     :param profile_id: the profile id of the player
     :param mmr: the current NNR of the player
     :param name: the name of the player
-    :param times_killed: the times the player was killed by us
-    :param times_died: the times we died to the player
+    :param kills: the amount of times the player was killed by us
+    :param deaths: the amount of times we died to the player
+    :param is_quickplay: True if the match was a quickplay match
     """
+    # Construct the queries to execute (the strings are duplicated for easier code refactoring/highlighting)
+    insert_query: str = "INSERT OR IGNORE INTO player_log_bountyhunt (profile_id, name) VALUES (?, ?)"
+    update_query: str = "UPDATE player_log_bountyhunt SET name = ?, mmr = ?, " \
+                        "kills = kills + ?, deaths = deaths + ?, " \
+                        "encounters = encounters + 1 WHERE profile_id = ?"
+    if is_quickplay:
+        insert_query = "INSERT OR IGNORE INTO player_log_quickplay (profile_id, name) VALUES (?, ?)"
+        update_query = "UPDATE player_log_quickplay SET name = ?, mmr = ?, " \
+                       "kills = kills + ?, deaths = deaths + ?, " \
+                       "encounters = encounters + 1 WHERE profile_id = ?"
+
     cursor: Cursor
     with closing(database.cursor()) as cursor:
         # Insert the data if it doesn't exist
-        insert_query: str = "INSERT OR IGNORE INTO player_log (profile_id, latest_name) VALUES (?, ?)"
         cursor.execute(insert_query, (profile_id, name))
 
-        # Increase the times_killed and times_died values
-        update_query: str = "UPDATE player_log SET latest_name = ?, latest_mmr = ?, " \
-                            "times_killed = times_killed + ?, times_died = times_died + ?, " \
-                            "times_seen = times_seen + 1 WHERE profile_id = ?"
-        cursor.execute(update_query, (name, mmr, times_killed, times_died, profile_id))
+        # Update all relevant values
+        cursor.execute(update_query, (name, mmr, kills, deaths, profile_id))
     database.save()
