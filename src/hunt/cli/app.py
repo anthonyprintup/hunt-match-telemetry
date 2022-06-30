@@ -139,7 +139,7 @@ def log_match_data(match: Match):
         if total_xp:
             logging.info(f"  Received {total_xp} hunter XP.")
         if match.rewards.hunter_levels:
-            logging.info(f"  Leveled up the current hunter by {match.rewards.hunter_levels} levels.")
+            logging.info(f"  Received {match.rewards.hunter_levels} perk points.")
         if match.rewards.upgrade_points:
             logging.info(f"  Collected {match.rewards.upgrade_points} upgrade points.")
 
