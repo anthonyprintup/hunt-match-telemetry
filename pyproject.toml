@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hunt-mmr"
-version = "1.1.0"
+version = "1.1.1"
 description = "Automatically extract match data from Hunt: Showdown matches."
 authors = ["Anthony Printup <anthony@printup.io>"]
 packages = [{include = "hunt", from = "src"}]
