@@ -1,5 +1,5 @@
 # Entry categories for rewards
-_BOSS_NAMES: tuple[str, ...] = ("assassin", "spider", "butcher", "scrapbeak")
+_BOSS_NAMES: tuple[str, ...] = ("spider", "butcher", "assassin", "scrapbeak")
 
 BOUNTY_CATEGORIES: tuple[str, ...] = (
     "accolade_bad_luck",
