@@ -87,7 +87,7 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
 
         # Parse and store the accolades
         for i in range(accolades_count):
-            accolades.append(Accolade(*_parse_element(root, prefix="MissionBagEntry", element_id=i)))
+            accolades.append(Accolade(*_parse_element(root, prefix="MissionAccoladeEntry", element_id=i)))
 
         # Parse and store the entries
         for i in range(entries_count):
