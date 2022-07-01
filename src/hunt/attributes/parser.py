@@ -1,7 +1,7 @@
 import logging
 import xml.etree.ElementTree as ElementTree
 
-from .match import Match, Entry, Rewards, Team, Player
+from .match import Match, Accolade, Entry, Rewards, Team, Player
 from ..exceptions import ParserError
 from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
     HUNTER_XP_CATEGORY, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
@@ -50,6 +50,7 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     :return: a Match object
     :raises ParserError: if an expected value is not found (AttributeError, parse_teams)
     """
+    accolades: list[Accolade] = []
     entries: list[Entry] = []
 
     try:
@@ -71,10 +72,13 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
                                  descriptor_name, descriptor_score, descriptor_type,
                                  reward_type, reward_size))
 
+        hunt_dollar_bonus: int = int(fetch_xpath_value(root, "MissionBagFbeGoldBonus"))
+        hunter_xp_bonus: int = int(fetch_xpath_value(root, "MissionBagFbeHunterXpBonus"))
         hunter_survived: bool = fetch_xpath_value(root, "MissionBagIsHunterDead") == "false"
         is_quickplay: bool = fetch_xpath_value(root, "MissionBagIsQuickPlay") == "true"
         return Match(steam_name, hunter_survived, is_quickplay,
-                     tuple(entries), _calculate_rewards(tuple(entries)),
+                     tuple(accolades), tuple(entries),
+                     _calculate_rewards(tuple(entries), hunt_dollar_bonus, hunter_xp_bonus),
                      parse_teams(root=root))
     except AttributeError as exception:
         logging.debug(f"AttributeError when parsing match data: {exception=}")
