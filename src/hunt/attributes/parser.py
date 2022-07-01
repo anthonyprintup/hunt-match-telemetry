@@ -52,6 +52,7 @@ def _parse_element(root: ElementTree.Element, prefix: str, element_id: int) -> _
     :param prefix: the prefix to use (different for accolades and entries)
     :param element_id: the id of the element
     :return: a tuple of parsed element variables/parameters
+    :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist (_fetch_xpath_value)
     """
     # Define the prefix
     element_prefix: str = f"{prefix}_{element_id}"
