@@ -81,22 +81,17 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     entries: list[Entry] = []
 
     try:
-        # Determine the expected number of entries to iterate
+        # Determine the expected number of accolades and entries to iterate
+        accolades_count: int = int(fetch_xpath_value(root, "MissionBagNumAccolades"))
         entries_count: int = int(fetch_xpath_value(root, "MissionBagNumEntries"))
-        for entry_id in range(entries_count):
-            # Parse each entry
-            entry_prefix: str = f"MissionBagEntry_{entry_id}"
-            amount: int = int(fetch_xpath_value(root, entry_prefix, "amount"))
-            category: str = fetch_xpath_value(root, entry_prefix, "category")
-            descriptor_name: str = fetch_xpath_value(root, entry_prefix, "descriptorName")
-            descriptor_score: int = int(fetch_xpath_value(root, entry_prefix, "descriptorScore"))
-            descriptor_type: int = int(fetch_xpath_value(root, entry_prefix, "descriptorType"))
-            reward_type: int = int(fetch_xpath_value(root, entry_prefix, "reward"))
-            reward_size: int = int(fetch_xpath_value(root, entry_prefix, "rewardSize"))
 
-            # Append a new Entry object to the list of entries
-            entries.append(Entry(amount, category, descriptor_name, descriptor_score, descriptor_type,
-                                 reward_type, reward_size))
+        # Parse and store the accolades
+        for i in range(accolades_count):
+            accolades.append(Accolade(*_parse_element(root, prefix="MissionBagEntry", element_id=i)))
+
+        # Parse and store the entries
+        for i in range(entries_count):
+            entries.append(Entry(*_parse_element(root, prefix="MissionBagEntry", element_id=i)))
 
         hunt_dollar_bonus: int = int(fetch_xpath_value(root, "MissionBagFbeGoldBonus"))
         hunter_xp_bonus: int = int(fetch_xpath_value(root, "MissionBagFbeHunterXpBonus"))
