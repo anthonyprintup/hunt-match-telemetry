@@ -42,6 +42,35 @@ def _calculate_rewards(entries: tuple[Entry, ...], hunt_dollar_bonus: int, hunte
                    hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
 
 
+def _parse_missionaccoladeentry(root: ElementTree.Element, element_id: int) -> Accolade:
+    """
+    Parses a MissionAccoladeEntry element.
+    :param root: an XML element
+    :param element_id: the id of the entry element
+    :return: an Accolade instance
+    :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist (_fetch_xpath_value)
+    """
+    # Define the prefix
+    element_prefix: str = f"MissionAccoladeEntry_{element_id}"
+
+    # Parse each entry
+    bloodline_xp: int = int(_fetch_xpath_value(root, element_prefix, "bloodlineXp"))
+    bounty: int = int(_fetch_xpath_value(root, element_prefix, "bounty"))
+    category: str = _fetch_xpath_value(root, element_prefix, "category")
+    event_points: int = int(_fetch_xpath_value(root, element_prefix, "eventPoints"))
+    bloodbonds: int = int(_fetch_xpath_value(root, element_prefix, "gems"))
+    generated_bloodbonds: int = int(_fetch_xpath_value(root, element_prefix, "generatedGems"))
+    hunt_dollars: int = int(_fetch_xpath_value(root, element_prefix, "gold"))
+    hits: int = int(_fetch_xpath_value(root, element_prefix, "hits"))
+    hunter_points: int = int(_fetch_xpath_value(root, element_prefix, "hunterPoints"))
+    hunter_xp: int = int(_fetch_xpath_value(root, element_prefix, "hunterXp"))
+    weighting: int = int(_fetch_xpath_value(root, element_prefix, "weighting"))
+    xp: int = int(_fetch_xpath_value(root, element_prefix, "xp"))
+
+    return Accolade(bloodline_xp, bounty, category, event_points, bloodbonds, generated_bloodbonds,
+                    hunt_dollars, hits, hunter_points, hunter_xp, weighting, xp)
+
+
 def _parse_missionbagentry(root: ElementTree.Element, element_id: int) -> Entry:
     """
     Parses a MissionBagEntry element.
@@ -79,12 +108,12 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
 
     try:
         # Determine the expected number of accolades and entries to iterate
-        # accolades_count: int = int(_fetch_xpath_value(root, "MissionBagNumAccolades"))
+        accolades_count: int = int(_fetch_xpath_value(root, "MissionBagNumAccolades"))
         entries_count: int = int(_fetch_xpath_value(root, "MissionBagNumEntries"))
 
         # Parse and store the accolades
-        # for i in range(accolades_count):
-        #     accolades.append(Accolade(*_parse_missionbagentry(root, prefix="MissionAccoladeEntry", element_id=i)))
+        for i in range(accolades_count):
+            accolades.append(_parse_missionaccoladeentry(root, element_id=i))
 
         # Parse and store the entries
         for i in range(entries_count):
