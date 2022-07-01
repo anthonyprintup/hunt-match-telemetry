@@ -4,7 +4,8 @@ from hashlib import sha256
 from datetime import datetime
 from dataclasses import dataclass
 
-from .entry import Accolade, Entry
+from .accolade import Accolade
+from .entry import Entry
 from .rewards import Rewards
 from .team import Team, Player
 from ..constants import RESOURCES_PATH
