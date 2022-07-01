@@ -9,7 +9,9 @@ BOUNTY_CATEGORIES: tuple[str, ...] = (
     *(f"accolade_contract_{boss_name}" for boss_name in _BOSS_NAMES),
     *(f"accolade_clean_sweep_{boss_name}" for boss_name in _BOSS_NAMES),
     "accolade_trophy_extraction_bonus",
-    "accolade_quickplay_wellsprings_found")
+    "accolade_quickplay_found_final_clue",
+    "accolade_quickplay_wellsprings_found",
+    "accolade_quickplay_extracted_artifact")
 
 XP_CATEGORIES: tuple[str, ...] = (
     "accolade_reviver",
