@@ -123,8 +123,7 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
         hunter_xp_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeHunterXpBonus"))
         hunter_survived: bool = _fetch_xpath_value(root, "MissionBagIsHunterDead") == "false"
         is_quickplay: bool = _fetch_xpath_value(root, "MissionBagIsQuickPlay") == "true"
-        return Match(steam_name, hunter_survived, is_quickplay,
-                     tuple(accolades), tuple(entries),
+        return Match(steam_name, hunter_survived, is_quickplay, tuple(accolades), tuple(entries),
                      _calculate_rewards(tuple(entries), hunt_dollar_bonus, hunter_xp_bonus),
                      parse_teams(root=root))
     except AttributeError as exception:
