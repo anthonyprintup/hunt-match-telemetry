@@ -1,4 +1,5 @@
 import logging
+from typing import TypeAlias
 import xml.etree.ElementTree as ElementTree
 
 from .match import Match, Accolade, Entry, Rewards, Team, Player
@@ -6,6 +7,8 @@ from ..exceptions import ParserError
 from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
     HUNTER_XP_CATEGORY, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
     UPGRADE_POINTS_DESCRIPTOR_NAME, BLOODLINE_DESCRIPTOR_NAME
+
+_PARSED_ELEMENT_TYPE: TypeAlias = tuple[int, str, str, int, int, int, int]
 
 
 def fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = "") -> str:
@@ -40,6 +43,30 @@ def _calculate_rewards(entries: tuple[Entry, ...], hunt_dollar_bonus: int, hunte
 
     return Rewards(bounty, xp + hunter_xp_bonus, hunt_dollars + hunt_dollar_bonus, bloodbonds,
                    hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
+
+
+def _parse_element(root: ElementTree.Element, prefix: str, element_id: int) -> _PARSED_ELEMENT_TYPE:
+    """
+    Parses an element.
+    :param root: an XML element
+    :param prefix: the prefix to use (different for accolades and entries)
+    :param element_id: the id of the element
+    :return: a tuple of parsed element variables/parameters
+    """
+    # Define the prefix
+    element_prefix: str = f"{prefix}_{element_id}"
+
+    # Parse each entry
+    amount: int = int(fetch_xpath_value(root, element_prefix, "amount"))
+    category: str = fetch_xpath_value(root, element_prefix, "category")
+    descriptor_name: str = fetch_xpath_value(root, element_prefix, "descriptorName")
+    descriptor_score: int = int(fetch_xpath_value(root, element_prefix, "descriptorScore"))
+    descriptor_type: int = int(fetch_xpath_value(root, element_prefix, "descriptorType"))
+    reward_type: int = int(fetch_xpath_value(root, element_prefix, "reward"))
+    reward_size: int = int(fetch_xpath_value(root, element_prefix, "rewardSize"))
+
+    # Return the results
+    return amount, category, descriptor_name, descriptor_score, descriptor_type, reward_type, reward_size
 
 
 def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
