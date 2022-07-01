@@ -54,8 +54,8 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     entries: list[Entry] = []
 
     try:
-        # Determine the expected number of entries to iterate over
-        entries_count: int = int(root.find(path="Attr[@name='MissionBagNumEntries']").attrib["value"])
+        # Determine the expected number of entries to iterate
+        entries_count: int = int(fetch_xpath_value(root, "MissionBagNumEntries"))
         for entry_id in range(entries_count):
             # Parse each entry
             entry_prefix: str = f"MissionBagEntry_{entry_id}"
@@ -68,8 +68,7 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
             reward_size: int = int(fetch_xpath_value(root, entry_prefix, "rewardSize"))
 
             # Append a new Entry object to the list of entries
-            entries.append(Entry(amount, category,
-                                 descriptor_name, descriptor_score, descriptor_type,
+            entries.append(Entry(amount, category, descriptor_name, descriptor_score, descriptor_type,
                                  reward_type, reward_size))
 
         hunt_dollar_bonus: int = int(fetch_xpath_value(root, "MissionBagFbeGoldBonus"))
