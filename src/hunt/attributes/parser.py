@@ -1,5 +1,4 @@
 import logging
-from typing import TypeAlias
 import xml.etree.ElementTree as ElementTree
 
 from .match import Match, Accolade, Entry, Rewards, Team, Player
@@ -7,8 +6,6 @@ from ..exceptions import ParserError
 from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
     HUNTER_XP_CATEGORY, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
     UPGRADE_POINTS_DESCRIPTOR_NAME, BLOODLINE_DESCRIPTOR_NAME
-
-_PARSED_ELEMENT_TYPE: TypeAlias = tuple[int, str, str, int, int, int, int]
 
 
 def _fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = "") -> str:
@@ -45,17 +42,16 @@ def _calculate_rewards(entries: tuple[Entry, ...], hunt_dollar_bonus: int, hunte
                    hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
 
 
-def _parse_element(root: ElementTree.Element, prefix: str, element_id: int) -> _PARSED_ELEMENT_TYPE:
+def _parse_missionbagentry(root: ElementTree.Element, element_id: int) -> Entry:
     """
-    Parses an element.
+    Parses a MissionBagEntry element.
     :param root: an XML element
-    :param prefix: the prefix to use (different for accolades and entries)
-    :param element_id: the id of the element
-    :return: a tuple of parsed element variables/parameters
+    :param element_id: the id of the entry element
+    :return: an Entry instance
     :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist (_fetch_xpath_value)
     """
     # Define the prefix
-    element_prefix: str = f"{prefix}_{element_id}"
+    element_prefix: str = f"MissionBagEntry_{element_id}"
 
     # Parse each entry
     amount: int = int(_fetch_xpath_value(root, element_prefix, "amount"))
@@ -66,8 +62,8 @@ def _parse_element(root: ElementTree.Element, prefix: str, element_id: int) -> _
     reward_type: int = int(_fetch_xpath_value(root, element_prefix, "reward"))
     reward_size: int = int(_fetch_xpath_value(root, element_prefix, "rewardSize"))
 
-    # Return the results
-    return amount, category, descriptor_name, descriptor_score, descriptor_type, reward_type, reward_size
+    # Return the entry
+    return Entry(amount, category, descriptor_name, descriptor_score, descriptor_type, reward_type, reward_size)
 
 
 def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
@@ -83,16 +79,16 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
 
     try:
         # Determine the expected number of accolades and entries to iterate
-        accolades_count: int = int(_fetch_xpath_value(root, "MissionBagNumAccolades"))
+        # accolades_count: int = int(_fetch_xpath_value(root, "MissionBagNumAccolades"))
         entries_count: int = int(_fetch_xpath_value(root, "MissionBagNumEntries"))
 
         # Parse and store the accolades
-        for i in range(accolades_count):
-            accolades.append(Accolade(*_parse_element(root, prefix="MissionAccoladeEntry", element_id=i)))
+        # for i in range(accolades_count):
+        #     accolades.append(Accolade(*_parse_missionbagentry(root, prefix="MissionAccoladeEntry", element_id=i)))
 
         # Parse and store the entries
         for i in range(entries_count):
-            entries.append(Entry(*_parse_element(root, prefix="MissionBagEntry", element_id=i)))
+            entries.append(_parse_missionbagentry(root, element_id=i))
 
         hunt_dollar_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeGoldBonus"))
         hunter_xp_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeHunterXpBonus"))
