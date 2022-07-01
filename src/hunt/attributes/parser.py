@@ -20,7 +20,7 @@ def fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = "")
     return element.find(path=f"Attr[@name='{name}{'_' + suffix if suffix else ''}']").attrib["value"]
 
 
-def _calculate_rewards(entries: tuple[Entry, ...]) -> Rewards:
+def _calculate_rewards(entries: tuple[Entry, ...], hunt_dollar_bonus: int, hunter_xp_bonus: int) -> Rewards:
     """
     Calculates all the rewards collected from a match.
     :param entries: a tuple of Entry instances
@@ -38,7 +38,8 @@ def _calculate_rewards(entries: tuple[Entry, ...]) -> Rewards:
     bloodline_xp: int = sum(entry.reward_size for entry in entries
                             if entry.descriptor_name == BLOODLINE_DESCRIPTOR_NAME)
 
-    return Rewards(bounty, xp, hunt_dollars, bloodbonds, hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
+    return Rewards(bounty, xp + hunter_xp_bonus, hunt_dollars + hunt_dollar_bonus, bloodbonds,
+                   hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
 
 
 def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
