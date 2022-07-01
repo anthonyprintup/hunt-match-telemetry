@@ -1,4 +1,4 @@
-from accolade import Accolade, dataclass
+from .accolade import Accolade, dataclass
 
 
 @dataclass(frozen=True)
