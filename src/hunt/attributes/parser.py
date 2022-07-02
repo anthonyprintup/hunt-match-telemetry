@@ -103,8 +103,8 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     :return: a Match object
     :raises ParserError: if an expected value is not found (AttributeError, parse_teams)
     """
-    accolades: list[Accolade] = []
-    entries: list[Entry] = []
+    accolades: list[Accolade, ...] = []
+    entries: list[Entry, ...] = []
 
     try:
         # Determine the expected number of accolades and entries to iterate
