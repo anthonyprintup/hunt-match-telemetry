@@ -20,12 +20,15 @@ def _fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = ""
     return element.find(path=f"Attr[@name='{name}{'_' + suffix if suffix else ''}']").attrib["value"]
 
 
-def _calculate_rewards(entries: tuple[Entry, ...], hunt_dollar_bonus: int, hunter_xp_bonus: int) -> Rewards:
+def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ...],
+                       hunt_dollar_bonus: int, hunter_xp_bonus: int) -> Rewards:
     """
     Calculates all the rewards collected from a match.
+    :param accolades: a tuple of Accolade instances
     :param entries: a tuple of Entry instances
     :return: a Rewards instance
     """
+    generated_bloodbonds: int = sum(accolade.generated_bloodbonds for accolade in accolades)
     bounty: int = sum(entry.reward_size for entry in entries if entry.category in BOUNTY_CATEGORIES)
     xp: int = sum(entry.reward_size for entry in entries if entry.category in XP_CATEGORIES)
     hunt_dollars: int = sum(entry.reward_size for entry in entries if entry.category == HUNT_DOLLARS_CATEGORY)
@@ -38,7 +41,7 @@ def _calculate_rewards(entries: tuple[Entry, ...], hunt_dollar_bonus: int, hunte
     bloodline_xp: int = sum(entry.reward_size for entry in entries
                             if entry.descriptor_name == BLOODLINE_DESCRIPTOR_NAME)
 
-    return Rewards(bounty, xp + hunter_xp_bonus, hunt_dollars + hunt_dollar_bonus, bloodbonds,
+    return Rewards(bounty, xp + hunter_xp_bonus, hunt_dollars + hunt_dollar_bonus, generated_bloodbonds + bloodbonds,
                    hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
 
 
@@ -123,8 +126,11 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
         hunter_xp_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeHunterXpBonus"))
         hunter_survived: bool = _fetch_xpath_value(root, "MissionBagIsHunterDead") == "false"
         is_quickplay: bool = _fetch_xpath_value(root, "MissionBagIsQuickPlay") == "true"
-        return Match(steam_name, hunter_survived, is_quickplay, tuple(accolades), tuple(entries),
-                     _calculate_rewards(tuple(entries), hunt_dollar_bonus, hunter_xp_bonus),
+
+        accolades_tuple: tuple[Accolade, ...] = tuple(accolades)
+        entries_tuple: tuple[Entry, ...] = tuple(entries)
+        return Match(steam_name, hunter_survived, is_quickplay, accolades_tuple, entries_tuple,
+                     _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
                      parse_teams(root=root))
     except AttributeError as exception:
         logging.debug(f"AttributeError when parsing match data: {exception=}")
