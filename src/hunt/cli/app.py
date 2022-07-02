@@ -132,7 +132,11 @@ def log_match_data(match: Match):
         # Hunt dollars
         total_hunt_dollars: int = match.rewards.bounty + match.rewards.hunt_dollars
         if total_hunt_dollars:
-            logging.info(f"  Collected {total_hunt_dollars} hunt dollars.")
+            logging.info(f"  Received {total_hunt_dollars} hunt dollars.")
+
+        # Bloodbonds
+        if match.rewards.bloodbonds:
+            logging.info(f"  Received {match.rewards.bloodbonds} bloodbonds.")
 
         # Hunter-related rewards
         total_xp: int = match.rewards.xp + match.rewards.hunter_xp + match.rewards.bounty * 4
