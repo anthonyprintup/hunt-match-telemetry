@@ -104,7 +104,8 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     :param steam_name: the user's display name
     :param root: the root element tree
     :return: a Match object
-    :raises ParserError: if an expected value is not found (AttributeError, parse_teams)
+    :raises ParserError: if an expected value is not found (AttributeError;
+                         _parse_missionaccoladeentry, _parse_missionbagentry, parse_teams)
     """
     accolades: list[Accolade, ...] = []
     entries: list[Entry, ...] = []
