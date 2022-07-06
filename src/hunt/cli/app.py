@@ -2,6 +2,7 @@ import sys
 import time
 import os.path
 import logging
+import argparse
 from typing import Generator
 from functools import partial
 
@@ -14,12 +15,23 @@ from hunt.filesystem.watchdog import FileWatchdog
 from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 from hunt.attributes.parser import ElementTree, Match, Player, parse_match
 from hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
+from hunt.cli.arguments.parser import ArgumentParser, setup_argument_parser
+from hunt.cli.exit_codes import ExitCode
 
 
-def main():
+def main() -> ExitCode:
+    """
+    The CLI entry point for the package.
+    :return: an exit code
+    """
+    # Parse any provided arguments
+    argument_parser: ArgumentParser = setup_argument_parser()
+    arguments: argparse.Namespace = argument_parser.parse_args()
+
     # Setup logging
     logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
-                        datefmt="%H:%M", level=logging.INFO, stream=sys.stdout)
+                        datefmt="%H:%M", level=logging.INFO if not arguments.debug else logging.DEBUG,
+                        stream=sys.stdout)
 
     try:
         # Extract the Steamworks binaries to disk
@@ -28,11 +40,11 @@ def main():
         logging.critical("Failed to extract the Steamworks binaries, are you missing the Steamworks SDK?")
         logging.info(f"The Steamworks SDK should be located at: {STEAMWORKS_SDK_PATH!r}")
         logging.debug(f"Steamworks error: {exception=}")
-        return
+        return ExitCode.STEAMWORKS_ERROR
     except UnsupportedPlatformError as exception:
         logging.critical("The current platform isn't supported.")
         logging.debug(f"Unsupported platform error: {exception=}")
-        return
+        return ExitCode.UNSUPPORTED_PLATFORM
 
     try:
         # Initialize the Steamworks API
@@ -40,7 +52,7 @@ def main():
     except SteamworksError as exception:
         logging.critical("A Steamworks API error occurred, is Steam running?")
         logging.debug(f"Steamworks error: {exception=}")
-        return
+        return ExitCode.STEAMWORKS_ERROR
     else:
         logging.info("Steamworks API initialized.")
 
@@ -71,6 +83,7 @@ def main():
 
     # Signal to the user that we're shutting down
     logging.info("Shutting down.")
+    return ExitCode.SUCCESS
 
 
 def attributes_file_modified(file_path: str, database: DatabaseClient, steamworks_api: SteamworksApi):
@@ -180,4 +193,4 @@ def log_match_data(match: Match):
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
