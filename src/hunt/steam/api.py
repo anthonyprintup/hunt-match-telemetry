@@ -69,6 +69,7 @@ class SteamworksApi:
     def get_install_directory(self, app_id: int) -> str:
         """
         Gets the installation path of the app id.
+        :param app_id: the app id of the game
         :return: a path to the app directory
         :raises SteamworksError: if the installation path returned was empty
         :raises SteamworksError: if the API returned a null pointer (SteamworksApi._steam_apps)
@@ -112,6 +113,8 @@ class SteamworksApi:
     def prepare_and_initialize(api_binary_path: str, app_id: int) -> SteamworksApi:
         """
         This function will set up everything required to use the Steamworks API.
+        :param api_binary_path: the path of the API binary
+        :param app_id: the app id of the game
         :return: a new SteamworksApi instance
         :raises SteamworksError: if initialization failed (SteamworksApi.init)
         """
@@ -203,6 +206,8 @@ def try_extract_steamworks_binaries() -> str:
 def fetch_hunt_attributes_path(steamworks_api: SteamworksApi, app_id: int) -> str:
     """
     Locates the game's install path and appends the attributes file path to it.
+    :param steamworks_api: a Steamworks API instance
+    :param app_id: the app id of the game
     :return: A path to the attributes file
     """
     install_directory: str = steamworks_api.get_install_directory(app_id=app_id)
