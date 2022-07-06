@@ -8,4 +8,4 @@ class Team:
     is_invite: bool
     mmr: int
     own_team: bool
-    players: tuple[Player]
+    players: tuple[Player, ...]
