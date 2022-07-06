@@ -8,7 +8,8 @@ from functools import partial
 
 from colorama import Fore, Style
 
-from hunt.constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, DATABASE_PATH, STEAMWORKS_SDK_PATH
+from hunt.constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
+    DATABASE_PATH, DATABASE_TEST_SERVER_PATH, STEAMWORKS_SDK_PATH
 from hunt.formats import format_mmr
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
@@ -72,7 +73,8 @@ def main(arguments: argparse.Namespace) -> ExitCode:
     assert os.path.exists(attributes_path), "Attributes file does not exist."
 
     database: DatabaseClient
-    with DatabaseClient(file_path=DATABASE_PATH) as database:
+    database_path: str = DATABASE_PATH if not arguments.test_server else DATABASE_TEST_SERVER_PATH
+    with DatabaseClient(file_path=database_path) as database:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
             file_path=attributes_path,
