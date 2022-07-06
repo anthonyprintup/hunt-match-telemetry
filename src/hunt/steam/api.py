@@ -6,8 +6,7 @@ import ctypes
 from zipfile import ZipFile
 from ctypes import cdll, CDLL
 
-from ..constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
-    STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
+from ..constants import STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
 from ..exceptions import UnsupportedPlatformError, SteamworksError
 from .type_aliases import char, char_pointer, void_pointer, uint32, AppId_t
 
@@ -67,7 +66,7 @@ class SteamworksApi:
             raise SteamworksError("The pointer to ISteamFriends was null.")
         return steam_friends
 
-    def get_install_directory(self) -> str:
+    def get_install_directory(self, app_id: int) -> str:
         """
         Gets the installation path of the app id.
         :return: a path to the app directory
@@ -84,7 +83,7 @@ class SteamworksApi:
         # Invoke SteamAPI_ISteamApps_GetAppInstallDir
         bytes_written: uint32 = self._api.SteamAPI_ISteamApps_GetAppInstallDir(
             steam_apps,
-            AppId_t(HUNT_SHOWDOWN_APP_ID),
+            AppId_t(app_id),
             install_directory_buffer,
             len(install_directory_buffer))
         if not bytes_written:
@@ -110,7 +109,7 @@ class SteamworksApi:
         self._api.SteamAPI_Shutdown()
 
     @staticmethod
-    def prepare_and_initialize(api_binary_path: str, is_test_server: bool) -> SteamworksApi:
+    def prepare_and_initialize(api_binary_path: str, app_id: int) -> SteamworksApi:
         """
         This function will set up everything required to use the Steamworks API.
         :return: a new SteamworksApi instance
@@ -120,7 +119,6 @@ class SteamworksApi:
         #   the Steam API will attempt to resolve this
         #   environment variable because "steam_appid.txt"
         #   doesn't exist in the working directory.
-        app_id: int = HUNT_SHOWDOWN_APP_ID if not is_test_server else HUNT_SHOWDOWN_TEST_SERVER_APP_ID
         os.environ["SteamAppId"] = f"{app_id}"
 
         # Initialize the api
@@ -202,10 +200,10 @@ def try_extract_steamworks_binaries() -> str:
     return expected_api_binary_path
 
 
-def fetch_hunt_attributes_path(steamworks_api: SteamworksApi) -> str:
+def fetch_hunt_attributes_path(steamworks_api: SteamworksApi, app_id: int) -> str:
     """
     Locates the game's install path and appends the attributes file path to it.
     :return: A path to the attributes file
     """
-    install_directory: str = steamworks_api.get_install_directory()
+    install_directory: str = steamworks_api.get_install_directory(app_id=app_id)
     return install_directory + r"\user\profiles\default\attributes.xml"
