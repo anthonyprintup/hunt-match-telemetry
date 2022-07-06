@@ -14,7 +14,7 @@ from hunt.formats import format_mmr
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
 from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
-from hunt.attributes.parser import ElementTree, Match, Player, parse_match
+from hunt.attributes.parser import ElementTree, Match, Player, TestServerPlayer, parse_match
 from hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
 from hunt.cli.arguments.parser import ArgumentParser, setup_argument_parser
 from hunt.cli.exit_codes import ExitCode
@@ -189,7 +189,7 @@ def log_match_data(match: Match):
 
         # Log information about the local team
         logging.info("Team:")
-        player: Player
+        player: Player | TestServerPlayer
         for player in teammates:
             name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
             local_player_marker: str = " (you)" if player.name == match.player_name else ""
