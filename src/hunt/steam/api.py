@@ -6,7 +6,7 @@ import ctypes
 from zipfile import ZipFile
 from ctypes import cdll, CDLL
 
-from ..constants import HUNT_SHOWDOWN_STEAM_ID, STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
+from ..constants import HUNT_SHOWDOWN_APP_ID, STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
 from ..exceptions import UnsupportedPlatformError, SteamworksError
 from .type_aliases import char, char_pointer, void_pointer, uint32, AppId_t
 
@@ -83,7 +83,7 @@ class SteamworksApi:
         # Invoke SteamAPI_ISteamApps_GetAppInstallDir
         bytes_written: uint32 = self._api.SteamAPI_ISteamApps_GetAppInstallDir(
             steam_apps,
-            AppId_t(HUNT_SHOWDOWN_STEAM_ID),
+            AppId_t(HUNT_SHOWDOWN_APP_ID),
             install_directory_buffer,
             len(install_directory_buffer))
         if not bytes_written:
@@ -119,7 +119,7 @@ class SteamworksApi:
         #   the Steam API will attempt to resolve this
         #   environment variable because "steam_appid.txt"
         #   doesn't exist in the working directory.
-        os.environ["SteamAppId"] = f"{HUNT_SHOWDOWN_STEAM_ID}"
+        os.environ["SteamAppId"] = f"{HUNT_SHOWDOWN_APP_ID}"
 
         # Initialize the api
         api: SteamworksApi = SteamworksApi(api_binary_path=api_binary_path)
