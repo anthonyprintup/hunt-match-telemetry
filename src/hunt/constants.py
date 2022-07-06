@@ -1,6 +1,7 @@
 import os.path
 
-HUNT_SHOWDOWN_APP_ID: int = 594650  # Hunt: Showdown Steam ID
+HUNT_SHOWDOWN_APP_ID: int = 594650  # Hunt: Showdown App ID
+HUNT_SHOWDOWN_TEST_SERVER_APP_ID: int = 770720  # Hunt: Showdown (Test Server) App ID
 
 # The path (directory) to where match logs are stored
 WORKING_DIRECTORY: str = os.getcwd()
