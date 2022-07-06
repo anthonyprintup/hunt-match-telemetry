@@ -58,7 +58,8 @@ def main(arguments: argparse.Namespace) -> ExitCode:
 
     try:
         # Initialize the Steamworks API
-        steamworks_api: SteamworksApi = SteamworksApi.prepare_and_initialize(api_binary_path=steamworks_api_path)
+        steamworks_api: SteamworksApi = SteamworksApi.prepare_and_initialize(api_binary_path=steamworks_api_path,
+                                                                             is_test_server=arguments.test_server)
     except SteamworksError as exception:
         logging.critical("A Steamworks API error occurred, is Steam running?")
         logging.debug(f"Steamworks error: {exception=}")

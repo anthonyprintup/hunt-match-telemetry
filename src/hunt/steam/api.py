@@ -6,7 +6,8 @@ import ctypes
 from zipfile import ZipFile
 from ctypes import cdll, CDLL
 
-from ..constants import HUNT_SHOWDOWN_APP_ID, STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
+from ..constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
+    STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
 from ..exceptions import UnsupportedPlatformError, SteamworksError
 from .type_aliases import char, char_pointer, void_pointer, uint32, AppId_t
 
@@ -109,7 +110,7 @@ class SteamworksApi:
         self._api.SteamAPI_Shutdown()
 
     @staticmethod
-    def prepare_and_initialize(api_binary_path: str) -> SteamworksApi:
+    def prepare_and_initialize(api_binary_path: str, is_test_server: bool) -> SteamworksApi:
         """
         This function will set up everything required to use the Steamworks API.
         :return: a new SteamworksApi instance
@@ -119,7 +120,8 @@ class SteamworksApi:
         #   the Steam API will attempt to resolve this
         #   environment variable because "steam_appid.txt"
         #   doesn't exist in the working directory.
-        os.environ["SteamAppId"] = f"{HUNT_SHOWDOWN_APP_ID}"
+        app_id: int = HUNT_SHOWDOWN_APP_ID if not is_test_server else HUNT_SHOWDOWN_TEST_SERVER_APP_ID
+        os.environ["SteamAppId"] = f"{app_id}"
 
         # Initialize the api
         api: SteamworksApi = SteamworksApi(api_binary_path=api_binary_path)
