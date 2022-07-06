@@ -19,6 +19,7 @@ MMR_RANGES: tuple[int, ...] = (0, 2000, 2300, 2600, 2750, 3000)
 
 # Database
 DATABASE_PATH: str = os.path.join(RESOURCES_PATH, "match_data.db")
+DATABASE_TEST_SERVER_PATH: str = os.path.join(RESOURCES_PATH, "match_data_ts.db")
 
 
 # Helper function to generate create table queries
