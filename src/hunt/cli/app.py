@@ -8,7 +8,7 @@ from functools import partial
 
 from colorama import Fore, Style
 
-from hunt.constants import DATABASE_PATH, STEAMWORKS_SDK_PATH
+from hunt.constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, DATABASE_PATH, STEAMWORKS_SDK_PATH
 from hunt.formats import format_mmr
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
@@ -58,8 +58,8 @@ def main(arguments: argparse.Namespace) -> ExitCode:
 
     try:
         # Initialize the Steamworks API
-        steamworks_api: SteamworksApi = SteamworksApi.prepare_and_initialize(api_binary_path=steamworks_api_path,
-                                                                             is_test_server=arguments.test_server)
+        app_id: int = HUNT_SHOWDOWN_APP_ID if not arguments.test_server else HUNT_SHOWDOWN_TEST_SERVER_APP_ID
+        steamworks_api: SteamworksApi = SteamworksApi.prepare_and_initialize(steamworks_api_path, app_id=app_id)
     except SteamworksError as exception:
         logging.critical("A Steamworks API error occurred, is Steam running?")
         logging.debug(f"Steamworks error: {exception=}")
@@ -68,7 +68,7 @@ def main(arguments: argparse.Namespace) -> ExitCode:
         logging.info("Steamworks API initialized.")
 
     # Locate the attributes file
-    attributes_path: str = fetch_hunt_attributes_path(steamworks_api)
+    attributes_path: str = fetch_hunt_attributes_path(steamworks_api, app_id=app_id)
     assert os.path.exists(attributes_path), "Attributes file does not exist."
 
     database: DatabaseClient
