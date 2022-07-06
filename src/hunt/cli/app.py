@@ -19,15 +19,25 @@ from hunt.cli.arguments.parser import ArgumentParser, setup_argument_parser
 from hunt.cli.exit_codes import ExitCode
 
 
-def main() -> ExitCode:
+def console_main() -> ExitCode:
     """
     The CLI entry point for the package.
-    :return: an exit code
+    :return: an exit code.
     """
     # Parse any provided arguments
     argument_parser: ArgumentParser = setup_argument_parser()
     arguments: argparse.Namespace = argument_parser.parse_args()
 
+    # Start the application.
+    return main(arguments)
+
+
+def main(arguments: argparse.Namespace) -> ExitCode:
+    """
+    Run the program and provide an exit code.
+    :param arguments: the provided arguments
+    :return: an exit code.
+    """
     # Setup logging
     logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
                         datefmt="%H:%M", level=logging.INFO if not arguments.debug else logging.DEBUG,
@@ -193,4 +203,4 @@ def log_match_data(match: Match):
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(console_main())
