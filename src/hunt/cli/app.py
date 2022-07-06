@@ -76,7 +76,8 @@ def main(arguments: argparse.Namespace) -> ExitCode:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
             file_path=attributes_path,
-            callback=partial(attributes_file_modified, database=database, steamworks_api=steamworks_api))
+            callback=partial(attributes_file_modified, is_test_server=arguments.test_server,
+                             database=database, steamworks_api=steamworks_api))
         file_watchdog.start()
 
         # Inform the user that the program has started
@@ -97,12 +98,14 @@ def main(arguments: argparse.Namespace) -> ExitCode:
     return ExitCode.SUCCESS
 
 
-def attributes_file_modified(file_path: str, database: DatabaseClient, steamworks_api: SteamworksApi):
+def attributes_file_modified(file_path: str, is_test_server: bool,
+                             database: DatabaseClient, steamworks_api: SteamworksApi):
     """
     Invoked when the attributes file is modified;
       Parses the match data from the attributes file and
       saves it to disk.
     :param file_path: the path of the file to parse
+    :param is_test_server: True if the parsed attributes file is from the test server
     :param database: a DatabaseClient instance
     :param steamworks_api: a SteamworksApi instance
     """
@@ -125,7 +128,8 @@ def attributes_file_modified(file_path: str, database: DatabaseClient, steamwork
 
     # Parse the teams from the attributes file
     try:
-        match: Match = parse_match(root=parsed_attributes, steam_name=steamworks_api.get_persona_name())
+        match: Match = parse_match(root=parsed_attributes, steam_name=steamworks_api.get_persona_name(),
+                                   is_test_server=is_test_server)
     except SteamworksError as exception:
         logging.debug(f"Failed to get the user's display name: {exception=}")
         return
