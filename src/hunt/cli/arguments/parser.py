@@ -11,4 +11,7 @@ def setup_argument_parser() -> ArgumentParser:
     # Debug variables
     argument_parser.add_argument("--debug", action="store_true")
 
+    # Test server support
+    argument_parser.add_argument("--test-server", action="store_true")
+
     return argument_parser
