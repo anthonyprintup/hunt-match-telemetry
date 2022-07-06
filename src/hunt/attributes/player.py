@@ -28,6 +28,8 @@ class TestServerPlayer:
     is_soul_survivor: bool
     killed_by_me: int
     killed_by_teammate: int
+    killed_me: int
+    killed_teammate: int
     mmr: int
     profile_id: int
     proximity_to_me: bool
