@@ -4,7 +4,7 @@ version = "1.3.2"
 description = "Automatically extract match data from Hunt: Showdown matches."
 authors = ["Anthony Printup <anthony@printup.io>"]
 packages = [{include = "hunt", from = "src"}]
-repository = "https://github.com/anthonyprintup/hunt-mmr"
+repository = "https://github.com/anthonyprintup/hunt-match-telemetry"
 
 [tool.poetry.dependencies]
 python = "^3.10"

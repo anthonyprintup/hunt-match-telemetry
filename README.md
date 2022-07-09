@@ -1,4 +1,4 @@
-# Hunt MMR
+# Hunt Match Telemetry
 This tool is intended to be used for automatically logging match data provided by the game.
 
 # Installation
