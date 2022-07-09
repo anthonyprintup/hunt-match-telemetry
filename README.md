@@ -3,11 +3,11 @@ This tool is intended to be used for automatically logging match data provided b
 
 # Installation
 - Create a new Python 3.10 [virtual environment](https://docs.python.org/3/library/venv.html) and activate it, <sup><sub>(optional)<sub/></sup>
-- run `pip install hunt-mmr` to install the package,
+- run `pip install hunt-match-telemetry` to install the package,
 - download the [Steamworks SDK](https://partner.steamgames.com/downloads/steamworks_sdk.zip) and place it in `./resources/steam` as `steamworks_sdk.zip`.
 
 # Instructions
-- Run the CLI version of the package by executing `hunt-mmr-cli` in your preferred terminal,
+- Run the CLI version of the package by executing `hunt-match-telemetry-cli` in your preferred terminal,
 - join a match from the game,
 - finish the game (extract, die, etc.),
 - return to the lobby screen (or any UI element that updates the last match information).

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "hunt-mmr"
+name = "hunt-match-telemetry"
 version = "1.3.2"
 description = "Automatically extract match data from Hunt: Showdown matches."
 authors = ["Anthony Printup <anthony@printup.io>"]
@@ -20,7 +20,7 @@ pytest-cov = "^3.0.0"
 pytest-custom-exit-code = "^0.3.0"
 
 [tool.poetry.scripts]
-hunt-mmr-cli = "hunt.cli.app:main"
+hunt-match-telemetry-cli = "hunt.cli.app:console_main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
