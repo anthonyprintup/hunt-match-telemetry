@@ -6,6 +6,7 @@ BOUNTY_CATEGORIES: tuple[str, ...] = (
     "accolade_clues_found",
     *(f"accolade_found_{boss_name}" for boss_name in _BOSS_NAMES),
     *(f"accolade_killed_{boss_name}" for boss_name in _BOSS_NAMES),
+    *(f"accolade_killed_{boss_name}_solo" for boss_name in _BOSS_NAMES),
     *(f"accolade_contract_{boss_name}" for boss_name in _BOSS_NAMES),
     *(f"accolade_clean_sweep_{boss_name}" for boss_name in _BOSS_NAMES),
     "accolade_trophy_extraction_bonus",
