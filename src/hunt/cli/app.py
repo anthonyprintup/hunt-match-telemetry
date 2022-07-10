@@ -2,7 +2,6 @@ import sys
 import time
 import os.path
 import logging
-import argparse
 from typing import Generator
 from functools import partial
 
@@ -16,7 +15,7 @@ from hunt.filesystem.watchdog import FileWatchdog
 from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 from hunt.attributes.parser import ElementTree, Match, Player, TestServerPlayer, parse_match
 from hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
-from hunt.cli.arguments.parser import ArgumentParser, setup_argument_parser
+from hunt.cli.arguments.parser import Config, parse_arguments
 from hunt.cli.exit_codes import ExitCode
 
 
@@ -25,23 +24,22 @@ def console_main() -> ExitCode:
     The CLI entry point for the package.
     :return: an exit code.
     """
-    # Parse any provided arguments
-    argument_parser: ArgumentParser = setup_argument_parser()
-    arguments: argparse.Namespace = argument_parser.parse_args()
+    # Parse the arguments and forward the app config to main
+    config: Config = parse_arguments()
 
     # Start the application.
-    return main(arguments)
+    return main(config)
 
 
-def main(arguments: argparse.Namespace) -> ExitCode:
+def main(config: Config) -> ExitCode:
     """
     Run the program and provide an exit code.
-    :param arguments: the provided arguments
+    :param config: the configuration provided by the user
     :return: an exit code.
     """
     # Setup logging
     logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
-                        datefmt="%H:%M", level=logging.INFO if not arguments.debug else logging.DEBUG,
+                        datefmt="%H:%M", level=logging.INFO if not config.debug else logging.DEBUG,
                         stream=sys.stdout)
 
     try:
@@ -59,7 +57,7 @@ def main(arguments: argparse.Namespace) -> ExitCode:
 
     try:
         # Initialize the Steamworks API
-        app_id: int = HUNT_SHOWDOWN_APP_ID if not arguments.test_server else HUNT_SHOWDOWN_TEST_SERVER_APP_ID
+        app_id: int = HUNT_SHOWDOWN_APP_ID if not config.test_server else HUNT_SHOWDOWN_TEST_SERVER_APP_ID
         steamworks_api: SteamworksApi = SteamworksApi.prepare_and_initialize(steamworks_api_path, app_id=app_id)
     except SteamworksError as exception:
         logging.critical("A Steamworks API error occurred, is Steam running?")
@@ -73,12 +71,12 @@ def main(arguments: argparse.Namespace) -> ExitCode:
     assert os.path.exists(attributes_path), "Attributes file does not exist."
 
     database: DatabaseClient
-    database_path: str = DATABASE_PATH if not arguments.test_server else DATABASE_TEST_SERVER_PATH
+    database_path: str = DATABASE_PATH if not config.test_server else DATABASE_TEST_SERVER_PATH
     with DatabaseClient(file_path=database_path) as database:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
             file_path=attributes_path,
-            callback=partial(attributes_file_modified, is_test_server=arguments.test_server,
+            callback=partial(attributes_file_modified, is_test_server=config.test_server,
                              database=database, steamworks_api=steamworks_api))
         file_watchdog.start()
 
