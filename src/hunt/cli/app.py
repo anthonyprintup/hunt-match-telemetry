@@ -5,7 +5,7 @@ import logging
 from typing import Generator
 from functools import partial
 
-from colorama import Fore, Style
+from colorama import Fore, Style, init as colorama_init
 
 from hunt.constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
     DATABASE_PATH, DATABASE_TEST_SERVER_PATH, STEAMWORKS_SDK_PATH
@@ -24,6 +24,9 @@ def console_main() -> ExitCode:
     The CLI entry point for the package.
     :return: an exit code.
     """
+    # Initialize Colorama
+    colorama_init()
+
     # Parse the arguments and forward the app config to main
     config: Config = parse_arguments()
 
