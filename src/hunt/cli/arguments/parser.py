@@ -1,4 +1,6 @@
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
+
+from ..config import Config
 
 
 def setup_argument_parser() -> ArgumentParser:
@@ -15,3 +17,16 @@ def setup_argument_parser() -> ArgumentParser:
     argument_parser.add_argument("--test-server", action="store_true")
 
     return argument_parser
+
+
+def parse_arguments() -> Config:
+    """
+    Parses command line arguments into a Config instance.
+    :return: a Config instance
+    """
+    # Parse any provided arguments
+    argument_parser: ArgumentParser = setup_argument_parser()
+    arguments: Namespace = argument_parser.parse_args()
+
+    # Return a Config instance
+    return Config(arguments.debug, arguments.test_server)
