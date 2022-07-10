@@ -187,7 +187,8 @@ def log_match_data(match: Match):
     # Log players
     def _log_players():
         teammates: Generator = (player for team in match.teams for player in team.players if team.own_team)
-        enemies: Generator = (player for team in match.teams for player in team.players if not team.own_team)
+        enemies: tuple[Player, ...] = tuple(player for team in match.teams for player in team.players
+                                            if not team.own_team)
 
         # Log information about the local team
         logging.info("Team:")
@@ -198,16 +199,17 @@ def log_match_data(match: Match):
             logging.info(f"  {name} ({format_mmr(player.mmr)}){local_player_marker}")
 
         # Log information about the players the local player interacted with
-        logging.info("Enemies:")
-        for player in enemies:
-            if player.killed_by_me:
-                name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
-                kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
-                logging.info(f"  Killed {name} ({format_mmr(player.mmr)}){kill_count}")
-            if player.killed_me:
-                name: str = f"{Fore.RED}{player.name}{Style.RESET_ALL}"
-                death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
-                logging.info(f"  Died to {name} ({format_mmr(player.mmr)}){death_count}")
+        if enemies:
+            logging.info("Enemies:")
+            for player in enemies:
+                if player.killed_by_me:
+                    name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
+                    kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
+                    logging.info(f"  Killed {name} ({format_mmr(player.mmr)}){kill_count}")
+                if player.killed_me:
+                    name: str = f"{Fore.RED}{player.name}{Style.RESET_ALL}"
+                    death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
+                    logging.info(f"  Died to {name} ({format_mmr(player.mmr)}){death_count}")
     _log_players()
 
 
