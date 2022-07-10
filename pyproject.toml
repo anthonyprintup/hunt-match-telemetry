@@ -5,6 +5,7 @@ description = "Automatically extract match data from Hunt: Showdown matches."
 authors = ["Anthony Printup <anthony@printup.io>"]
 packages = [{include = "hunt", from = "src"}]
 repository = "https://github.com/anthonyprintup/hunt-match-telemetry"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
