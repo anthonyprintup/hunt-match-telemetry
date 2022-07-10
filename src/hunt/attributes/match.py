@@ -8,7 +8,7 @@ from .accolade import Accolade
 from .entry import Entry
 from .rewards import Rewards
 from .team import Team, Player, TestServerPlayer
-from ..constants import RESOURCES_PATH
+from ..constants import MATCH_LOGS_PATH
 from ..database.queries import DatabaseClient, data_hash_exists, insert_match_hash, update_player_data
 
 
@@ -28,7 +28,7 @@ class Match:
         :return: the file path for the match data
         """
         now: datetime = datetime.now()
-        return os.path.join(RESOURCES_PATH,
+        return os.path.join(MATCH_LOGS_PATH,
                             f"{now.year}-{now.month:02d}-{now.day:02d}",
                             f"{'quickplay' if self.is_quickplay else 'bounty_hunt'}",
                             f"{now.hour:02d}-{now.minute:02d}-{now.second:02d}.json")
