@@ -155,6 +155,10 @@ def log_match_data(match: Match):
     """
     # Log interesting rewards
     def _log_rewards():
+        # Skip logging if there are no rewards
+        if not match.rewards:
+            return
+
         logging.info("Rewards:")
 
         # Hunt dollars
