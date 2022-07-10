@@ -6,7 +6,9 @@ HUNT_SHOWDOWN_TEST_SERVER_APP_ID: int = 770720  # Hunt: Showdown (Test Server) A
 # The path (directory) to where match logs are stored
 WORKING_DIRECTORY: str = os.getcwd()
 RESOURCES_PATH: str = os.path.realpath(os.path.join(WORKING_DIRECTORY, "resources"))
+MATCH_LOGS_PATH: str = os.path.join(RESOURCES_PATH, "logs")
 os.makedirs(name=RESOURCES_PATH, exist_ok=True)  # Create the resource directory if it doesn't exist
+os.makedirs(name=MATCH_LOGS_PATH, exist_ok=True)  # Create the MATCH LOGS directory if it doesn't exist
 
 # Steam
 STEAMWORKS_BINARIES_PATH: str = os.path.join(RESOURCES_PATH, "steam")
