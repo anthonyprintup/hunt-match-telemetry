@@ -186,9 +186,10 @@ def log_match_data(match: Match):
 
     # Log players
     def _log_players():
-        teammates: Generator = (player for team in match.teams for player in team.players if team.own_team)
-        enemies: tuple[Player, ...] = tuple(player for team in match.teams for player in team.players
-                                            if not team.own_team)
+        teammates: Generator[Player | TestServerPlayer, None, None] = (
+            player for team in match.teams for player in team.players if team.own_team)
+        enemies: tuple[Player | TestServerPlayer, ...] = tuple(player for team in match.teams
+                                                               for player in team.players if not team.own_team)
 
         # Log information about the local team
         logging.info("Team:")
