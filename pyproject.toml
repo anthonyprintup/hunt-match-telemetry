@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "hunt-match-telemetry"
-version = "1.4.0"
+version = "1.4.1"
 description = "Automatically extract match data from Hunt: Showdown matches."
 authors = ["Anthony Printup <anthony@printup.io>"]
+readme = "README.md"
 packages = [{include = "hunt", from = "src"}]
 repository = "https://github.com/anthonyprintup/hunt-match-telemetry"
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
