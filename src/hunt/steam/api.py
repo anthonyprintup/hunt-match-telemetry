@@ -4,7 +4,7 @@ import os
 import sys
 import ctypes
 from zipfile import ZipFile
-from ctypes import cdll, CDLL
+from ctypes import cdll, CDLL, Array
 
 from ..constants import STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
 from ..exceptions import UnsupportedPlatformError, SteamworksError
@@ -21,7 +21,7 @@ class SteamworksApi:
         """
         self._api = cdll.LoadLibrary(name=api_binary_path)
 
-    def setup_types(self):
+    def setup_types(self) -> None:
         """Sets up native function types."""
         # SteamAPI
         self._api.SteamAPI_Init.restype = ctypes.c_bool
@@ -36,7 +36,7 @@ class SteamworksApi:
         self._api.SteamAPI_ISteamFriends_GetPersonaName.restype = char_pointer
         self._api.SteamAPI_ISteamFriends_GetPersonaName.argtypes = (void_pointer,)
 
-    def init(self):
+    def init(self) -> None:
         """
         Invoke SteamAPI_Init.
         :raises SteamworksError: if initialization failed
@@ -79,7 +79,7 @@ class SteamworksApi:
 
         # Allocate a path buffer
         max_path_size: int = 260  # ctypes.wintypes.MAX_PATH
-        install_directory_buffer: char * max_path_size = ctypes.create_string_buffer(max_path_size)
+        install_directory_buffer: Array[char] = ctypes.create_string_buffer(max_path_size)
 
         # Invoke SteamAPI_ISteamApps_GetAppInstallDir
         bytes_written: uint32 = self._api.SteamAPI_ISteamApps_GetAppInstallDir(
@@ -105,7 +105,7 @@ class SteamworksApi:
         persona_name: bytes = self._api.SteamAPI_ISteamFriends_GetPersonaName(steam_friends)
         return persona_name.decode()
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Invoke SteamAPI_Shutdown."""
         self._api.SteamAPI_Shutdown()
 
