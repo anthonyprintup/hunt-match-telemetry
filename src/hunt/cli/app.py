@@ -102,7 +102,7 @@ def main(config: Config) -> ExitCode:
 
 
 def attributes_file_modified(file_path: str, is_test_server: bool,
-                             database: DatabaseClient, steamworks_api: SteamworksApi):
+                             database: DatabaseClient, steamworks_api: SteamworksApi) -> None:
     """
     Invoked when the attributes file is modified;
       Parses the match data from the attributes file and
@@ -148,7 +148,7 @@ def attributes_file_modified(file_path: str, is_test_server: bool,
     log_match_data(match)
 
 
-def log_match_data(match: Match):
+def log_match_data(match: Match) -> None:
     """
     Logs interesting data about the match such as:
       - rewards collected from the match,
@@ -157,7 +157,7 @@ def log_match_data(match: Match):
     :param match: a parsed Match instance
     """
     # Log interesting rewards
-    def _log_rewards():
+    def _log_rewards() -> None:
         # Skip logging if there are no rewards
         if not match.rewards:
             return
@@ -188,7 +188,7 @@ def log_match_data(match: Match):
     _log_rewards()
 
     # Log players
-    def _log_players():
+    def _log_players() -> None:
         teammates: Generator[Player | TestServerPlayer, None, None] = (
             player for team in match.teams for player in team.players if team.own_team)
         enemies: tuple[Player | TestServerPlayer, ...] = tuple(player for team in match.teams
@@ -197,8 +197,9 @@ def log_match_data(match: Match):
         # Log information about the local team
         logging.info("Team:")
         player: Player | TestServerPlayer
+        name: str
         for player in teammates:
-            name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
+            name = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
             local_player_marker: str = " (you)" if player.name == match.player_name else ""
             logging.info(f"  {name} ({format_mmr(player.mmr)}){local_player_marker}")
 
@@ -207,11 +208,11 @@ def log_match_data(match: Match):
             logging.info("Enemies:")
             for player in enemies:
                 if player.killed_by_me:
-                    name: str = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
+                    name = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
                     kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
                     logging.info(f"  Killed {name} ({format_mmr(player.mmr)}){kill_count}")
                 if player.killed_me:
-                    name: str = f"{Fore.RED}{player.name}{Style.RESET_ALL}"
+                    name = f"{Fore.RED}{player.name}{Style.RESET_ALL}"
                     death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
                     logging.info(f"  Died to {name} ({format_mmr(player.mmr)}){death_count}")
     _log_players()
