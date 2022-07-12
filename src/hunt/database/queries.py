@@ -16,7 +16,7 @@ def data_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
         return cursor.execute(query, (match_hash,)).fetchone()[0] >= 1
 
 
-def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str):
+def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str) -> None:
     """
     Saves a match hash to the database.
     :param database: a DatabaseClient instance
@@ -31,7 +31,7 @@ def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str)
 
 
 def update_player_data(database: DatabaseClient, profile_id: int, name: str, mmr: int,
-                       kills: int, deaths: int, is_quickplay: bool):
+                       kills: int, deaths: int, is_quickplay: bool) -> None:
     """
     Inserts and updates a player's data in the database.
     :param database: a DatabaseClient instance
