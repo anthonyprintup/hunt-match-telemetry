@@ -56,7 +56,7 @@ def _parse_missionaccoladeentry(root: ElementTree.Element, element_id: int) -> A
     :param root: an XML element
     :param element_id: the id of the entry element
     :return: an Accolade instance
-    :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist (_fetch_xpath_value)
+    :raises ParserError: if the xpath isn't found (_fetch_xpath_value)
     """
     # Define the prefix
     element_prefix: str = f"MissionAccoladeEntry_{element_id}"
@@ -85,7 +85,7 @@ def _parse_missionbagentry(root: ElementTree.Element, element_id: int) -> Entry:
     :param root: an XML element
     :param element_id: the id of the entry element
     :return: an Entry instance
-    :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist (_fetch_xpath_value)
+    :raises ParserError: if the xpath isn't found (_fetch_xpath_value)
     """
     # Define the prefix
     element_prefix: str = f"MissionBagEntry_{element_id}"
@@ -110,7 +110,7 @@ def _parse_player(root: ElementTree.Element, team_id: int, player_id: int) -> Pl
     :param team_id: the id of the player's team
     :param player_id: the id of the player in the team
     :return: a Player instance
-    :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist (_fetch_xpath_value)
+    :raises ParserError: if the xpath isn't found (_fetch_xpath_value)
     """
     # Define the prefix
     element_prefix: str = f"MissionBagPlayer_{team_id}_{player_id}"
@@ -138,7 +138,7 @@ def _parse_test_server_player(root: ElementTree.Element, team_id: int, player_id
     :param team_id: the id of the player's team
     :param player_id: the id of the player in the team
     :return: a Player instance
-    :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist (_fetch_xpath_value)
+    :raises ParserError: if the xpath isn't found (_fetch_xpath_value)
     """
     # Define the prefix
     element_prefix: str = f"MissionBagPlayer_{team_id}_{player_id}"
@@ -180,7 +180,7 @@ def parse_match(root: ElementTree.Element, steam_name: str, is_test_server: bool
     :param steam_name: the user's display name
     :param is_test_server: True if the parsed attributes file is from the test server
     :return: a Match object
-    :raises ParserError: if an expected value is not found (AttributeError;
+    :raises ParserError: if the xpath isn't found (ParserError;
                          _parse_missionaccoladeentry, _parse_missionbagentry, parse_teams)
     """
     accolades: list[Accolade] = []
@@ -209,9 +209,6 @@ def parse_match(root: ElementTree.Element, steam_name: str, is_test_server: bool
         return Match(steam_name, hunter_survived, is_quickplay, accolades_tuple, entries_tuple,
                      _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
                      parse_teams(root=root, is_test_server=is_test_server))
-    except AttributeError as exception:
-        logging.debug(f"AttributeError when parsing match data: {exception=}")
-        raise ParserError("Failed to parse match data.")
     except ParserError as exception:
         logging.debug(f"ParserError when parsing match data: {exception=}")
         raise
@@ -223,32 +220,28 @@ def parse_teams(root: ElementTree.Element, is_test_server: bool) -> tuple[Team, 
     :param root: the root element tree
     :param is_test_server: True if the parsed attributes file is from the test server
     :return: a tuple of Team objects
-    :raises ParserError: if an expected value is not found (AttributeError)
+    :raises ParserError: if the xpath isn't found (_fetch_xpath_value)
     """
     teams: list[Team] = []
 
-    try:
-        # Determine the expected team count and iterate over the teams
-        expected_team_count: int = int(_fetch_xpath_value(root, "MissionBagNumTeams"))
-        for team_id in range(expected_team_count):
-            # Parse each team
-            team_prefix: str = f"MissionBagTeam_{team_id}"
-            handicap: int = int(_fetch_xpath_value(root, team_prefix, "handicap"))
-            is_invite: bool = _fetch_xpath_value(root, team_prefix, "isinvite") == "true"
-            team_mmr: int = int(_fetch_xpath_value(root, team_prefix, "mmr"))
-            number_of_players: int = int(_fetch_xpath_value(root, team_prefix, "numplayers"))
-            own_team: bool = _fetch_xpath_value(root, team_prefix, "ownteam") == "true"
+    # Determine the expected team count and iterate over the teams
+    expected_team_count: int = int(_fetch_xpath_value(root, "MissionBagNumTeams"))
+    for team_id in range(expected_team_count):
+        # Parse each team
+        team_prefix: str = f"MissionBagTeam_{team_id}"
+        handicap: int = int(_fetch_xpath_value(root, team_prefix, "handicap"))
+        is_invite: bool = _fetch_xpath_value(root, team_prefix, "isinvite") == "true"
+        team_mmr: int = int(_fetch_xpath_value(root, team_prefix, "mmr"))
+        number_of_players: int = int(_fetch_xpath_value(root, team_prefix, "numplayers"))
+        own_team: bool = _fetch_xpath_value(root, team_prefix, "ownteam") == "true"
 
-            players: list[Player | TestServerPlayer] = []
-            # Parse each player from the team
-            for player_id in range(number_of_players):
-                if not is_test_server:
-                    players.append(_parse_player(root, team_id=team_id, player_id=player_id))
-                else:
-                    players.append(_parse_test_server_player(root, team_id=team_id, player_id=player_id))
+        players: list[Player | TestServerPlayer] = []
+        # Parse each player from the team
+        for player_id in range(number_of_players):
+            if not is_test_server:
+                players.append(_parse_player(root, team_id=team_id, player_id=player_id))
+            else:
+                players.append(_parse_test_server_player(root, team_id=team_id, player_id=player_id))
 
-            teams.append(Team(handicap, is_invite, team_mmr, own_team, tuple(players)))
-        return tuple(teams)
-    except AttributeError as exception:
-        logging.debug(f"AttributeError when parsing team data: {exception=}")
-        raise ParserError("Failed to parse team data.")
+        teams.append(Team(handicap, is_invite, team_mmr, own_team, tuple(players)))
+    return tuple(teams)
