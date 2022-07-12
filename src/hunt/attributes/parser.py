@@ -1,4 +1,3 @@
-import logging
 import xml.etree.ElementTree as ElementTree
 
 from .match import Match, Accolade, Entry, Rewards, Team, Player
@@ -186,32 +185,28 @@ def parse_match(root: ElementTree.Element, steam_name: str, is_test_server: bool
     accolades: list[Accolade] = []
     entries: list[Entry] = []
 
-    try:
-        # Determine the expected number of accolades and entries to iterate
-        accolades_count: int = int(_fetch_xpath_value(root, "MissionBagNumAccolades"))
-        entries_count: int = int(_fetch_xpath_value(root, "MissionBagNumEntries"))
+    # Determine the expected number of accolades and entries to iterate
+    accolades_count: int = int(_fetch_xpath_value(root, "MissionBagNumAccolades"))
+    entries_count: int = int(_fetch_xpath_value(root, "MissionBagNumEntries"))
 
-        # Parse and store the accolades
-        for i in range(accolades_count):
-            accolades.append(_parse_missionaccoladeentry(root, element_id=i))
+    # Parse and store the accolades
+    for i in range(accolades_count):
+        accolades.append(_parse_missionaccoladeentry(root, element_id=i))
 
-        # Parse and store the entries
-        for i in range(entries_count):
-            entries.append(_parse_missionbagentry(root, element_id=i))
+    # Parse and store the entries
+    for i in range(entries_count):
+        entries.append(_parse_missionbagentry(root, element_id=i))
 
-        hunt_dollar_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeGoldBonus"))
-        hunter_xp_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeHunterXpBonus"))
-        hunter_survived: bool = _fetch_xpath_value(root, "MissionBagIsHunterDead") == "false"
-        is_quickplay: bool = _fetch_xpath_value(root, "MissionBagIsQuickPlay") == "true"
+    hunt_dollar_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeGoldBonus"))
+    hunter_xp_bonus: int = int(_fetch_xpath_value(root, "MissionBagFbeHunterXpBonus"))
+    hunter_survived: bool = _fetch_xpath_value(root, "MissionBagIsHunterDead") == "false"
+    is_quickplay: bool = _fetch_xpath_value(root, "MissionBagIsQuickPlay") == "true"
 
-        accolades_tuple: tuple[Accolade, ...] = tuple(accolades)
-        entries_tuple: tuple[Entry, ...] = tuple(entries)
-        return Match(steam_name, hunter_survived, is_quickplay, accolades_tuple, entries_tuple,
-                     _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
-                     parse_teams(root=root, is_test_server=is_test_server))
-    except ParserError as exception:
-        logging.debug(f"ParserError when parsing match data: {exception=}")
-        raise
+    accolades_tuple: tuple[Accolade, ...] = tuple(accolades)
+    entries_tuple: tuple[Entry, ...] = tuple(entries)
+    return Match(steam_name, hunter_survived, is_quickplay, accolades_tuple, entries_tuple,
+                 _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
+                 parse_teams(root=root, is_test_server=is_test_server))
 
 
 def parse_teams(root: ElementTree.Element, is_test_server: bool) -> tuple[Team, ...]:
