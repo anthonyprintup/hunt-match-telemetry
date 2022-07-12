@@ -16,9 +16,13 @@ def _fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = ""
     :param name: the element's name
     :param suffix: a suffix to append to the element
     :return: the value of an element
-    :raises AttributeError: if the xpath isn't found or the attribute "value" doesn't exist
+    :raises ParserError: if the xpath isn't found
     """
-    return element.find(path=f"Attr[@name='{name}{'_' + suffix if suffix else ''}']").attrib["value"]
+    path: str = f"Attr[@name='{name}{'_' + suffix if suffix else ''}']"
+    resolved_element: ElementTree.Element | None = element.find(path=path)
+    if resolved_element:
+        return resolved_element.attrib["value"]
+    raise ParserError(f"No such element \"{path}\" in the XML element tree.")
 
 
 def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ...],
