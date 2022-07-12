@@ -155,7 +155,7 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pre-commit"
-version = "2.19.0"
+version = "2.20.0"
 description = "A framework for managing and maintaining multi-language pre-commit hooks."
 category = "dev"
 optional = false
@@ -334,7 +334,7 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "0f5c4bd072b4d71f58d8d03cc00cb0890a24cedbe3ca820a5d13e3db37963db6"
+content-hash = "58f798cab3ee0816d7a2c0b36dc9ff471fa56fd586c480b0fc58eb82dba9fd46"
 
 [metadata.files]
 atomicwrites = []
