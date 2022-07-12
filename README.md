@@ -1,3 +1,5 @@
+[![Run Tests CI](https://github.com/anthonyprintup/hunt-match-telemetry/actions/workflows/run-tests.yaml/badge.svg)](https://github.com/anthonyprintup/hunt-match-telemetry/actions/workflows/run-tests.yaml)
+
 # Hunt Match Telemetry
 This tool is intended to be used for automatically logging match data provided by the game.
 
