@@ -12,14 +12,14 @@ from ..constants import DATABASE_TABLE_QUERIES
 @dataclass(kw_only=True)
 class Client:
     file_path: str
-    _connection: Connection = None
+    _connection: Connection | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Setup the database connection."""
         self._connection = sqlite3.connect(f"file:{self.file_path}", check_same_thread=False, uri=True)
         self._setup_database()
 
-    def _setup_database(self):
+    def _setup_database(self) -> None:
         """Sets up the database by creating the required tables."""
         cursor: Cursor
         with closing(self.cursor()) as cursor:
@@ -31,14 +31,17 @@ class Client:
 
     def cursor(self) -> Cursor:
         """Returns a new Cursor instance."""
+        assert self._connection is not None
         return self._connection.cursor()
 
-    def save(self):
+    def save(self) -> None:
         """Commit the changes to disk."""
+        assert self._connection is not None
         self._connection.commit()
 
-    def close(self):
+    def close(self) -> None:
         """Closes the connection."""
+        assert self._connection is not None
         self._connection.close()
 
     # Context manager support
@@ -47,6 +50,6 @@ class Client:
         return self
 
     def __exit__(self, exc_type: type[BaseException] | None, exc_val: BaseException | None,
-                 exc_tb: TracebackType | None):
+                 exc_tb: TracebackType | None) -> None:
         """Close the database connection when exiting the scope."""
         self.close()
