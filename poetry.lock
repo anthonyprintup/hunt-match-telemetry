@@ -253,7 +253,7 @@ pytest = ">=4.0.2"
 
 [[package]]
 name = "pyupgrade"
-version = "2.35.0"
+version = "2.37.1"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -334,7 +334,7 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "58f798cab3ee0816d7a2c0b36dc9ff471fa56fd586c480b0fc58eb82dba9fd46"
+content-hash = "3a7911fe7905eea57993f8e9c9c81220974f3ca6f977b588d0b60431d350f748"
 
 [metadata.files]
 atomicwrites = []
