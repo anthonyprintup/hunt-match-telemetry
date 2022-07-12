@@ -334,7 +334,7 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "3a7911fe7905eea57993f8e9c9c81220974f3ca6f977b588d0b60431d350f748"
+content-hash = "a33a07f50678506a31bc662f451f5c3b6b4b12247a50fd029481052eeecfa505"
 
 [metadata.files]
 atomicwrites = []
@@ -352,7 +352,10 @@ nodeenv = []
 packaging = []
 platformdirs = []
 pluggy = []
-pre-commit = []
+pre-commit = [
+    {file = "pre_commit-2.20.0-py2.py3-none-any.whl", hash = "sha256:51a5ba7c480ae8072ecdb6933df22d2f812dc897d5fe848778116129a681aac7"},
+    {file = "pre_commit-2.20.0.tar.gz", hash = "sha256:a978dac7bc9ec0bcee55c18a277d553b0f419d259dadb4b9418ff2d00eb43959"},
+]
 py = []
 pycodestyle = []
 pyflakes = []
@@ -360,7 +363,10 @@ pyparsing = []
 pytest = []
 pytest-cov = []
 pytest-custom-exit-code = []
-pyupgrade = []
+pyupgrade = [
+    {file = "pyupgrade-2.37.1-py2.py3-none-any.whl", hash = "sha256:dd2a32628d6d2a7dd6c086d98420e234b9e60c1e1d4c55431578491703e762a5"},
+    {file = "pyupgrade-2.37.1.tar.gz", hash = "sha256:3d9cbd88507a0f3d7397c46870617f0d073d61401c451c08a06763d6235d9e7d"},
+]
 pyyaml = []
 six = []
 tokenize-rt = []
