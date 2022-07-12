@@ -20,9 +20,9 @@ def _fetch_xpath_value(element: ElementTree.Element, name: str, suffix: str = ""
     """
     path: str = f"Attr[@name='{name}{'_' + suffix if suffix else ''}']"
     resolved_element: ElementTree.Element | None = element.find(path=path)
-    if resolved_element:
+    if resolved_element is not None:
         return resolved_element.attrib["value"]
-    raise ParserError(f"No such element \"{path}\" in the XML element tree.")
+    raise ParserError(f"No such element {path!r} in the XML element tree.")
 
 
 def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ...],
