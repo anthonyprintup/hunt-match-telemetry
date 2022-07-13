@@ -4,19 +4,6 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Player:
     name: str
-    had_wellspring: bool
-    had_bounty: bool
-    killed_by_me: int
-    killed_me: int
-    mmr: int
-    profile_id: int
-    used_proximity_chat: bool
-    is_skillbased: bool
-
-
-@dataclass(frozen=True)
-class TestServerPlayer:
-    name: str
     bounties_extracted: int
     bounties_picked_up: int
     downed_by_me: int
