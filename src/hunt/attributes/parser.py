@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ElementTree
 
 from .match import Match, Accolade, Entry, Rewards, Team, Player
-from .player import TestServerPlayer
 from ..exceptions import ParserError
 from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
     HUNTER_XP_CATEGORY, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
@@ -116,34 +115,6 @@ def _parse_player(root: ElementTree.Element, team_id: int, player_id: int) -> Pl
 
     # Parse each entry
     name: str = _fetch_xpath_value(root, element_prefix, "blood_line_name")
-    had_wellspring: bool = _fetch_xpath_value(root, element_prefix, "hadWellspring") == "true"
-    had_bounty: bool = _fetch_xpath_value(root, element_prefix, "hadbounty") == "true"
-    killed_by_me: int = int(_fetch_xpath_value(root, element_prefix, "killedbyme"))
-    killed_me: int = int(_fetch_xpath_value(root, element_prefix, "killedme"))
-    mmr: int = int(_fetch_xpath_value(root, element_prefix, "mmr"))
-    profile_id: int = int(_fetch_xpath_value(root, element_prefix, "profileid"))
-    used_proximity_chat: bool = _fetch_xpath_value(root, element_prefix, "proximity") == "true"
-    is_skillbased: bool = _fetch_xpath_value(root, element_prefix, "skillbased") == "true"
-
-    # Return the player
-    return Player(name, had_wellspring, had_bounty, killed_by_me, killed_me, mmr, profile_id,
-                  used_proximity_chat, is_skillbased)
-
-
-def _parse_test_server_player(root: ElementTree.Element, team_id: int, player_id: int) -> TestServerPlayer:
-    """
-    Parses a MissionBagPlayer element.
-    :param root: an XML element
-    :param team_id: the id of the player's team
-    :param player_id: the id of the player in the team
-    :return: a Player instance
-    :raises ParserError: if the xpath isn't found (_fetch_xpath_value)
-    """
-    # Define the prefix
-    element_prefix: str = f"MissionBagPlayer_{team_id}_{player_id}"
-
-    # Parse each entry
-    name: str = _fetch_xpath_value(root, element_prefix, "blood_line_name")
     bounties_extracted: int = int(_fetch_xpath_value(root, element_prefix, "bountyextracted"))
     bounties_picked_up: int = int(_fetch_xpath_value(root, element_prefix, "bountypickedup"))
     downed_by_me: int = int(_fetch_xpath_value(root, element_prefix, "downedbyme"))
@@ -166,19 +137,17 @@ def _parse_test_server_player(root: ElementTree.Element, team_id: int, player_id
     teamextraction: bool = _fetch_xpath_value(root, element_prefix, "teamextraction") == "true"
 
     # Return the player
-    return TestServerPlayer(name, bounties_extracted, bounties_picked_up, downed_by_me, downed_by_teammate,
-                            downed_me, downed_teammate, had_wellspring, had_bounty, is_partner, is_soul_survivor,
-                            killed_by_me, killed_by_teammate, killed_me, killed_teammate, mmr,
-                            profile_id, proximity_to_me, proximity_to_teammate, skillbased,
-                            teamextraction)
+    return Player(name, bounties_extracted, bounties_picked_up, downed_by_me, downed_by_teammate,
+                  downed_me, downed_teammate, had_wellspring, had_bounty, is_partner, is_soul_survivor,
+                  killed_by_me, killed_by_teammate, killed_me, killed_teammate, mmr, profile_id,
+                  proximity_to_me, proximity_to_teammate, skillbased, teamextraction)
 
 
-def parse_match(root: ElementTree.Element, steam_name: str, is_test_server: bool) -> Match:
+def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     """
     Parse the element tree for match data.
     :param root: the root element tree
     :param steam_name: the user's display name
-    :param is_test_server: True if the parsed attributes file is from the test server
     :return: a Match object
     :raises ParserError: if the xpath isn't found (ParserError;
                          _parse_missionaccoladeentry, _parse_missionbagentry, parse_teams)
@@ -207,14 +176,13 @@ def parse_match(root: ElementTree.Element, steam_name: str, is_test_server: bool
     entries_tuple: tuple[Entry, ...] = tuple(entries)
     return Match(steam_name, hunter_survived, is_quickplay, accolades_tuple, entries_tuple,
                  _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
-                 parse_teams(root=root, is_test_server=is_test_server))
+                 parse_teams(root=root))
 
 
-def parse_teams(root: ElementTree.Element, is_test_server: bool) -> tuple[Team, ...]:
+def parse_teams(root: ElementTree.Element) -> tuple[Team, ...]:
     """
     Parse the element tree for the available teams.
     :param root: the root element tree
-    :param is_test_server: True if the parsed attributes file is from the test server
     :return: a tuple of Team objects
     :raises ParserError: if the xpath isn't found (_fetch_xpath_value)
     """
@@ -231,13 +199,10 @@ def parse_teams(root: ElementTree.Element, is_test_server: bool) -> tuple[Team, 
         number_of_players: int = int(_fetch_xpath_value(root, team_prefix, "numplayers"))
         own_team: bool = _fetch_xpath_value(root, team_prefix, "ownteam") == "true"
 
-        players: list[Player | TestServerPlayer] = []
+        players: list[Player] = []
         # Parse each player from the team
         for player_id in range(number_of_players):
-            if not is_test_server:
-                players.append(_parse_player(root, team_id=team_id, player_id=player_id))
-            else:
-                players.append(_parse_test_server_player(root, team_id=team_id, player_id=player_id))
+            players.append(_parse_player(root, team_id=team_id, player_id=player_id))
 
         teams.append(Team(handicap, is_invite, team_mmr, own_team, tuple(players)))
     return tuple(teams)

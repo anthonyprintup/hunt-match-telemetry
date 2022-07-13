@@ -13,7 +13,7 @@ from hunt.formats import format_mmr
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
 from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
-from hunt.attributes.parser import ElementTree, Match, Player, TestServerPlayer, parse_match
+from hunt.attributes.parser import ElementTree, Match, Player, parse_match
 from hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
 from hunt.cli.arguments.parser import Config, parse_arguments
 from hunt.cli.exit_codes import ExitCode
@@ -101,14 +101,12 @@ def main(config: Config) -> ExitCode:
     return ExitCode.SUCCESS
 
 
-def attributes_file_modified(file_path: str, is_test_server: bool,
-                             database: DatabaseClient, steamworks_api: SteamworksApi) -> None:
+def attributes_file_modified(file_path: str, database: DatabaseClient, steamworks_api: SteamworksApi) -> None:
     """
     Invoked when the attributes file is modified;
       Parses the match data from the attributes file and
       saves it to disk.
     :param file_path: the path of the file to parse
-    :param is_test_server: True if the parsed attributes file is from the test server
     :param database: a DatabaseClient instance
     :param steamworks_api: a SteamworksApi instance
     """
@@ -131,8 +129,7 @@ def attributes_file_modified(file_path: str, is_test_server: bool,
 
     # Parse the teams from the attributes file
     try:
-        match: Match = parse_match(root=parsed_attributes, steam_name=steamworks_api.get_persona_name(),
-                                   is_test_server=is_test_server)
+        match: Match = parse_match(root=parsed_attributes, steam_name=steamworks_api.get_persona_name())
     except SteamworksError as exception:
         logging.debug(f"Failed to get the user's display name: {exception=}")
         return
@@ -189,14 +186,14 @@ def log_match_data(match: Match) -> None:
 
     # Log players
     def _log_players() -> None:
-        teammates: Generator[Player | TestServerPlayer, None, None] = (
+        teammates: Generator[Player, None, None] = (
             player for team in match.teams for player in team.players if team.own_team)
-        enemies: tuple[Player | TestServerPlayer, ...] = tuple(player for team in match.teams
-                                                               for player in team.players if not team.own_team)
+        enemies: tuple[Player, ...] = tuple(player for team in match.teams
+                                            for player in team.players if not team.own_team)
 
         # Log information about the local team
         logging.info("Team:")
-        player: Player | TestServerPlayer
+        player: Player
         name: str
         for player in teammates:
             name = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"

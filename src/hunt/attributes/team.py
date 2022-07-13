@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .player import Player, TestServerPlayer
+from .player import Player
 
 
 @dataclass(frozen=True)
@@ -8,4 +8,4 @@ class Team:
     is_invite: bool
     mmr: int
     own_team: bool
-    players: tuple[Player | TestServerPlayer, ...]
+    players: tuple[Player, ...]
