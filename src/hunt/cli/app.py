@@ -79,8 +79,7 @@ def main(config: Config) -> ExitCode:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
             file_path=attributes_path,
-            callback=partial(attributes_file_modified, is_test_server=config.test_server,
-                             database=database, steamworks_api=steamworks_api))
+            callback=partial(attributes_file_modified, database=database, steamworks_api=steamworks_api))
         file_watchdog.start()
 
         # Inform the user that the program has started
