@@ -19,17 +19,17 @@ This tool is intended to be used for automatically logging match data provided b
 <p align="center">
     Console log:
     <br/>
-    <img alt="Console Log" src="./assets/console_log_example.png" />
+    <img alt="Console Log" src="https://github.com/anthonyprintup/hunt-match-telemetry/blob/main/assets/console_log_example.png?raw=true" />
 </p>
 <p align="center">
     Match log:
     <br/>
-    <img alt="Match Log" src="./assets/match_log_example.png" />
+    <img alt="Match Log" src="https://github.com/anthonyprintup/hunt-match-telemetry/blob/main/assets/match_log_example.png?raw=true" />
 </p>
 <p align="center">
     Player log:
     <br/>
-    <img alt="Player Log" src="./assets/player_log_example.png" width="715"/>
+    <img alt="Player Log" src="https://github.com/anthonyprintup/hunt-match-telemetry/blob/main/assets/player_log_example.png?raw=true" width="715"/>
 </p>
 
 # Notice of Non-Affiliation and Disclaimer
