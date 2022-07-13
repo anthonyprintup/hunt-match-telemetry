@@ -151,6 +151,7 @@ def _parse_test_server_player(root: ElementTree.Element, team_id: int, player_id
     downed_me: int = int(_fetch_xpath_value(root, element_prefix, "downedme"))
     downed_teammate: int = int(_fetch_xpath_value(root, element_prefix, "downedteammate"))
     had_wellspring: bool = _fetch_xpath_value(root, element_prefix, "hadWellspring") == "true"
+    had_bounty: bool = _fetch_xpath_value(root, element_prefix, "hadbounty") == "true"
     is_partner: bool = _fetch_xpath_value(root, element_prefix, "ispartner") == "true"
     is_soul_survivor: bool = _fetch_xpath_value(root, element_prefix, "issoulsurvivor") == "true"
     killed_by_me: int = int(_fetch_xpath_value(root, element_prefix, "killedbyme"))
@@ -166,7 +167,7 @@ def _parse_test_server_player(root: ElementTree.Element, team_id: int, player_id
 
     # Return the player
     return TestServerPlayer(name, bounties_extracted, bounties_picked_up, downed_by_me, downed_by_teammate,
-                            downed_me, downed_teammate, had_wellspring, is_partner, is_soul_survivor,
+                            downed_me, downed_teammate, had_wellspring, had_bounty, is_partner, is_soul_survivor,
                             killed_by_me, killed_by_teammate, killed_me, killed_teammate, mmr,
                             profile_id, proximity_to_me, proximity_to_teammate, skillbased,
                             teamextraction)

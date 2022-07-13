@@ -24,6 +24,7 @@ class TestServerPlayer:
     downed_me: int
     downed_teammate: int
     had_wellspring: bool
+    had_bounty: bool
     is_partner: bool
     is_soul_survivor: bool
     killed_by_me: int
