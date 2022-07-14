@@ -184,10 +184,6 @@ def log_match_data(match: Match) -> None:
     """
     # Log interesting rewards
     def _log_rewards() -> None:
-        # Skip logging if there are no rewards
-        if not match.rewards:
-            return
-
         logging.info("Rewards:")
 
         # Hunt dollars
@@ -211,7 +207,9 @@ def log_match_data(match: Match) -> None:
         # Bloodline XP
         if match.rewards.bloodline_xp:
             logging.info(f"  Collected {match.rewards.bloodline_xp} bloodline XP.")
-    _log_rewards()
+    # Skip logging if there were no rewards
+    if match.rewards:
+        _log_rewards()
 
     # Log players
     def _log_players() -> None:
