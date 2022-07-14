@@ -24,4 +24,4 @@ jobs:
       - name: Build the package
         run: poetry build
       - name: Publish the package to PyPi
-        run: poetry publish --username "__token__" --password "{{ secrets.PYPI_TOKEN }}" --dry-run
+        run: poetry publish --username "__token__" --password "{{ secrets.PYPI_TOKEN }}"
