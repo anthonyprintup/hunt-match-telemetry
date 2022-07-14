@@ -23,7 +23,7 @@ XP_CATEGORIES: tuple[str, ...] = (
 
 HUNT_DOLLARS_CATEGORY: str = "accolade_found_gold"
 BLOODBONDS_CATEGORY: str = "accolade_found_gems"
-HUNTER_XP_CATEGORY: str = "loot hunter xp"
+HUNTER_XP_DESCRIPTOR_NAME: str = "loot hunter xp"
 HUNTER_XP_REWARD_TYPE: int = 10
 HUNTER_LEVELS_CATEGORY: str = "accolade_hunter_points"
 UPGRADE_POINTS_DESCRIPTOR_NAME: str = "loot upgrade points"

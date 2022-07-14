@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ElementTree
 from .match import Match, Accolade, Entry, Rewards, Team, Player
 from ..exceptions import ParserError
 from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
-    HUNTER_XP_CATEGORY, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
+    HUNTER_XP_DESCRIPTOR_NAME, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
     UPGRADE_POINTS_DESCRIPTOR_NAME, BLOODLINE_DESCRIPTOR_NAME
 
 
@@ -37,7 +37,8 @@ def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ..
     hunt_dollars: int = sum(entry.reward_size for entry in entries if entry.category == HUNT_DOLLARS_CATEGORY)
     bloodbonds: int = sum(entry.reward_size for entry in entries if entry.category == BLOODBONDS_CATEGORY)
     hunter_xp: int = sum(entry.reward_size for entry in entries
-                         if entry.category == HUNTER_XP_CATEGORY and entry.reward_type == HUNTER_XP_REWARD_TYPE)
+                         if entry.descriptor_name == HUNTER_XP_DESCRIPTOR_NAME
+                         and entry.reward_type == HUNTER_XP_REWARD_TYPE)
     hunter_levels: int = sum(entry.reward_size for entry in entries if entry.category == HUNTER_LEVELS_CATEGORY)
     upgrade_points: int = sum(entry.reward_size for entry in entries
                               if entry.descriptor_name == UPGRADE_POINTS_DESCRIPTOR_NAME)
