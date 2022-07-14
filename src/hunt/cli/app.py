@@ -19,6 +19,40 @@ from hunt.cli.arguments.parser import Config, parse_arguments
 from hunt.cli.exit_codes import ExitCode
 
 
+def setup_logger(config: Config) -> None:
+    """
+    Sets up the application logger.
+    :param config: the configuration provided by the user
+    """
+    # Setup logging
+    logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
+                        datefmt="%H:%M", level=logging.INFO if not config.debug else logging.DEBUG,
+                        stream=sys.stdout)
+
+    def setup_level_color(level: int, color: str, padding: int = 8) -> None:
+        """
+        Adjusts a logging level name to add fancy color support.
+        :param level: the logger level
+        :param color: the color to use
+        :param padding: the number of padded whitespace characters
+        """
+        logging.addLevelName(level, f"{color}{logging.getLevelName(level):>{padding}}{Style.RESET_ALL}")
+
+    # Color config
+    color_config: tuple[tuple[int, str], ...] = (
+        (logging.DEBUG, Fore.CYAN),
+        (logging.INFO, Fore.GREEN),
+        (logging.WARNING, Fore.YELLOW),
+        (logging.ERROR, Fore.RED),
+        (logging.CRITICAL, Style.BRIGHT + Fore.RED))
+
+    # Setup the color levels
+    logger_level: int
+    level_color: str
+    for logger_level, level_color in color_config:
+        setup_level_color(logger_level, level_color)
+
+
 def console_main() -> ExitCode:
     """
     The CLI entry point for the package.
@@ -28,6 +62,9 @@ def console_main() -> ExitCode:
     with colorama_text():
         # Parse the arguments and forward the app config to main
         config: Config = parse_arguments()
+
+        # Setup the logger
+        setup_logger(config)
 
         # Start the application.
         return main(config)
@@ -39,11 +76,6 @@ def main(config: Config) -> ExitCode:
     :param config: the configuration provided by the user
     :return: an exit code.
     """
-    # Setup logging
-    logging.basicConfig(format="[%(asctime)s, %(levelname)s] %(message)s",
-                        datefmt="%H:%M", level=logging.INFO if not config.debug else logging.DEBUG,
-                        stream=sys.stdout)
-
     try:
         # Extract the Steamworks binaries to disk
         steamworks_api_path: str = try_extract_steamworks_binaries()
