@@ -37,7 +37,7 @@ class Player:
         :return: a color formatted string
         """
         local_player_marker: str = " (you)" if is_local_player else ""
-        return f"{color_prefix}{self.name} ({format_mmr(self.mmr)}){Style.RESET_ALL}{local_player_marker}"
+        return f"{color_prefix}{self.name}{Style.RESET_ALL} ({format_mmr(self.mmr)}){local_player_marker}"
 
     def format_kills(self) -> str:
         """
