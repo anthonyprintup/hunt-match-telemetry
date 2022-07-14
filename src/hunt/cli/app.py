@@ -121,7 +121,7 @@ def attributes_file_modified(file_path: str, database: DatabaseClient, steamwork
         parsed_attributes: ElementTree.Element = ElementTree.fromstring(file_contents)
     except ElementTree.ParseError as exception:
         # Skip the update
-        logging.critical("Failed to parse the attributes file.")
+        logging.error("Failed to parse the attributes file.")
         logging.debug(f"Failed to parse the attributes file: {exception=}")
         return
 
