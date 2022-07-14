@@ -7,7 +7,8 @@ from functools import partial
 
 from colorama import Fore, Style, colorama_text
 
-from hunt.constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
+from hunt.constants import RESOURCES_PATH, MATCH_LOGS_PATH, STEAMWORKS_BINARIES_PATH, \
+    HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
     DATABASE_PATH, DATABASE_TEST_SERVER_PATH, STEAMWORKS_SDK_PATH
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
@@ -75,6 +76,16 @@ def main(config: Config) -> ExitCode:
     :param config: the configuration provided by the user
     :return: an exit code.
     """
+    try:
+        os.makedirs(name=RESOURCES_PATH, exist_ok=True)  # Create the resource directory if it doesn't exist
+        os.makedirs(name=MATCH_LOGS_PATH, exist_ok=True)  # Create the MATCH LOGS directory if it doesn't exist
+        os.makedirs(name=STEAMWORKS_BINARIES_PATH, exist_ok=True)  # Create the bin directory if it doesn't exist
+    except OSError as exception:
+        logging.critical("Failed to create create application-critical directories in the current working directory. "
+                         "Are write permissions missing?")
+        logging.debug(f"OS error: {exception=}")
+        return ExitCode.FILESYSTEM_ERROR
+
     try:
         # Extract the Steamworks binaries to disk
         steamworks_api_path: str = try_extract_steamworks_binaries()
