@@ -9,7 +9,6 @@ from colorama import Fore, Style, colorama_text
 
 from hunt.constants import HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
     DATABASE_PATH, DATABASE_TEST_SERVER_PATH, STEAMWORKS_SDK_PATH
-from hunt.formats import format_mmr
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
 from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
@@ -224,24 +223,17 @@ def log_match_data(match: Match) -> None:
         # Log information about the local team
         logging.info("Team:")
         player: Player
-        name: str
         for player in teammates:
-            name = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
-            local_player_marker: str = " (you)" if player.name == match.player_name else ""
-            logging.info(f"  {name} ({format_mmr(player.mmr)}){local_player_marker}")
+            logging.info(f"  {player.format_name(is_local_player=player.name == match.player_name)}")
 
         # Log information about the players the local player interacted with
         if any(player.killed_by_me or player.killed_me for player in enemies):
             logging.info("Enemies:")
             for player in enemies:
                 if player.killed_by_me:
-                    name = f"{Fore.GREEN}{player.name}{Style.RESET_ALL}"
-                    kill_count: str = f" {player.killed_by_me}x" if player.killed_by_me > 1 else ""
-                    logging.info(f"  Killed {name} ({format_mmr(player.mmr)}){kill_count}")
+                    logging.info(f"  {player.format_kills()}")
                 if player.killed_me:
-                    name = f"{Fore.RED}{player.name}{Style.RESET_ALL}"
-                    death_count: str = f" {player.killed_me}x" if player.killed_me > 1 else ""
-                    logging.info(f"  Died to {name} ({format_mmr(player.mmr)}){death_count}")
+                    logging.info(f"  {player.format_deaths()}")
     _log_players()
 
 
