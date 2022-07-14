@@ -205,4 +205,5 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
         _append_attribute(attributes, name=f"{team_prefix}_numplayers", value=f"{len(team.players)}")
         _append_attribute(attributes, name=f"{team_prefix}_ownteam", value=f"{str(team.own_team).lower()}")
 
+    # Yield the attribute tree
     yield attributes
