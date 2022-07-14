@@ -78,7 +78,7 @@ def main(config: Config) -> ExitCode:
     """
     try:
         os.makedirs(name=RESOURCES_PATH, exist_ok=True)  # Create the resource directory if it doesn't exist
-        os.makedirs(name=MATCH_LOGS_PATH, exist_ok=True)  # Create the MATCH LOGS directory if it doesn't exist
+        os.makedirs(name=MATCH_LOGS_PATH, exist_ok=True)  # Create the match logs directory if it doesn't exist
         os.makedirs(name=STEAMWORKS_BINARIES_PATH, exist_ok=True)  # Create the bin directory if it doesn't exist
     except OSError as exception:
         logging.critical("Failed to create create application-critical directories in the current working directory. "
