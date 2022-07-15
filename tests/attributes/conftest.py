@@ -5,6 +5,7 @@ from xml.etree.ElementTree import Element as XmlElement
 from pytest import fixture
 
 from hunt.attributes.match import Match, Accolade, Entry, Rewards, Team, Player
+from hunt.attributes.xml.elements import append_element
 
 
 def _create_element(tag: str, attributes: dict[str, str]) -> XmlElement:
@@ -15,17 +16,6 @@ def _create_element(tag: str, attributes: dict[str, str]) -> XmlElement:
     :return: an XmlElement instance
     """
     return XmlElement(tag, attrib=attributes)
-
-
-def _append_attribute(element: XmlElement, name: str, value: str) -> None:
-    """
-    A helper function which appends a new element to an existing element.
-    :param element: the element to append to
-    :param name: the name of the attribute
-    :param value: the value of the attribute
-    """
-    new_element: XmlElement = _create_element(tag="Attr", attributes={"name": name, "value": value})
-    element.append(new_element)
 
 
 def _generate_player(name: str, is_quickplay: bool = False, is_partner: bool = False) -> Player:
@@ -115,31 +105,31 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     accolade: Accolade
     for i, accolade in enumerate(expected_match.accolades):
         accolade_prefix: str = f"MissionAccoladeEntry_{i}"
-        _append_attribute(attributes, name=f"{accolade_prefix}", value="1")
-        _append_attribute(attributes, name=f"{accolade_prefix}_bloodlineXp", value=f"{accolade.bloodline_xp}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_bounty", value=f"{accolade.bounty}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_category", value=f"{accolade.category}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_eventPoints", value=f"{accolade.event_points}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_gems", value=f"{accolade.bloodbonds}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_generatedGems", value=f"{accolade.generated_bloodbonds}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_gold", value=f"{accolade.hunt_dollars}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_hits", value=f"{accolade.hits}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_hunterPoints", value=f"{accolade.hunter_points}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_hunterXp", value=f"{accolade.hunter_xp}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_weighting", value=f"{accolade.weighting}")
-        _append_attribute(attributes, name=f"{accolade_prefix}_xp", value=f"{accolade.xp}")
+        append_element(attributes, name=f"{accolade_prefix}", value="1")
+        append_element(attributes, name=f"{accolade_prefix}_bloodlineXp", value=f"{accolade.bloodline_xp}")
+        append_element(attributes, name=f"{accolade_prefix}_bounty", value=f"{accolade.bounty}")
+        append_element(attributes, name=f"{accolade_prefix}_category", value=f"{accolade.category}")
+        append_element(attributes, name=f"{accolade_prefix}_eventPoints", value=f"{accolade.event_points}")
+        append_element(attributes, name=f"{accolade_prefix}_gems", value=f"{accolade.bloodbonds}")
+        append_element(attributes, name=f"{accolade_prefix}_generatedGems", value=f"{accolade.generated_bloodbonds}")
+        append_element(attributes, name=f"{accolade_prefix}_gold", value=f"{accolade.hunt_dollars}")
+        append_element(attributes, name=f"{accolade_prefix}_hits", value=f"{accolade.hits}")
+        append_element(attributes, name=f"{accolade_prefix}_hunterPoints", value=f"{accolade.hunter_points}")
+        append_element(attributes, name=f"{accolade_prefix}_hunterXp", value=f"{accolade.hunter_xp}")
+        append_element(attributes, name=f"{accolade_prefix}_weighting", value=f"{accolade.weighting}")
+        append_element(attributes, name=f"{accolade_prefix}_xp", value=f"{accolade.xp}")
 
     # Entries
     for i, entry in enumerate(expected_match.entries):
         entry_prefix: str = f"MissionBagEntry_{i}"
-        _append_attribute(attributes, name=f"{entry_prefix}", value="1")
-        _append_attribute(attributes, name=f"{entry_prefix}_amount", value=f"{entry.amount}")
-        _append_attribute(attributes, name=f"{entry_prefix}_category", value=f"{entry.category}")
-        _append_attribute(attributes, name=f"{entry_prefix}_descriptorName", value=f"{entry.descriptor_name}")
-        _append_attribute(attributes, name=f"{entry_prefix}_descriptorScore", value=f"{entry.descriptor_score}")
-        _append_attribute(attributes, name=f"{entry_prefix}_descriptorType", value=f"{entry.descriptor_type}")
-        _append_attribute(attributes, name=f"{entry_prefix}_reward", value=f"{entry.reward_type}")
-        _append_attribute(attributes, name=f"{entry_prefix}_rewardSize", value=f"{entry.reward_size}")
+        append_element(attributes, name=f"{entry_prefix}", value="1")
+        append_element(attributes, name=f"{entry_prefix}_amount", value=f"{entry.amount}")
+        append_element(attributes, name=f"{entry_prefix}_category", value=f"{entry.category}")
+        append_element(attributes, name=f"{entry_prefix}_descriptorName", value=f"{entry.descriptor_name}")
+        append_element(attributes, name=f"{entry_prefix}_descriptorScore", value=f"{entry.descriptor_score}")
+        append_element(attributes, name=f"{entry_prefix}_descriptorType", value=f"{entry.descriptor_type}")
+        append_element(attributes, name=f"{entry_prefix}_reward", value=f"{entry.reward_type}")
+        append_element(attributes, name=f"{entry_prefix}_rewardSize", value=f"{entry.reward_size}")
 
     # Bonuses
     hunt_dollars: int = expected_match.rewards.hunt_dollars
@@ -149,19 +139,19 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     hunt_dollar_bonus: int = int(hunt_dollars - hunt_dollars * bonus_multiplier**-1)
     xp_bonus: int = int(xp - xp * bonus_multiplier**-1)
 
-    _append_attribute(attributes, name="MissionBagFbeGoldBonus", value=f"{hunt_dollar_bonus}")
-    _append_attribute(attributes, name="MissionBagFbeHunterXpBonus", value=f"{xp_bonus}")
+    append_element(attributes, name="MissionBagFbeGoldBonus", value=f"{hunt_dollar_bonus}")
+    append_element(attributes, name="MissionBagFbeHunterXpBonus", value=f"{xp_bonus}")
 
     # Other information
-    _append_attribute(attributes, name="MissionBagIsHunterDead",
-                      value="false" if expected_match.hunter_survived else "true")
-    _append_attribute(attributes, name="MissionBagIsQuickPlay",
-                      value="false" if not expected_match.is_quickplay else "true")
+    append_element(attributes, name="MissionBagIsHunterDead",
+                   value="false" if expected_match.hunter_survived else "true")
+    append_element(attributes, name="MissionBagIsQuickPlay",
+                   value="false" if not expected_match.is_quickplay else "true")
 
     # Match data
-    _append_attribute(attributes, name="MissionBagNumAccolades", value=f"{len(expected_match.accolades)}")
-    _append_attribute(attributes, name="MissionBagNumEntries", value=f"{len(expected_match.entries)}")
-    _append_attribute(attributes, name="MissionBagNumTeams", value=f"{len(expected_match.teams)}")
+    append_element(attributes, name="MissionBagNumAccolades", value=f"{len(expected_match.accolades)}")
+    append_element(attributes, name="MissionBagNumEntries", value=f"{len(expected_match.entries)}")
+    append_element(attributes, name="MissionBagNumTeams", value=f"{len(expected_match.teams)}")
 
     # Players
     team: Team
@@ -169,43 +159,43 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     for i, team in enumerate(expected_match.teams):
         for j, player in enumerate(team.players):
             player_prefix: str = f"MissionBagPlayer_{i}_{j}"
-            _append_attribute(attributes, name=f"{player_prefix}_blood_line_name", value=f"{player.name}")
-            _append_attribute(attributes, name=f"{player_prefix}_bountyextracted", value=f"{player.bounties_extracted}")
-            _append_attribute(attributes, name=f"{player_prefix}_bountypickedup", value=f"{player.bounties_picked_up}")
-            _append_attribute(attributes, name=f"{player_prefix}_downedbyme", value=f"{player.downed_by_me}")
-            _append_attribute(attributes, name=f"{player_prefix}_downedbyteammate",
-                              value=f"{player.downed_by_teammate}")
-            _append_attribute(attributes, name=f"{player_prefix}_downedme", value=f"{player.downed_me}")
-            _append_attribute(attributes, name=f"{player_prefix}_downedteammate", value=f"{player.downed_teammate}")
-            _append_attribute(attributes, name=f"{player_prefix}_hadWellspring",
-                              value=f"{str(player.had_wellspring).lower()}")
-            _append_attribute(attributes, name=f"{player_prefix}_ispartner", value=f"{str(player.is_partner).lower()}")
-            _append_attribute(attributes, name=f"{player_prefix}_issoulsurvivor",
-                              value=f"{str(player.is_soul_survivor).lower()}")
-            _append_attribute(attributes, name=f"{player_prefix}_killedbyme", value=f"{player.killed_by_me}")
-            _append_attribute(attributes, name=f"{player_prefix}_killedbyteammate",
-                              value=f"{player.killed_by_teammate}")
-            _append_attribute(attributes, name=f"{player_prefix}_killedme", value=f"{player.killed_me}")
-            _append_attribute(attributes, name=f"{player_prefix}_killedteammate", value=f"{player.killed_teammate}")
-            _append_attribute(attributes, name=f"{player_prefix}_mmr", value=f"{player.mmr}")
-            _append_attribute(attributes, name=f"{player_prefix}_profileid", value=f"{player.profile_id}")
-            _append_attribute(attributes, name=f"{player_prefix}_proximitytome",
-                              value=f"{str(player.proximity_to_me).lower()}")
-            _append_attribute(attributes, name=f"{player_prefix}_proximitytoteammate",
-                              value=f"{str(player.proximity_to_teammate).lower()}")
-            _append_attribute(attributes, name=f"{player_prefix}_skillbased", value=f"{str(player.skillbased).lower()}")
-            _append_attribute(attributes, name=f"{player_prefix}_teamextraction",
-                              value=f"{str(player.team_extraction).lower()}")
+            append_element(attributes, name=f"{player_prefix}_blood_line_name", value=f"{player.name}")
+            append_element(attributes, name=f"{player_prefix}_bountyextracted", value=f"{player.bounties_extracted}")
+            append_element(attributes, name=f"{player_prefix}_bountypickedup", value=f"{player.bounties_picked_up}")
+            append_element(attributes, name=f"{player_prefix}_downedbyme", value=f"{player.downed_by_me}")
+            append_element(attributes, name=f"{player_prefix}_downedbyteammate",
+                           value=f"{player.downed_by_teammate}")
+            append_element(attributes, name=f"{player_prefix}_downedme", value=f"{player.downed_me}")
+            append_element(attributes, name=f"{player_prefix}_downedteammate", value=f"{player.downed_teammate}")
+            append_element(attributes, name=f"{player_prefix}_hadWellspring",
+                           value=f"{str(player.had_wellspring).lower()}")
+            append_element(attributes, name=f"{player_prefix}_ispartner", value=f"{str(player.is_partner).lower()}")
+            append_element(attributes, name=f"{player_prefix}_issoulsurvivor",
+                           value=f"{str(player.is_soul_survivor).lower()}")
+            append_element(attributes, name=f"{player_prefix}_killedbyme", value=f"{player.killed_by_me}")
+            append_element(attributes, name=f"{player_prefix}_killedbyteammate",
+                           value=f"{player.killed_by_teammate}")
+            append_element(attributes, name=f"{player_prefix}_killedme", value=f"{player.killed_me}")
+            append_element(attributes, name=f"{player_prefix}_killedteammate", value=f"{player.killed_teammate}")
+            append_element(attributes, name=f"{player_prefix}_mmr", value=f"{player.mmr}")
+            append_element(attributes, name=f"{player_prefix}_profileid", value=f"{player.profile_id}")
+            append_element(attributes, name=f"{player_prefix}_proximitytome",
+                           value=f"{str(player.proximity_to_me).lower()}")
+            append_element(attributes, name=f"{player_prefix}_proximitytoteammate",
+                           value=f"{str(player.proximity_to_teammate).lower()}")
+            append_element(attributes, name=f"{player_prefix}_skillbased", value=f"{str(player.skillbased).lower()}")
+            append_element(attributes, name=f"{player_prefix}_teamextraction",
+                           value=f"{str(player.team_extraction).lower()}")
 
     # Teams
     for i, team in enumerate(expected_match.teams):
         team_prefix: str = f"MissionBagTeam_{i}"
-        _append_attribute(attributes, name=f"{team_prefix}", value="1")
-        _append_attribute(attributes, name=f"{team_prefix}_handicap", value=f"{team.handicap}")
-        _append_attribute(attributes, name=f"{team_prefix}_isinvite", value=f"{str(team.is_invite).lower()}")
-        _append_attribute(attributes, name=f"{team_prefix}_mmr", value=f"{team.mmr}")
-        _append_attribute(attributes, name=f"{team_prefix}_numplayers", value=f"{len(team.players)}")
-        _append_attribute(attributes, name=f"{team_prefix}_ownteam", value=f"{str(team.own_team).lower()}")
+        append_element(attributes, name=f"{team_prefix}", value="1")
+        append_element(attributes, name=f"{team_prefix}_handicap", value=f"{team.handicap}")
+        append_element(attributes, name=f"{team_prefix}_isinvite", value=f"{str(team.is_invite).lower()}")
+        append_element(attributes, name=f"{team_prefix}_mmr", value=f"{team.mmr}")
+        append_element(attributes, name=f"{team_prefix}_numplayers", value=f"{len(team.players)}")
+        append_element(attributes, name=f"{team_prefix}_ownteam", value=f"{str(team.own_team).lower()}")
 
     # Yield the attribute tree
     yield attributes
