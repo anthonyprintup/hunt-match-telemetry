@@ -1,19 +1,28 @@
 import builtins
-from typing import TypeVar
+from typing import TypeVar, TypeAlias
 from xml.etree.ElementTree import Element as XmlElement
 
 from ...exceptions import ParserError
 
 _T = TypeVar("_T")
+ValueType: TypeAlias = str | int | bool
 
 
-def append_element(parent_element: XmlElement, name: str, value: str) -> None:
+def append_element(parent_element: XmlElement, name: str, value: ValueType) -> None:
     """
     Appends a new element to the parent element.
     :param parent_element: the element to append to
     :param name: the name of the attribute
     :param value: the value of the attribute
     """
+    # Transform the value to a string
+    match value:
+        case bool():
+            value = str(value).lower()
+        case _:
+            value = str(value)
+
+    # Create and append the element
     new_element: XmlElement = XmlElement("Attr", attrib={"name": name, "value": value})
     parent_element.append(new_element)
 
