@@ -18,6 +18,7 @@ def append_element(parent_element: XmlElement, name: str, value: str) -> None:
     parent_element.append(new_element)
 
 
+# https://github.com/python/mypy/issues/3737
 def get_element_value(element: XmlElement, name: str, suffix: str = "",
                       result_type: type[_T] = str) -> _T:  # type: ignore
     """
