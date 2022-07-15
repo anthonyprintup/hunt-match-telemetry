@@ -28,12 +28,17 @@ def get_element_value(element: XmlElement, name: str, suffix: str = "",
     :param suffix: a suffix to append to the element name
     :param result_type: the type to cast the value to
     :return: the value of an element
-    :raises ParserError: if the xpath isn't found or if the result type isn't a supported type
+    :raises ParserError: if the xpath isn't found,
+                         if the element is missing a "value" attribute, or
+                         if the result type isn't a supported type
     """
-    xpath: str = f"Attr[@name='{name}{'_' + suffix if suffix else ''}']"
+    xpath: str = f"Attr[@name={name + ('_' + suffix if suffix else '')!r}]"
     resolved_element: XmlElement | None = element.find(path=xpath)
     if resolved_element is not None:
-        value: str = resolved_element.attrib["value"]
+        value: str | None = resolved_element.attrib.get("value", None)
+        if value is None:
+            raise ParserError(f"Missing \"value\" attribute in element {xpath!r}.")
+
         match result_type:
             case builtins.str | builtins.int:
                 return result_type(value)  # type: ignore
