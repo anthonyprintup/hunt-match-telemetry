@@ -153,12 +153,12 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
 
     hunt_dollar_bonus: int = get_element_value(root, "MissionBagFbeGoldBonus", result_type=int)
     hunter_xp_bonus: int = get_element_value(root, "MissionBagFbeHunterXpBonus", result_type=int)
-    hunter_survived: bool = get_element_value(root, "MissionBagIsHunterDead", result_type=bool)
+    hunter_is_dead: bool = get_element_value(root, "MissionBagIsHunterDead", result_type=bool)
     is_quickplay: bool = get_element_value(root, "MissionBagIsQuickPlay", result_type=bool)
 
     accolades_tuple: tuple[Accolade, ...] = tuple(accolades)
     entries_tuple: tuple[Entry, ...] = tuple(entries)
-    return Match(steam_name, hunter_survived, is_quickplay, accolades_tuple, entries_tuple,
+    return Match(steam_name, not hunter_is_dead, is_quickplay, accolades_tuple, entries_tuple,
                  _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
                  parse_teams(root=root))
 
