@@ -45,18 +45,18 @@ def _parse_missionaccoladeentry(root: ElementTree.Element, element_id: int) -> A
     element_prefix: str = f"MissionAccoladeEntry_{element_id}"
 
     # Parse each entry
-    bloodline_xp: int = int(get_element_value(root, element_prefix, "bloodlineXp"))
-    bounty: int = int(get_element_value(root, element_prefix, "bounty"))
+    bloodline_xp: int = get_element_value(root, element_prefix, "bloodlineXp", result_type=int)
+    bounty: int = get_element_value(root, element_prefix, "bounty", result_type=int)
     category: str = get_element_value(root, element_prefix, "category")
-    event_points: int = int(get_element_value(root, element_prefix, "eventPoints"))
-    bloodbonds: int = int(get_element_value(root, element_prefix, "gems"))
-    generated_bloodbonds: int = int(get_element_value(root, element_prefix, "generatedGems"))
-    hunt_dollars: int = int(get_element_value(root, element_prefix, "gold"))
-    hits: int = int(get_element_value(root, element_prefix, "hits"))
-    hunter_points: int = int(get_element_value(root, element_prefix, "hunterPoints"))
-    hunter_xp: int = int(get_element_value(root, element_prefix, "hunterXp"))
-    weighting: int = int(get_element_value(root, element_prefix, "weighting"))
-    xp: int = int(get_element_value(root, element_prefix, "xp"))
+    event_points: int = get_element_value(root, element_prefix, "eventPoints", result_type=int)
+    bloodbonds: int = get_element_value(root, element_prefix, "gems", result_type=int)
+    generated_bloodbonds: int = get_element_value(root, element_prefix, "generatedGems", result_type=int)
+    hunt_dollars: int = get_element_value(root, element_prefix, "gold", result_type=int)
+    hits: int = get_element_value(root, element_prefix, "hits", result_type=int)
+    hunter_points: int = get_element_value(root, element_prefix, "hunterPoints", result_type=int)
+    hunter_xp: int = get_element_value(root, element_prefix, "hunterXp", result_type=int)
+    weighting: int = get_element_value(root, element_prefix, "weighting", result_type=int)
+    xp: int = get_element_value(root, element_prefix, "xp", result_type=int)
 
     return Accolade(bloodline_xp, bounty, category, event_points, bloodbonds, generated_bloodbonds,
                     hunt_dollars, hits, hunter_points, hunter_xp, weighting, xp)
@@ -74,13 +74,13 @@ def _parse_missionbagentry(root: ElementTree.Element, element_id: int) -> Entry:
     element_prefix: str = f"MissionBagEntry_{element_id}"
 
     # Parse each entry
-    amount: int = int(get_element_value(root, element_prefix, "amount"))
+    amount: int = get_element_value(root, element_prefix, "amount", result_type=int)
     category: str = get_element_value(root, element_prefix, "category")
     descriptor_name: str = get_element_value(root, element_prefix, "descriptorName")
-    descriptor_score: int = int(get_element_value(root, element_prefix, "descriptorScore"))
-    descriptor_type: int = int(get_element_value(root, element_prefix, "descriptorType"))
-    reward_type: int = int(get_element_value(root, element_prefix, "reward"))
-    reward_size: int = int(get_element_value(root, element_prefix, "rewardSize"))
+    descriptor_score: int = get_element_value(root, element_prefix, "descriptorScore", result_type=int)
+    descriptor_type: int = get_element_value(root, element_prefix, "descriptorType", result_type=int)
+    reward_type: int = get_element_value(root, element_prefix, "reward", result_type=int)
+    reward_size: int = get_element_value(root, element_prefix, "rewardSize", result_type=int)
 
     # Return the entry
     return Entry(amount, category, descriptor_name, descriptor_score, descriptor_type, reward_type, reward_size)
@@ -100,25 +100,25 @@ def _parse_player(root: ElementTree.Element, team_id: int, player_id: int) -> Pl
 
     # Parse each entry
     name: str = get_element_value(root, element_prefix, "blood_line_name")
-    bounties_extracted: int = int(get_element_value(root, element_prefix, "bountyextracted"))
-    bounties_picked_up: int = int(get_element_value(root, element_prefix, "bountypickedup"))
-    downed_by_me: int = int(get_element_value(root, element_prefix, "downedbyme"))
-    downed_by_teammate: int = int(get_element_value(root, element_prefix, "downedbyteammate"))
-    downed_me: int = int(get_element_value(root, element_prefix, "downedme"))
-    downed_teammate: int = int(get_element_value(root, element_prefix, "downedteammate"))
-    had_wellspring: bool = get_element_value(root, element_prefix, "hadWellspring") == "true"
-    is_partner: bool = get_element_value(root, element_prefix, "ispartner") == "true"
-    is_soul_survivor: bool = get_element_value(root, element_prefix, "issoulsurvivor") == "true"
-    killed_by_me: int = int(get_element_value(root, element_prefix, "killedbyme"))
-    killed_by_teammate: int = int(get_element_value(root, element_prefix, "killedbyteammate"))
-    killed_me: int = int(get_element_value(root, element_prefix, "killedme"))
-    killed_teammate: int = int(get_element_value(root, element_prefix, "killedteammate"))
-    mmr: int = int(get_element_value(root, element_prefix, "mmr"))
-    profile_id: int = int(get_element_value(root, element_prefix, "profileid"))
-    proximity_to_me: bool = get_element_value(root, element_prefix, "proximitytome") == "true"
-    proximity_to_teammate: bool = get_element_value(root, element_prefix, "proximitytoteammate") == "true"
-    skillbased: bool = get_element_value(root, element_prefix, "skillbased") == "true"
-    teamextraction: bool = get_element_value(root, element_prefix, "teamextraction") == "true"
+    bounties_extracted: int = get_element_value(root, element_prefix, "bountyextracted", result_type=int)
+    bounties_picked_up: int = get_element_value(root, element_prefix, "bountypickedup", result_type=int)
+    downed_by_me: int = get_element_value(root, element_prefix, "downedbyme", result_type=int)
+    downed_by_teammate: int = get_element_value(root, element_prefix, "downedbyteammate", result_type=int)
+    downed_me: int = get_element_value(root, element_prefix, "downedme", result_type=int)
+    downed_teammate: int = get_element_value(root, element_prefix, "downedteammate", result_type=int)
+    had_wellspring: bool = get_element_value(root, element_prefix, "hadWellspring", result_type=bool)
+    is_partner: bool = get_element_value(root, element_prefix, "ispartner", result_type=bool)
+    is_soul_survivor: bool = get_element_value(root, element_prefix, "issoulsurvivor", result_type=bool)
+    killed_by_me: int = get_element_value(root, element_prefix, "killedbyme", result_type=int)
+    killed_by_teammate: int = get_element_value(root, element_prefix, "killedbyteammate", result_type=int)
+    killed_me: int = get_element_value(root, element_prefix, "killedme", result_type=int)
+    killed_teammate: int = get_element_value(root, element_prefix, "killedteammate", result_type=int)
+    mmr: int = get_element_value(root, element_prefix, "mmr", result_type=int)
+    profile_id: int = get_element_value(root, element_prefix, "profileid", result_type=int)
+    proximity_to_me: bool = get_element_value(root, element_prefix, "proximitytome", result_type=bool)
+    proximity_to_teammate: bool = get_element_value(root, element_prefix, "proximitytoteammate", result_type=bool)
+    skillbased: bool = get_element_value(root, element_prefix, "skillbased", result_type=bool)
+    teamextraction: bool = get_element_value(root, element_prefix, "teamextraction", result_type=bool)
 
     # Return the player
     return Player(name, bounties_extracted, bounties_picked_up, downed_by_me, downed_by_teammate,
@@ -140,8 +140,8 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     entries: list[Entry] = []
 
     # Determine the expected number of accolades and entries to iterate
-    accolades_count: int = int(get_element_value(root, "MissionBagNumAccolades"))
-    entries_count: int = int(get_element_value(root, "MissionBagNumEntries"))
+    accolades_count: int = get_element_value(root, "MissionBagNumAccolades", result_type=int)
+    entries_count: int = get_element_value(root, "MissionBagNumEntries", result_type=int)
 
     # Parse and store the accolades
     for i in range(accolades_count):
@@ -151,10 +151,10 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     for i in range(entries_count):
         entries.append(_parse_missionbagentry(root, element_id=i))
 
-    hunt_dollar_bonus: int = int(get_element_value(root, "MissionBagFbeGoldBonus"))
-    hunter_xp_bonus: int = int(get_element_value(root, "MissionBagFbeHunterXpBonus"))
-    hunter_survived: bool = get_element_value(root, "MissionBagIsHunterDead") == "false"
-    is_quickplay: bool = get_element_value(root, "MissionBagIsQuickPlay") == "true"
+    hunt_dollar_bonus: int = get_element_value(root, "MissionBagFbeGoldBonus", result_type=int)
+    hunter_xp_bonus: int = get_element_value(root, "MissionBagFbeHunterXpBonus", result_type=int)
+    hunter_survived: bool = get_element_value(root, "MissionBagIsHunterDead", result_type=bool)
+    is_quickplay: bool = get_element_value(root, "MissionBagIsQuickPlay", result_type=bool)
 
     accolades_tuple: tuple[Accolade, ...] = tuple(accolades)
     entries_tuple: tuple[Entry, ...] = tuple(entries)
@@ -173,15 +173,15 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team, ...]:
     teams: list[Team] = []
 
     # Determine the expected team count and iterate over the teams
-    expected_team_count: int = int(get_element_value(root, "MissionBagNumTeams"))
+    expected_team_count: int = get_element_value(root, "MissionBagNumTeams", result_type=int)
     for team_id in range(expected_team_count):
         # Parse each team
         team_prefix: str = f"MissionBagTeam_{team_id}"
-        handicap: int = int(get_element_value(root, team_prefix, "handicap"))
-        is_invite: bool = get_element_value(root, team_prefix, "isinvite") == "true"
-        team_mmr: int = int(get_element_value(root, team_prefix, "mmr"))
-        number_of_players: int = int(get_element_value(root, team_prefix, "numplayers"))
-        own_team: bool = get_element_value(root, team_prefix, "ownteam") == "true"
+        handicap: int = get_element_value(root, team_prefix, "handicap", result_type=int)
+        is_invite: bool = get_element_value(root, team_prefix, "isinvite", result_type=bool)
+        team_mmr: int = get_element_value(root, team_prefix, "mmr", result_type=int)
+        number_of_players: int = get_element_value(root, team_prefix, "numplayers", result_type=int)
+        own_team: bool = get_element_value(root, team_prefix, "ownteam", result_type=bool)
 
         players: list[Player] = []
         # Parse each player from the team
