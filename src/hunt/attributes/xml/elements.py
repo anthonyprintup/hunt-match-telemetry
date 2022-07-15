@@ -1,3 +1,4 @@
+import builtins
 from typing import TypeVar
 from xml.etree.ElementTree import Element as XmlElement
 
@@ -31,5 +32,12 @@ def get_element_value(element: XmlElement, name: str, suffix: str = "",
     xpath: str = f"Attr[@name='{name}{'_' + suffix if suffix else ''}']"
     resolved_element: XmlElement | None = element.find(path=xpath)
     if resolved_element is not None:
-        return result_type(resolved_element.attrib["value"])  # type: ignore
+        value: str = resolved_element.attrib["value"]
+        match result_type:
+            case builtins.str | builtins.int:
+                return result_type(value)  # type: ignore
+            case builtins.bool:
+                return value == "true"  # type: ignore
+            case _:
+                raise ParserError("Type not implemented.")
     raise ParserError(f"No such element {xpath!r} in the current element.")
