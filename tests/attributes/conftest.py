@@ -153,8 +153,10 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     _append_attribute(attributes, name="MissionBagFbeHunterXpBonus", value=f"{xp_bonus}")
 
     # Other information
-    _append_attribute(attributes, name="MissionBagIsHunterDead", value="false")
-    _append_attribute(attributes, name="MissionBagIsQuickPlay", value="false")
+    _append_attribute(attributes, name="MissionBagIsHunterDead",
+                      value="false" if expected_match.hunter_survived else "true")
+    _append_attribute(attributes, name="MissionBagIsQuickPlay",
+                      value="false" if not expected_match.is_quickplay else "true")
 
     # Match data
     _append_attribute(attributes, name="MissionBagNumAccolades", value=f"{len(expected_match.accolades)}")
