@@ -28,7 +28,7 @@ def get_element_value(element: XmlElement, name: str, suffix: str = "",
     :param suffix: a suffix to append to the element name
     :param result_type: the type to cast the value to
     :return: the value of an element
-    :raises ParserError: if the xpath isn't found
+    :raises ParserError: if the xpath isn't found or if the result type isn't a supported type
     """
     xpath: str = f"Attr[@name='{name}{'_' + suffix if suffix else ''}']"
     resolved_element: XmlElement | None = element.find(path=xpath)

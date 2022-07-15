@@ -39,7 +39,7 @@ def _parse_missionaccoladeentry(root: ElementTree.Element, element_id: int) -> A
     :param root: an XML element
     :param element_id: the id of the entry element
     :return: an Accolade instance
-    :raises ParserError: if the xpath isn't found (get_element_value)
+    :raises ParserError: if the xpath isn't found or if the result type isn't a supported type (get_element_value)
     """
     # Define the prefix
     element_prefix: str = f"MissionAccoladeEntry_{element_id}"
@@ -68,7 +68,7 @@ def _parse_missionbagentry(root: ElementTree.Element, element_id: int) -> Entry:
     :param root: an XML element
     :param element_id: the id of the entry element
     :return: an Entry instance
-    :raises ParserError: if the xpath isn't found (get_element_value)
+    :raises ParserError: if the xpath isn't found or if the result type isn't a supported type (get_element_value)
     """
     # Define the prefix
     element_prefix: str = f"MissionBagEntry_{element_id}"
@@ -93,7 +93,7 @@ def _parse_player(root: ElementTree.Element, team_id: int, player_id: int) -> Pl
     :param team_id: the id of the player's team
     :param player_id: the id of the player in the team
     :return: a Player instance
-    :raises ParserError: if the xpath isn't found (get_element_value)
+    :raises ParserError: if the xpath isn't found or if the result type isn't a supported type (get_element_value)
     """
     # Define the prefix
     element_prefix: str = f"MissionBagPlayer_{team_id}_{player_id}"
@@ -133,8 +133,8 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     :param root: the root element tree
     :param steam_name: the user's display name
     :return: a Match object
-    :raises ParserError: if the xpath isn't found (ParserError;
-                         _parse_missionaccoladeentry, _parse_missionbagentry, parse_teams)
+    :raises ParserError: if the xpath isn't found or if the result type isn't a supported type
+                         (ParserError; _parse_missionaccoladeentry, _parse_missionbagentry, parse_teams)
     """
     accolades: list[Accolade] = []
     entries: list[Entry] = []
@@ -168,7 +168,7 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team, ...]:
     Parse the element tree for the available teams.
     :param root: the root element tree
     :return: a tuple of Team objects
-    :raises ParserError: if the xpath isn't found (get_element_value)
+    :raises ParserError: if the xpath isn't found or if the result type isn't a supported type (get_element_value)
     """
     teams: list[Team] = []
 
