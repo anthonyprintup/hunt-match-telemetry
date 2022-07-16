@@ -116,19 +116,17 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     hunt_dollar_bonus: int = int(hunt_dollars - hunt_dollars * bonus_multiplier**-1)
     xp_bonus: int = int(xp - xp * bonus_multiplier**-1)
 
-    append_element(attributes, name="MissionBagFbeGoldBonus", value=f"{hunt_dollar_bonus}")
-    append_element(attributes, name="MissionBagFbeHunterXpBonus", value=f"{xp_bonus}")
+    append_element(attributes, name="MissionBagFbeGoldBonus", value=hunt_dollar_bonus)
+    append_element(attributes, name="MissionBagFbeHunterXpBonus", value=xp_bonus)
 
     # Other information
-    append_element(attributes, name="MissionBagIsHunterDead",
-                   value="false" if expected_match.hunter_survived else "true")
-    append_element(attributes, name="MissionBagIsQuickPlay",
-                   value="false" if not expected_match.is_quickplay else "true")
+    append_element(attributes, name="MissionBagIsHunterDead", value=not expected_match.hunter_survived)
+    append_element(attributes, name="MissionBagIsQuickPlay", value=expected_match.is_quickplay)
 
     # Match data
-    append_element(attributes, name="MissionBagNumAccolades", value=f"{len(expected_match.accolades)}")
-    append_element(attributes, name="MissionBagNumEntries", value=f"{len(expected_match.entries)}")
-    append_element(attributes, name="MissionBagNumTeams", value=f"{len(expected_match.teams)}")
+    append_element(attributes, name="MissionBagNumAccolades", value=len(expected_match.accolades))
+    append_element(attributes, name="MissionBagNumEntries", value=len(expected_match.entries))
+    append_element(attributes, name="MissionBagNumTeams", value=len(expected_match.teams))
 
     # Players
     team: Team
@@ -140,12 +138,11 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     # Teams
     for i, team in enumerate(expected_match.teams):
         team_prefix: str = f"MissionBagTeam_{i}"
-        append_element(attributes, name=f"{team_prefix}", value="1")
-        append_element(attributes, name=f"{team_prefix}_handicap", value=f"{team.handicap}")
-        append_element(attributes, name=f"{team_prefix}_isinvite", value=f"{str(team.is_invite).lower()}")
-        append_element(attributes, name=f"{team_prefix}_mmr", value=f"{team.mmr}")
-        append_element(attributes, name=f"{team_prefix}_numplayers", value=f"{len(team.players)}")
-        append_element(attributes, name=f"{team_prefix}_ownteam", value=f"{str(team.own_team).lower()}")
+        append_element(attributes, name=f"{team_prefix}_handicap", value=team.handicap)
+        append_element(attributes, name=f"{team_prefix}_isinvite", value=team.is_invite)
+        append_element(attributes, name=f"{team_prefix}_mmr", value=team.mmr)
+        append_element(attributes, name=f"{team_prefix}_numplayers", value=len(team.players))
+        append_element(attributes, name=f"{team_prefix}_ownteam", value=team.own_team)
 
     # Yield the attribute tree
     yield attributes
