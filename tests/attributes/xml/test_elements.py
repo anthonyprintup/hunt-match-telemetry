@@ -32,8 +32,8 @@ def test_get_element_value(root_element: XmlElement, expected_elements: ElementD
     """
     # Invoke get_element_value
     for element_name, expected_value in expected_elements:
-        assert get_element_value(  # type: ignore
-            root_element, name=element_name, result_type=type(expected_value)) == expected_value  # type: ignore
+        result = get_element_value(root_element, name=element_name, result_type=type(expected_value))  # type: ignore
+        assert result == expected_value
 
 
 def test_get_element_value_missing_value_attribute(root_element: XmlElement) -> None:
