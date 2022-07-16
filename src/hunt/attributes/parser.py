@@ -33,59 +33,6 @@ def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ..
                    hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
 
 
-def _parse_missionaccoladeentry(root: ElementTree.Element, element_id: int) -> Accolade:
-    """
-    Parses a MissionAccoladeEntry element.
-    :param root: an XML element
-    :param element_id: the id of the entry element
-    :return: an Accolade instance
-    :raises ParserError: from get_element_value
-    """
-    # Define the prefix
-    element_prefix: str = f"MissionAccoladeEntry_{element_id}"
-
-    # Parse each entry
-    bloodline_xp: int = get_element_value(root, f"{element_prefix}_bloodlineXp", result_type=int)
-    bounty: int = get_element_value(root, f"{element_prefix}_bounty", result_type=int)
-    category: str = get_element_value(root, f"{element_prefix}_category")
-    event_points: int = get_element_value(root, f"{element_prefix}_eventPoints", result_type=int)
-    bloodbonds: int = get_element_value(root, f"{element_prefix}_gems", result_type=int)
-    generated_bloodbonds: int = get_element_value(root, f"{element_prefix}_generatedGems", result_type=int)
-    hunt_dollars: int = get_element_value(root, f"{element_prefix}_gold", result_type=int)
-    hits: int = get_element_value(root, f"{element_prefix}_hits", result_type=int)
-    hunter_points: int = get_element_value(root, f"{element_prefix}_hunterPoints", result_type=int)
-    hunter_xp: int = get_element_value(root, f"{element_prefix}_hunterXp", result_type=int)
-    weighting: int = get_element_value(root, f"{element_prefix}_weighting", result_type=int)
-    xp: int = get_element_value(root, f"{element_prefix}_xp", result_type=int)
-
-    return Accolade(bloodline_xp, bounty, category, event_points, bloodbonds, generated_bloodbonds,
-                    hunt_dollars, hits, hunter_points, hunter_xp, weighting, xp)
-
-
-def _parse_missionbagentry(root: ElementTree.Element, element_id: int) -> Entry:
-    """
-    Parses a MissionBagEntry element.
-    :param root: an XML element
-    :param element_id: the id of the entry element
-    :return: an Entry instance
-    :raises ParserError: from get_element_value
-    """
-    # Define the prefix
-    element_prefix: str = f"MissionBagEntry_{element_id}"
-
-    # Parse each entry
-    amount: int = get_element_value(root, f"{element_prefix}_amount", result_type=int)
-    category: str = get_element_value(root, f"{element_prefix}_category")
-    descriptor_name: str = get_element_value(root, f"{element_prefix}_descriptorName")
-    descriptor_score: int = get_element_value(root, f"{element_prefix}_descriptorScore", result_type=int)
-    descriptor_type: int = get_element_value(root, f"{element_prefix}_descriptorType", result_type=int)
-    reward_type: int = get_element_value(root, f"{element_prefix}_reward", result_type=int)
-    reward_size: int = get_element_value(root, f"{element_prefix}_rewardSize", result_type=int)
-
-    # Return the entry
-    return Entry(amount, category, descriptor_name, descriptor_score, descriptor_type, reward_type, reward_size)
-
-
 def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     """
     Parse the element tree for match data.
@@ -103,11 +50,11 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
 
     # Parse and store the accolades
     for i in range(accolades_count):
-        accolades.append(_parse_missionaccoladeentry(root, element_id=i))
+        accolades.append(Accolade.deserialize(root, accolade_id=i))
 
     # Parse and store the entries
     for i in range(entries_count):
-        entries.append(_parse_missionbagentry(root, element_id=i))
+        entries.append(Entry.deserialize(root, entry_id=i))
 
     hunt_dollar_bonus: int = get_element_value(root, "MissionBagFbeGoldBonus", result_type=int)
     hunter_xp_bonus: int = get_element_value(root, "MissionBagFbeHunterXpBonus", result_type=int)
