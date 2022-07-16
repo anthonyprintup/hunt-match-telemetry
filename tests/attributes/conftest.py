@@ -66,7 +66,7 @@ def expected_match() -> Generator[Match, None, None]:
     :return: a Match instance
     """
     local_player: Player = _generate_player("Player")
-    yield Match(player_name=local_player.name, hunter_survived=True, is_quickplay=False,
+    yield Match(player_name=local_player.name, is_hunter_dead=False, is_quickplay=False,
                 accolades=(Accolade(0, 0, "accolade_extraction", 0, 0, 10, 0, 0, 0, 0, 0, 0),),
                 entries=(Entry(amount=30, category="accolade_clues_found", descriptor_name="found spider clue 1st",
                                descriptor_score=1, descriptor_type=7, reward_type=0, reward_size=1500),  # bounty
@@ -121,7 +121,7 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     append_element(attributes, name="MissionBagFbeHunterXpBonus", value=xp_bonus)
 
     # Other information
-    append_element(attributes, name="MissionBagIsHunterDead", value=not expected_match.hunter_survived)
+    append_element(attributes, name="MissionBagIsHunterDead", value=expected_match.is_hunter_dead)
     append_element(attributes, name="MissionBagIsQuickPlay", value=expected_match.is_quickplay)
 
     # Match data

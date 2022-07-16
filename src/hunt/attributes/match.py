@@ -15,7 +15,7 @@ from ..database.queries import DatabaseClient, data_hash_exists, insert_match_ha
 @dataclass(frozen=True)
 class Match:
     player_name: str
-    hunter_survived: bool
+    is_hunter_dead: bool
     is_quickplay: bool
     accolades: tuple[Accolade, ...]
     entries: tuple[Entry, ...]
