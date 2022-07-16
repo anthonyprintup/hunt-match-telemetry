@@ -58,7 +58,7 @@ def _generate_player(name: str, is_quickplay: bool = False, is_partner: bool = F
                   proximity_to_me, proximity_to_teammate, skillbased, team_extraction)
 
 
-@fixture(scope="session")
+@fixture(scope="module")
 def expected_match() -> Generator[Match, None, None]:
     """
     The expected parsing result.
