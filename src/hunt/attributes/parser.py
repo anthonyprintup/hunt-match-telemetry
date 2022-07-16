@@ -86,47 +86,6 @@ def _parse_missionbagentry(root: ElementTree.Element, element_id: int) -> Entry:
     return Entry(amount, category, descriptor_name, descriptor_score, descriptor_type, reward_type, reward_size)
 
 
-def _parse_player(root: ElementTree.Element, team_id: int, player_id: int) -> Player:
-    """
-    Parses a MissionBagPlayer element.
-    :param root: an XML element
-    :param team_id: the id of the player's team
-    :param player_id: the id of the player in the team
-    :return: a Player instance
-    :raises ParserError: from get_element_value
-    """
-    # Define the prefix
-    element_prefix: str = f"MissionBagPlayer_{team_id}_{player_id}"
-
-    # Parse each entry
-    name: str = get_element_value(root, f"{element_prefix}_blood_line_name")
-    bounties_extracted: int = get_element_value(root, f"{element_prefix}_bountyextracted", result_type=int)
-    bounties_picked_up: int = get_element_value(root, f"{element_prefix}_bountypickedup", result_type=int)
-    downed_by_me: int = get_element_value(root, f"{element_prefix}_downedbyme", result_type=int)
-    downed_by_teammate: int = get_element_value(root, f"{element_prefix}_downedbyteammate", result_type=int)
-    downed_me: int = get_element_value(root, f"{element_prefix}_downedme", result_type=int)
-    downed_teammate: int = get_element_value(root, f"{element_prefix}_downedteammate", result_type=int)
-    had_wellspring: bool = get_element_value(root, f"{element_prefix}_hadWellspring", result_type=bool)
-    is_partner: bool = get_element_value(root, f"{element_prefix}_ispartner", result_type=bool)
-    is_soul_survivor: bool = get_element_value(root, f"{element_prefix}_issoulsurvivor", result_type=bool)
-    killed_by_me: int = get_element_value(root, f"{element_prefix}_killedbyme", result_type=int)
-    killed_by_teammate: int = get_element_value(root, f"{element_prefix}_killedbyteammate", result_type=int)
-    killed_me: int = get_element_value(root, f"{element_prefix}_killedme", result_type=int)
-    killed_teammate: int = get_element_value(root, f"{element_prefix}_killedteammate", result_type=int)
-    mmr: int = get_element_value(root, f"{element_prefix}_mmr", result_type=int)
-    profile_id: int = get_element_value(root, f"{element_prefix}_profileid", result_type=int)
-    proximity_to_me: bool = get_element_value(root, f"{element_prefix}_proximitytome", result_type=bool)
-    proximity_to_teammate: bool = get_element_value(root, f"{element_prefix}_proximitytoteammate", result_type=bool)
-    skillbased: bool = get_element_value(root, f"{element_prefix}_skillbased", result_type=bool)
-    teamextraction: bool = get_element_value(root, f"{element_prefix}_teamextraction", result_type=bool)
-
-    # Return the player
-    return Player(name, bounties_extracted, bounties_picked_up, downed_by_me, downed_by_teammate,
-                  downed_me, downed_teammate, had_wellspring, is_partner, is_soul_survivor,
-                  killed_by_me, killed_by_teammate, killed_me, killed_teammate, mmr, profile_id,
-                  proximity_to_me, proximity_to_teammate, skillbased, teamextraction)
-
-
 def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
     """
     Parse the element tree for match data.
@@ -185,7 +144,7 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team, ...]:
         players: list[Player] = []
         # Parse each player from the team
         for player_id in range(number_of_players):
-            players.append(_parse_player(root, team_id=team_id, player_id=player_id))
+            players.append(Player.deserialize(root, team_id=team_id, player_id=player_id))
 
         teams.append(Team(handicap, is_invite, team_mmr, own_team, tuple(players)))
     return tuple(teams)
