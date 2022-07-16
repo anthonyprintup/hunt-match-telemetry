@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ElementTree
 
 from .xml.elements import get_element_value
 from .match import Match, Accolade, Entry, Rewards, Team, Player
+from .team import SerializableTeam
 from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
     HUNTER_XP_DESCRIPTOR_NAME, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
     UPGRADE_POINTS_DESCRIPTOR_NAME, BLOODLINE_DESCRIPTOR_NAME
@@ -79,19 +80,15 @@ def parse_teams(root: ElementTree.Element) -> tuple[Team, ...]:
 
     # Determine the expected team count and iterate over the teams
     expected_team_count: int = get_element_value(root, "MissionBagNumTeams", result_type=int)
-    for team_id in range(expected_team_count):
+    for i in range(expected_team_count):
         # Parse each team
-        team_prefix: str = f"MissionBagTeam_{team_id}"
-        handicap: int = get_element_value(root, f"{team_prefix}_handicap", result_type=int)
-        is_invite: bool = get_element_value(root, f"{team_prefix}_isinvite", result_type=bool)
-        team_mmr: int = get_element_value(root, f"{team_prefix}_mmr", result_type=int)
-        number_of_players: int = get_element_value(root, f"{team_prefix}_numplayers", result_type=int)
-        own_team: bool = get_element_value(root, f"{team_prefix}_ownteam", result_type=bool)
+        parsed_team: SerializableTeam = SerializableTeam.deserialize(root, team_id=i)
 
         players: list[Player] = []
         # Parse each player from the team
-        for player_id in range(number_of_players):
-            players.append(Player.deserialize(root, team_id=team_id, player_id=player_id))
+        for j in range(parsed_team.players_count):
+            players.append(Player.deserialize(root, team_id=i, player_id=j))
 
-        teams.append(Team(handicap, is_invite, team_mmr, own_team, tuple(players)))
+        teams.append(Team(parsed_team.handicap, parsed_team.is_invite, parsed_team.mmr, parsed_team.own_team,
+                          tuple(players)))
     return tuple(teams)
