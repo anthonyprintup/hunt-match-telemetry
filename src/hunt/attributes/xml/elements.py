@@ -28,20 +28,19 @@ def append_element(parent_element: XmlElement, name: str, value: ValueType) -> N
 
 
 # https://github.com/python/mypy/issues/3737
-def get_element_value(element: XmlElement, name: str, suffix: str = "",
+def get_element_value(element: XmlElement, name: str,
                       result_type: type[_T] = str) -> _T:  # type: ignore
     """
     Resolves an element's "value" attribute based from its name (and suffix).
     :param element: an XmlElement instance
     :param name: the element's name
-    :param suffix: a suffix to append to the element name
     :param result_type: the type to cast the value to
     :return: the value of an element
     :raises ParserError: if the xpath isn't found,
                          if the element is missing a "value" attribute, or
                          if the result type isn't a supported type
     """
-    xpath: str = f"Attr[@name={name + ('_' + suffix if suffix else '')!r}]"
+    xpath: str = f"Attr[@name={name!r}]"
     resolved_element: XmlElement | None = element.find(path=xpath)
     if resolved_element is not None:
         value: str | None = resolved_element.attrib.get("value", None)
