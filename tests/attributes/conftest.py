@@ -158,34 +158,7 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     player: Player
     for i, team in enumerate(expected_match.teams):
         for j, player in enumerate(team.players):
-            player_prefix: str = f"MissionBagPlayer_{i}_{j}"
-            append_element(attributes, name=f"{player_prefix}_blood_line_name", value=f"{player.name}")
-            append_element(attributes, name=f"{player_prefix}_bountyextracted", value=f"{player.bounties_extracted}")
-            append_element(attributes, name=f"{player_prefix}_bountypickedup", value=f"{player.bounties_picked_up}")
-            append_element(attributes, name=f"{player_prefix}_downedbyme", value=f"{player.downed_by_me}")
-            append_element(attributes, name=f"{player_prefix}_downedbyteammate",
-                           value=f"{player.downed_by_teammate}")
-            append_element(attributes, name=f"{player_prefix}_downedme", value=f"{player.downed_me}")
-            append_element(attributes, name=f"{player_prefix}_downedteammate", value=f"{player.downed_teammate}")
-            append_element(attributes, name=f"{player_prefix}_hadWellspring",
-                           value=f"{str(player.had_wellspring).lower()}")
-            append_element(attributes, name=f"{player_prefix}_ispartner", value=f"{str(player.is_partner).lower()}")
-            append_element(attributes, name=f"{player_prefix}_issoulsurvivor",
-                           value=f"{str(player.is_soul_survivor).lower()}")
-            append_element(attributes, name=f"{player_prefix}_killedbyme", value=f"{player.killed_by_me}")
-            append_element(attributes, name=f"{player_prefix}_killedbyteammate",
-                           value=f"{player.killed_by_teammate}")
-            append_element(attributes, name=f"{player_prefix}_killedme", value=f"{player.killed_me}")
-            append_element(attributes, name=f"{player_prefix}_killedteammate", value=f"{player.killed_teammate}")
-            append_element(attributes, name=f"{player_prefix}_mmr", value=f"{player.mmr}")
-            append_element(attributes, name=f"{player_prefix}_profileid", value=f"{player.profile_id}")
-            append_element(attributes, name=f"{player_prefix}_proximitytome",
-                           value=f"{str(player.proximity_to_me).lower()}")
-            append_element(attributes, name=f"{player_prefix}_proximitytoteammate",
-                           value=f"{str(player.proximity_to_teammate).lower()}")
-            append_element(attributes, name=f"{player_prefix}_skillbased", value=f"{str(player.skillbased).lower()}")
-            append_element(attributes, name=f"{player_prefix}_teamextraction",
-                           value=f"{str(player.team_extraction).lower()}")
+            player.serialize(attributes, team_id=i, player_id=j)
 
     # Teams
     for i, team in enumerate(expected_match.teams):
