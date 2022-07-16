@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from dataclasses import is_dataclass
 from typing import TypeVar, Generator, TypeAlias
 
-from .elements import XmlElement, ValueType as ElementValueType, append_element, get_element_value
+from .elements import XmlElement, ElementValueType, append_element, get_element_value
 
 _T = TypeVar("_T", bound="Serializable")
 MappingGenerator: TypeAlias = Generator[tuple[str, str], None, None]
@@ -13,7 +13,11 @@ class Serializable(ABC):
     @staticmethod
     @abstractmethod
     def _data_mappings() -> MappingGenerator:
-        raise NotImplementedError("Unimplemented _data_mappings method.")
+        """
+        Yield each variable name and its corresponding attribute suffix.
+        :return: a generator which yields the name, value
+        """
+        raise NotImplementedError("Unimplemented _data_mappings method.")  # pragma: no cover
 
     @abstractmethod
     def serialize(self, root: XmlElement, name_prefix: str) -> None:
