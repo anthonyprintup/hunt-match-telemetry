@@ -4,6 +4,7 @@ import os.path
 import logging
 from typing import Generator
 from functools import partial
+import xml.etree.ElementTree as ElementTree
 
 from colorama import Fore, Style, colorama_text
 
@@ -13,7 +14,7 @@ from hunt.constants import RESOURCES_PATH, MATCH_LOGS_PATH, STEAMWORKS_BINARIES_
 from hunt.database.client import Client as DatabaseClient
 from hunt.filesystem.watchdog import FileWatchdog
 from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
-from hunt.attributes.parser import ElementTree, Match, Player, parse_match
+from hunt.attributes.parser import XmlElement, Match, Player, parse_match
 from hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
 from hunt.cli.arguments.parser import Config, parse_arguments
 from hunt.cli.exit_codes import ExitCode
@@ -160,7 +161,7 @@ def attributes_file_modified(file_path: str, database: DatabaseClient, steamwork
 
     try:
         # Attempt to parse the attributes file
-        parsed_attributes: ElementTree.Element = ElementTree.fromstring(file_contents)
+        parsed_attributes: XmlElement = ElementTree.fromstring(file_contents)
     except ElementTree.ParseError as exception:
         # Skip the update
         logging.error("Failed to parse the attributes file.")

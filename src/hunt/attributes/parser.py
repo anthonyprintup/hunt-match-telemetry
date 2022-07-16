@@ -1,6 +1,4 @@
-import xml.etree.ElementTree as ElementTree
-
-from .xml.elements import get_element_value
+from .xml.elements import XmlElement, get_element_value
 from .match import Match, Accolade, Entry, Rewards, Team, Player
 from .team import SerializableTeam
 from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
@@ -34,7 +32,7 @@ def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ..
                    hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
 
 
-def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
+def parse_match(root: XmlElement, steam_name: str) -> Match:
     """
     Parse the element tree for match data.
     :param root: the root element tree
@@ -69,7 +67,7 @@ def parse_match(root: ElementTree.Element, steam_name: str) -> Match:
                  parse_teams(root=root))
 
 
-def parse_teams(root: ElementTree.Element) -> tuple[Team, ...]:
+def parse_teams(root: XmlElement) -> tuple[Team, ...]:
     """
     Parse the element tree for the available teams.
     :param root: the root element tree
