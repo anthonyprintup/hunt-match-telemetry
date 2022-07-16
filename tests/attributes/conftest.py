@@ -102,32 +102,11 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
 
     # Accolades
     for i, accolade in enumerate(expected_match.accolades):
-        accolade_prefix: str = f"MissionAccoladeEntry_{i}"
-        append_element(attributes, name=f"{accolade_prefix}", value="1")
-        append_element(attributes, name=f"{accolade_prefix}_bloodlineXp", value=f"{accolade.bloodline_xp}")
-        append_element(attributes, name=f"{accolade_prefix}_bounty", value=f"{accolade.bounty}")
-        append_element(attributes, name=f"{accolade_prefix}_category", value=f"{accolade.category}")
-        append_element(attributes, name=f"{accolade_prefix}_eventPoints", value=f"{accolade.event_points}")
-        append_element(attributes, name=f"{accolade_prefix}_gems", value=f"{accolade.bloodbonds}")
-        append_element(attributes, name=f"{accolade_prefix}_generatedGems", value=f"{accolade.generated_bloodbonds}")
-        append_element(attributes, name=f"{accolade_prefix}_gold", value=f"{accolade.hunt_dollars}")
-        append_element(attributes, name=f"{accolade_prefix}_hits", value=f"{accolade.hits}")
-        append_element(attributes, name=f"{accolade_prefix}_hunterPoints", value=f"{accolade.hunter_points}")
-        append_element(attributes, name=f"{accolade_prefix}_hunterXp", value=f"{accolade.hunter_xp}")
-        append_element(attributes, name=f"{accolade_prefix}_weighting", value=f"{accolade.weighting}")
-        append_element(attributes, name=f"{accolade_prefix}_xp", value=f"{accolade.xp}")
+        accolade.serialize(attributes, accolade_id=i)
 
     # Entries
     for i, entry in enumerate(expected_match.entries):
-        entry_prefix: str = f"MissionBagEntry_{i}"
-        append_element(attributes, name=f"{entry_prefix}", value="1")
-        append_element(attributes, name=f"{entry_prefix}_amount", value=f"{entry.amount}")
-        append_element(attributes, name=f"{entry_prefix}_category", value=f"{entry.category}")
-        append_element(attributes, name=f"{entry_prefix}_descriptorName", value=f"{entry.descriptor_name}")
-        append_element(attributes, name=f"{entry_prefix}_descriptorScore", value=f"{entry.descriptor_score}")
-        append_element(attributes, name=f"{entry_prefix}_descriptorType", value=f"{entry.descriptor_type}")
-        append_element(attributes, name=f"{entry_prefix}_reward", value=f"{entry.reward_type}")
-        append_element(attributes, name=f"{entry_prefix}_rewardSize", value=f"{entry.reward_size}")
+        entry.serialize(attributes, entry_id=i)
 
     # Bonuses
     hunt_dollars: int = expected_match.rewards.hunt_dollars
