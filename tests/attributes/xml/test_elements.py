@@ -28,7 +28,6 @@ def test_get_element_value(root_element: XmlElement, expected_elements: ElementD
     Test get_element_value by resolving expected elements with different types.
     :param root_element: the root element of the tree
     """
-    element_name: str
-    expected_value: ElementValueType
+    # Invoke get_element_value
     for element_name, expected_value in expected_elements:
         assert get_element_value(root_element, name=element_name, result_type=type(expected_value)) == expected_value
