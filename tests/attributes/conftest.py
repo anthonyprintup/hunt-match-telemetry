@@ -5,6 +5,7 @@ from xml.etree.ElementTree import Element as XmlElement
 from pytest import fixture
 
 from hunt.attributes.match import Match, Accolade, Entry, Rewards, Team, Player
+from hunt.attributes.team import SerializableTeam
 from hunt.attributes.xml.elements import append_element
 
 
@@ -137,12 +138,8 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
 
     # Teams
     for i, team in enumerate(expected_match.teams):
-        team_prefix: str = f"MissionBagTeam_{i}"
-        append_element(attributes, name=f"{team_prefix}_handicap", value=team.handicap)
-        append_element(attributes, name=f"{team_prefix}_isinvite", value=team.is_invite)
-        append_element(attributes, name=f"{team_prefix}_mmr", value=team.mmr)
-        append_element(attributes, name=f"{team_prefix}_numplayers", value=len(team.players))
-        append_element(attributes, name=f"{team_prefix}_ownteam", value=team.own_team)
+        serializable_team: SerializableTeam = team.to_serializable_team()
+        serializable_team.serialize(attributes, team_id=i)
 
     # Yield the attribute tree
     yield attributes
