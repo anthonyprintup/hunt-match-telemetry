@@ -92,7 +92,6 @@ def expected_match() -> Generator[Match, None, None]:
                                      _generate_player("Josh")))))
 
 
-# noinspection DuplicatedCode
 @fixture
 def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     """
