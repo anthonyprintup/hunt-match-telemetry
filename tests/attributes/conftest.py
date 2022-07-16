@@ -1,13 +1,34 @@
 import random
+import string
 import os.path
+import builtins
 from datetime import datetime
+from typing import Generator, Any
+from unittest.mock import MagicMock, mock_open as unittest_mock_open
 
-from pytest import fixture
+from pytest import fixture, MonkeyPatch
 
 from hunt.constants import MATCH_LOGS_PATH
 from hunt.attributes.match import Match, Accolade, Entry, Rewards, Team, Player
 from hunt.attributes.team import SerializableTeam
 from hunt.attributes.xml.elements import XmlElement, append_element
+
+MAGIC_FILE_PATH: str = f"dummy_path_{''.join(random.choice(string.ascii_letters) for _ in range(16))}"
+
+
+# noinspection PyUnusedLocal
+def mock_match_generate_file_path(self: Match, time: datetime | None = None) -> str:
+    """
+    Mock Match.generate_file_path
+    :param self: a Match instance
+    :param time: the time to use in this context
+    :return: a dummy file path
+    """
+    return MAGIC_FILE_PATH
+
+
+# noinspection PyUnusedLocal
+def mock_os_makedirs(*args: Any, **kwargs: Any) -> None: ...
 
 
 def _create_element(tag: str, attributes: dict[str, str]) -> XmlElement:
@@ -109,6 +130,36 @@ def expected_match() -> Match:
                         Team(handicap=0, is_invite=True, mmr=2500, own_team=False,
                              players=(_generate_player("Jerry"), _generate_player("Jonathan"),
                                       _generate_player("Josh")))))
+
+
+@fixture
+def mock_open() -> MagicMock:
+    """
+    Mock builtins.open.
+    :return: a MagicMock instance
+    """
+    return unittest_mock_open()
+
+
+@fixture
+def io_safe_match(expected_match: Match,
+                  monkeypatch_module_scope: MonkeyPatch, mock_open: MagicMock) -> Generator[Match, None, None]:
+    """
+    Wrap a Match instance with IO patches to avoid modifying the filesystem running our tests.
+    :param expected_match: a populated Match instance
+    :param monkeypatch_module_scope: a MonkeyPatch instance
+    :param mock_open: a MagicMock instance for mocking builtins.open
+    :return: an IO safe Match instance
+    """
+    monkeypatch_context: MonkeyPatch
+    with monkeypatch_module_scope.context() as monkeypatch_context:
+        # Set up the patches
+        monkeypatch_context.setattr(Match, "generate_file_path", mock_match_generate_file_path)
+        monkeypatch_context.setattr(os, "makedirs", mock_os_makedirs)
+        monkeypatch_context.setattr(builtins, "open", mock_open)
+
+        # Yield the match
+        yield expected_match
 
 
 @fixture
