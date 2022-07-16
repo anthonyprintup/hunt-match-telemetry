@@ -9,7 +9,7 @@ class Serializable(ABC):
     def serialize(self, root: XmlElement) -> None:
         """
         Serialize the current class into a series of XmlElement instances.
-        :param root: the element to append the new element instances to
+        :param root: the root element to serialize into
         """
         raise NotImplementedError("Unimplemented serialize method.")
 
@@ -18,6 +18,6 @@ class Serializable(ABC):
     def deserialize(root: XmlElement) -> Serializable:
         """
         Deserialize a series of elements into the class instance.
-        :param root: the element to read the data elements from
+        :param root: the root element to deserialize from
         """
         raise NotImplementedError("Unimplemented deserialize method.")
