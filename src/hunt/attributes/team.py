@@ -14,6 +14,15 @@ class SerializableTeam(Serializable):
     players_count: int
     own_team: bool
 
+    @staticmethod
+    def from_team(team: Team) -> SerializableTeam:
+        """
+        Construct a SerializableTeam from a Team instance.
+        :param team: a Team instance
+        :return: a SerializableTeam instance
+        """
+        return SerializableTeam(team.handicap, team.is_invite, team.mmr, len(team.players), team.own_team)
+
     # Serialization
     @staticmethod
     def _generate_prefix(team_id: int) -> str:
