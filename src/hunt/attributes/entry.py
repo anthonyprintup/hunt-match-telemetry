@@ -41,7 +41,7 @@ class Entry(Serializable):
         yield "reward_size", "rewardSize"
 
     # noinspection PyMethodOverriding
-    def serialize(self, root: XmlElement, *, entry_id: int) -> None:  # type: ignore
+    def serialize(self, root: XmlElement, *, entry_id: int) -> None:  # type: ignore[override]
         """
         Serialize an Entry instance.
         :param root: the root element to serialize into
@@ -55,7 +55,7 @@ class Entry(Serializable):
 
     # noinspection PyMethodOverriding
     @classmethod
-    def deserialize(cls, root: XmlElement, entry_id: int) -> Entry:  # type: ignore
+    def deserialize(cls, root: XmlElement, entry_id: int) -> Entry:  # type: ignore[override]
         """
         Deserialize a series of elements into an Entry instance.
         :param root: the root element to serialize into

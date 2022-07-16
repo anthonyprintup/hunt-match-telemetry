@@ -99,7 +99,7 @@ class Player(Serializable):
         yield "team_extraction", "teamextraction"
 
     # noinspection PyMethodOverriding
-    def serialize(self, root: XmlElement, *, team_id: int, player_id: int) -> None:  # type: ignore
+    def serialize(self, root: XmlElement, *, team_id: int, player_id: int) -> None:  # type: ignore[override]
         """
         Serialize a Player instance.
         :param root: the root element to serialize into
@@ -114,7 +114,7 @@ class Player(Serializable):
 
     # noinspection PyMethodOverriding
     @classmethod
-    def deserialize(cls, root: XmlElement, *, team_id: int, player_id: int) -> Player:  # type: ignore
+    def deserialize(cls, root: XmlElement, *, team_id: int, player_id: int) -> Player:  # type: ignore[override]
         """
         Deserialize a series of elements into a Player instance.
         :return: a serialized Player instance

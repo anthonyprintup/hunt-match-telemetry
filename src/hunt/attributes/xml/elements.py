@@ -28,7 +28,7 @@ def append_element(parent_element: XmlElement, name: str, value: ElementValueTyp
 
 
 # https://github.com/python/mypy/issues/3737
-def get_element_value(element: XmlElement, name: str, result_type: type[_T] = str) -> _T:  # type: ignore
+def get_element_value(element: XmlElement, name: str, result_type: type[_T] = str) -> _T:  # type: ignore[assignment]
     """
     Resolves an element's "value" attribute based from its name (and suffix).
     :param element: an XmlElement instance
@@ -49,11 +49,11 @@ def get_element_value(element: XmlElement, name: str, result_type: type[_T] = st
         match result_type:
             case builtins.str | builtins.int:
                 try:
-                    return result_type(value)  # type: ignore
+                    return result_type(value)  # type: ignore[return-value]
                 except ValueError:
                     raise ParserError(f"Couldn't cast the value {value!r} to an {result_type!r} type.")
             case builtins.bool:
-                return value == "true"  # type: ignore
+                return value == "true"  # type: ignore[return-value]
             case _:
                 raise ParserError("Type conversion not supported.")
     raise ParserError(f"No such element {xpath!r} in the current element tree.")

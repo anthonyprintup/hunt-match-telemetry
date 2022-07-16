@@ -18,7 +18,7 @@ class FileWatchdog(FileSystemEventHandler):
         """
         self.file_path = os.path.realpath(file_path)
         # https://github.com/python/mypy/issues/708
-        self.callback = callback  # type: ignore
+        self.callback = callback  # type: ignore[assignment]
 
         self._observer = Observer()
         self._observer.schedule(event_handler=self, path=os.path.dirname(file_path))

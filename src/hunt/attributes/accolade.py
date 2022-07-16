@@ -51,7 +51,7 @@ class Accolade(Serializable):
         yield "xp", "xp"
 
     # noinspection PyMethodOverriding
-    def serialize(self, root: XmlElement, *, accolade_id: int) -> None:  # type: ignore
+    def serialize(self, root: XmlElement, *, accolade_id: int) -> None:  # type: ignore[override]
         """
         Serialize an Accolade instance.
         :param root: the root element to serialize into
@@ -65,7 +65,7 @@ class Accolade(Serializable):
 
     # noinspection PyMethodOverriding
     @classmethod
-    def deserialize(cls, root: XmlElement, accolade_id: int) -> Accolade:  # type: ignore
+    def deserialize(cls, root: XmlElement, accolade_id: int) -> Accolade:  # type: ignore[override]
         """
         Deserialize a series of elements into an Accolade instance.
         :param root: the root element to serialize into
