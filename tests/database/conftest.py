@@ -21,20 +21,20 @@ def mock_sqlite3_connect(database: str, *args: Any, **kwargs: Any) -> Connection
     return sqlite3_connect(":memory:", *args, **kwargs)
 
 
-@fixture(scope="package")
-def monkeypatch_package_scope() -> Generator[MonkeyPatch, None, None]:
+@fixture(scope="module")
+def monkeypatch_module_scope() -> Generator[MonkeyPatch, None, None]:
     monkeypatch: MonkeyPatch = MonkeyPatch()
     yield monkeypatch
     monkeypatch.undo()
 
 
-@fixture(scope="package")
-def database_client(monkeypatch_package_scope: MonkeyPatch) -> Generator[DatabaseClient, None, None]:
+@fixture(scope="module")
+def database_client(monkeypatch_module_scope: MonkeyPatch) -> Generator[DatabaseClient, None, None]:
     """
     A fixture to provide an already set up Database.
     :return: a generator which yields a DatabaseClient instance
     """
-    monkeypatch_package_scope.setattr("hunt.database.client.sqlite3_connect", mock_sqlite3_connect)
+    monkeypatch_module_scope.setattr("hunt.database.client.sqlite3_connect", mock_sqlite3_connect)
 
     database: DatabaseClient
     with DatabaseClient(file_path=_DUMMY_FILE_PATH) as database:
