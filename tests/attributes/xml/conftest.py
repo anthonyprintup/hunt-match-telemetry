@@ -1,6 +1,6 @@
 import random
 import string
-from typing import TypeAlias, Generator
+from typing import TypeAlias
 from xml.etree.ElementTree import Element as XmlElement
 
 from pytest import fixture
@@ -12,12 +12,12 @@ ElementDataCollectionType: TypeAlias = tuple[ElementDataType, ...]
 
 
 @fixture
-def expected_elements() -> Generator[ElementDataCollectionType, None, None]:
+def expected_elements() -> ElementDataCollectionType:
     """
     A fixture to provide information about the expected element names and values.
     :return: a generator which yields a tuple of expected elements
     """
-    yield (
+    return (
         ("string-element", "".join(random.choice(string.printable) for _ in range(16))),
         ("integer-element", random.randint(-1000, 1000)),
         ("bool-element-true", True),
@@ -25,21 +25,21 @@ def expected_elements() -> Generator[ElementDataCollectionType, None, None]:
 
 
 @fixture
-def existing_element_name(expected_elements: ElementDataCollectionType) -> Generator[str, None, None]:
+def existing_element_name(expected_elements: ElementDataCollectionType) -> str:
     """
     A fixture to provide a name of an element that's guaranteed to exist.
     :return: a generator which yields a string
     """
-    yield expected_elements[0][0]
+    return expected_elements[0][0]
 
 
 @fixture
-def random_element_data() -> Generator[ElementDataType, None, None]:
-    yield "random-element", "".join(random.choice(string.printable) for _ in range(16))
+def random_element_data() -> ElementDataType:
+    return "random-element", "".join(random.choice(string.printable) for _ in range(16))
 
 
 @fixture
-def root_element(expected_elements: ElementDataCollectionType) -> Generator[XmlElement, None, None]:
+def root_element(expected_elements: ElementDataCollectionType) -> XmlElement:
     """
     A fixture to provide an XML element pattern which is expected by the parser.
     :return: a generator which yields an XmlElement instance
@@ -59,5 +59,5 @@ def root_element(expected_elements: ElementDataCollectionType) -> Generator[XmlE
                 value = str(element_value)
         root_element.append(XmlElement("Attr", attrib={"name": element_name, "value": value}))
 
-    # Yield the root element
-    yield root_element
+    # Return the root element
+    return root_element
