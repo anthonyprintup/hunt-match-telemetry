@@ -59,8 +59,9 @@ def test_update_player_data(database_client: DatabaseClient) -> None:
     mmr: int = int(random.gauss(2695, 600))
 
     # Insert the data into the player log
-    update_player_data(database_client, profile_id=profile_id, name=name, mmr=mmr,
-                       kills=2, deaths=0, is_quickplay=False)
+    for is_quickplay in (True, False):
+        update_player_data(database_client, profile_id=profile_id, name=name, mmr=mmr,
+                           kills=2, deaths=0, is_quickplay=is_quickplay)
 
     # Verify that the data was inserted properly
     cursor: Cursor
@@ -69,13 +70,20 @@ def test_update_player_data(database_client: DatabaseClient) -> None:
         query = "SELECT name, mmr, kills, deaths, encounters FROM player_log_bountyhunt WHERE profile_id = ?"
         assert cursor.execute(query, (profile_id,)).fetchone() == (name, mmr, 2, 0, 1)
 
+        query = "SELECT name, mmr, kills, deaths, encounters FROM player_log_quickplay WHERE profile_id = ?"
+        assert cursor.execute(query, (profile_id,)).fetchone() == (name, mmr, 2, 0, 1)
+
     # Update the data
     name = "Tom"
     mmr = int(random.gauss(2695, 600))
-    update_player_data(database_client, profile_id=profile_id, name=name, mmr=mmr,
-                       kills=4, deaths=1, is_quickplay=False)
+    for is_quickplay in (True, False):
+        update_player_data(database_client, profile_id=profile_id, name=name, mmr=mmr,
+                           kills=4, deaths=1, is_quickplay=is_quickplay)
 
     # Verify that the data was updated properly
     with closing(database_client.cursor()) as cursor:
         query = "SELECT name, mmr, kills, deaths, encounters FROM player_log_bountyhunt WHERE profile_id = ?"
+        assert cursor.execute(query, (profile_id,)).fetchone() == (name, mmr, 6, 1, 2)
+
+        query = "SELECT name, mmr, kills, deaths, encounters FROM player_log_quickplay WHERE profile_id = ?"
         assert cursor.execute(query, (profile_id,)).fetchone() == (name, mmr, 6, 1, 2)
