@@ -15,7 +15,7 @@ ElementDataCollectionType: TypeAlias = tuple[ElementDataType, ...]
 def expected_elements() -> ElementDataCollectionType:
     """
     A fixture to provide information about the expected element names and values.
-    :return: a generator which yields a tuple of expected elements
+    :return: a tuple of element data tuples
     """
     return (
         ("string-element", "".join(random.choice(string.printable) for _ in range(16))),
@@ -28,7 +28,7 @@ def expected_elements() -> ElementDataCollectionType:
 def existing_element_name(expected_elements: ElementDataCollectionType) -> str:
     """
     A fixture to provide a name of an element that's guaranteed to exist.
-    :return: a generator which yields a string
+    :return: an existing element name
     """
     return expected_elements[0][0]
 
@@ -42,7 +42,7 @@ def random_element_data() -> ElementDataType:
 def root_element(expected_elements: ElementDataCollectionType) -> XmlElement:
     """
     A fixture to provide an XML element pattern which is expected by the parser.
-    :return: a generator which yields an XmlElement instance
+    :return: an XmlElement instance populated in the expected parser format
     """
     # Create the root element
     root_element: XmlElement = XmlElement("Attributes", attrib={"Version": "37"})
