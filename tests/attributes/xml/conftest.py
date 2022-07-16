@@ -48,8 +48,6 @@ def root_element(expected_elements: ElementDataCollectionType) -> XmlElement:
     root_element: XmlElement = XmlElement("Attributes", attrib={"Version": "37"})
 
     # Append a few elements to perform tests on later
-    element_name: str
-    element_value: str | int | bool
     for element_name, element_value in expected_elements:
         value: str
         match element_value:
