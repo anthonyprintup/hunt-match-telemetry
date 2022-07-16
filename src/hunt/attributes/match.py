@@ -22,16 +22,17 @@ class Match:
     rewards: Rewards
     teams: tuple[Team, ...]
 
-    def _generate_file_path(self) -> str:
+    def _generate_file_path(self, time: datetime | None = None) -> str:
         """
         Generates a file path for the match.
+        :param time: the time to use in this context
         :return: the file path for the match data
         """
-        now: datetime = datetime.now()
-        return os.path.join(MATCH_LOGS_PATH,
-                            f"{now.year}-{now.month:02d}-{now.day:02d}",
-                            f"{'quickplay' if self.is_quickplay else 'bounty_hunt'}",
-                            f"{now.hour:02d}-{now.minute:02d}-{now.second:02d}.json")
+        if time is None:
+            time = datetime.now()
+        return os.path.join(MATCH_LOGS_PATH, f"{time.year}-{time.month:02d}-{time.day:02d}",
+                                             f"{'quickplay' if self.is_quickplay else 'bounty_hunt'}",
+                                             f"{time.hour:02d}-{time.minute:02d}-{time.second:02d}.json")
 
     def try_save_to_file(self, database: DatabaseClient) -> bool:
         """
