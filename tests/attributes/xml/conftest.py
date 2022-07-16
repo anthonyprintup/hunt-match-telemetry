@@ -25,6 +25,15 @@ def expected_elements() -> Generator[ElementDataCollectionType, None, None]:
 
 
 @fixture
+def existing_element_name(expected_elements: ElementDataCollectionType) -> Generator[str, None, None]:
+    """
+    A fixture to provide a name of an element that's guaranteed to exist.
+    :return: a generator which yields a string
+    """
+    yield expected_elements[0][0]
+
+
+@fixture
 def random_element_data() -> Generator[ElementDataType, None, None]:
     yield "random-element", "".join(random.choice(string.printable) for _ in range(16))
 
