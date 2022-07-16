@@ -4,11 +4,11 @@ from xml.etree.ElementTree import Element as XmlElement
 
 from ...exceptions import ParserError
 
-_T = TypeVar("_T")
-ValueType: TypeAlias = str | int | bool
+ElementValueType: TypeAlias = str | int | bool
+_T = TypeVar("_T", bound=ElementValueType)
 
 
-def append_element(parent_element: XmlElement, name: str, value: ValueType) -> None:
+def append_element(parent_element: XmlElement, name: str, value: ElementValueType) -> None:
     """
     Appends a new element to the parent element.
     :param parent_element: the element to append to
