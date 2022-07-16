@@ -56,4 +56,4 @@ def get_element_value(element: XmlElement, name: str, result_type: type[_T] = st
                 return value == "true"  # type: ignore
             case _:
                 raise ParserError("Type conversion not supported.")
-    raise ParserError(f"No such element {xpath!r} in the current element.")
+    raise ParserError(f"No such element {xpath!r} in the current element tree.")
