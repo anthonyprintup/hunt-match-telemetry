@@ -75,23 +75,32 @@ def expected_match() -> Match:
     The expected parsing result.
     :return: a Match instance
     """
+    # Return a Match instance
     local_player: Player = _generate_player("Player")
     return Match(player_name=local_player.name, is_hunter_dead=False, is_quickplay=False,
                  accolades=(Accolade(0, 0, "accolade_extraction", 0, 0, 10, 0, 0, 0, 0, 0, 0),),
-                 entries=(Entry(amount=30, category="accolade_clues_found", descriptor_name="found spider clue 1st",
-                                descriptor_score=1, descriptor_type=7, reward_type=0, reward_size=1500),  # bounty
-                          Entry(amount=1000, category="accolade_monsters_killed", descriptor_name="kill grunt",  # xp
-                                descriptor_score=1, descriptor_type=2, reward_type=2, reward_size=10000),
-                          Entry(amount=40, category="accolade_found_gold", descriptor_name="loot gold",  # hunt dollars
-                                descriptor_score=0, descriptor_type=0, reward_type=4, reward_size=500),
-                          Entry(amount=2, category="UNKNOWN", descriptor_name="loot hunter xp",  # hunter xp
-                                descriptor_score=0, descriptor_type=0, reward_type=10, reward_size=2000),
-                          Entry(amount=1, category="accolade_hunter_points", descriptor_name="hunter points",
-                                descriptor_score=1, descriptor_type=0, reward_type=0, reward_size=38),  # hunter levels
-                          Entry(amount=1, category="UNKNOWN", descriptor_name="loot upgrade points",  # upgrade points
-                                descriptor_score=0, descriptor_type=0, reward_type=11, reward_size=4),
-                          Entry(amount=1, category="UNKNOWN", descriptor_name="loot bloodline xp",  # bloodline xp
-                                descriptor_score=0, descriptor_type=0, reward_type=12, reward_size=500)),
+                 entries=(
+                     # bounty
+                     Entry(amount=30, category="accolade_clues_found", descriptor_name="found spider clue 1st",
+                           descriptor_score=1, descriptor_type=7, reward_type=0, reward_size=1500),
+                     # xp
+                     Entry(amount=1000, category="accolade_monsters_killed", descriptor_name="kill grunt",
+                           descriptor_score=1, descriptor_type=2, reward_type=2, reward_size=10000),
+                     # hunt dollars
+                     Entry(amount=40, category="accolade_found_gold", descriptor_name="loot gold",
+                           descriptor_score=0, descriptor_type=0, reward_type=4, reward_size=500),
+                     # hunter xp
+                     Entry(amount=2, category="UNKNOWN", descriptor_name="loot hunter xp",
+                           descriptor_score=0, descriptor_type=0, reward_type=10, reward_size=2000),
+                     # hunter levels
+                     Entry(amount=1, category="accolade_hunter_points", descriptor_name="hunter points",
+                           descriptor_score=1, descriptor_type=0, reward_type=0, reward_size=38),
+                     # upgrade points
+                     Entry(amount=1, category="UNKNOWN", descriptor_name="loot upgrade points",
+                           descriptor_score=0, descriptor_type=0, reward_type=11, reward_size=4),
+                     # bloodline xp
+                     Entry(amount=1, category="UNKNOWN", descriptor_name="loot bloodline xp",
+                           descriptor_score=0, descriptor_type=0, reward_type=12, reward_size=500)),
                  rewards=Rewards(bounty=1500, xp=12000, hunt_dollars=600, bloodbonds=10, hunter_xp=2000,
                                  hunter_levels=38, upgrade_points=4, bloodline_xp=500),
                  teams=(Team(handicap=0, is_invite=True, mmr=3000, own_team=True,
