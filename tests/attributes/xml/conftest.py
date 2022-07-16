@@ -5,7 +5,7 @@ from xml.etree.ElementTree import Element as XmlElement
 
 from pytest import fixture
 
-from hunt.attributes.xml.elements import ValueType as ElementValueType
+from hunt.attributes.xml.elements import ElementValueType
 
 ElementDataType: TypeAlias = tuple[str, ElementValueType]
 ElementDataCollectionType: TypeAlias = tuple[ElementDataType, ...]
