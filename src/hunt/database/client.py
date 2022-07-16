@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-import sqlite3
-from sqlite3 import Connection, Cursor
+from sqlite3 import Connection, Cursor, connect as sqlite3_connect
 from dataclasses import dataclass
 from contextlib import closing
 from types import TracebackType
@@ -16,7 +15,7 @@ class Client:
 
     def __post_init__(self) -> None:
         """Setup the database connection."""
-        self._connection = sqlite3.connect(f"file:{self.file_path}", check_same_thread=False, uri=True)
+        self._connection = sqlite3_connect(f"file:{self.file_path}", check_same_thread=False, uri=True)
         self._setup_database()
 
     def _setup_database(self) -> None:
