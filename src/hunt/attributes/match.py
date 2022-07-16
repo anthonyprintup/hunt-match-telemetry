@@ -22,7 +22,7 @@ class Match:
     rewards: Rewards
     teams: tuple[Team, ...]
 
-    def _generate_file_path(self, time: datetime | None = None) -> str:
+    def generate_file_path(self, time: datetime | None = None) -> str:
         """
         Generates a file path for the match.
         :param time: the time to use in this context
@@ -41,6 +41,9 @@ class Match:
         :param database: a DatabaseClient instance
         :return: True if this entry already exists in the database, otherwise False.
         """
+        # Generate a datetime instance
+        current_time: datetime = datetime.now()
+
         # Generate the match data and its hash
         match_data: str = json.dumps(self, indent=2, default=vars)
         match_hash: str = sha256(match_data.encode()).hexdigest()
@@ -50,7 +53,7 @@ class Match:
             return True
 
         # Generate the file path
-        generated_file_path: str = self._generate_file_path()
+        generated_file_path: str = self.generate_file_path(time=current_time)
 
         # Save the hash to the database
         insert_match_hash(database, match_hash=match_hash, file_path=generated_file_path)
@@ -66,6 +69,6 @@ class Match:
         os.makedirs(name=directory_path, exist_ok=True)
 
         # Save the data to a file
-        with open(self._generate_file_path(), mode="w") as file:
+        with open(generated_file_path, mode="w") as file:
             file.write(match_data)
         return False
