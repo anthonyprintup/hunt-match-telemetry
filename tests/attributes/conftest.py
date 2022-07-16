@@ -101,8 +101,6 @@ def attributes_tree(expected_match: Match) -> Generator[XmlElement, None, None]:
     attributes: XmlElement = _create_element(tag="Attributes", attributes={"Version": "37"})
 
     # Accolades
-    i: int
-    accolade: Accolade
     for i, accolade in enumerate(expected_match.accolades):
         accolade_prefix: str = f"MissionAccoladeEntry_{i}"
         append_element(attributes, name=f"{accolade_prefix}", value="1")
