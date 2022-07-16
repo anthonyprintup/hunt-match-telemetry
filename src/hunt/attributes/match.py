@@ -31,7 +31,7 @@ class Match:
         if time is None:
             time = datetime.now()
         return os.path.join(MATCH_LOGS_PATH, f"{time.year}-{time.month:02d}-{time.day:02d}",
-                                             f"{'quickplay' if self.is_quickplay else 'bounty_hunt'}",
+                                             "quickplay" if self.is_quickplay else "bounty_hunt",
                                              f"{time.hour:02d}-{time.minute:02d}-{time.second:02d}.json")
 
     def try_save_to_file(self, database: DatabaseClient) -> bool:
