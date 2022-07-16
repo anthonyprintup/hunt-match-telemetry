@@ -32,7 +32,8 @@ def test_get_element_value(root_element: XmlElement, expected_elements: ElementD
     """
     # Invoke get_element_value
     for element_name, expected_value in expected_elements:
-        assert get_element_value(root_element, name=element_name, result_type=type(expected_value)) == expected_value
+        assert get_element_value(  # type: ignore
+            root_element, name=element_name, result_type=type(expected_value)) == expected_value  # type: ignore
 
 
 def test_get_element_value_missing_value_attribute(root_element: XmlElement) -> None:
@@ -67,7 +68,7 @@ def test_get_element_value_type_not_implemented(root_element: XmlElement, existi
     # Invoke get_element_value
     with pytest.raises(ParserError, match=r"Type conversion not supported."):
         # noinspection PyTypeChecker
-        get_element_value(root_element, name=existing_element_name, result_type=float)
+        get_element_value(root_element, name=existing_element_name, result_type=float)  # type: ignore
 
 
 def test_get_element_value_missing_element(root_element: XmlElement) -> None:
