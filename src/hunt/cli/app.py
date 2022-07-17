@@ -237,12 +237,13 @@ def log_match_data(match: Match) -> None:
             logging.info(f"  {player.format_name(is_local_player=player.name == match.player_name)}")
 
         # Log information about the players the local player interacted with
-        if any(player.killed_by_me or player.killed_me for player in enemies):
+        if any(player.downed_by_me or player.downed_me or player.killed_by_me or player.killed_me
+               for player in enemies):
             logging.info("Enemies:")
             for player in enemies:
-                if player.killed_by_me:
+                if player.downed_by_me or player.killed_by_me:
                     logging.info(f"  {player.format_kills()}")
-                if player.killed_me:
+                if player.downed_me or player.killed_me:
                     logging.info(f"  {player.format_deaths()}")
     _log_players()
 

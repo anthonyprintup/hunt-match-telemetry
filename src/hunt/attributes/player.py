@@ -47,7 +47,8 @@ class Player(Serializable):
         Generate a formatted name with the amount of times this player was killed by the local player.
         :return: a color formatted string
         """
-        kill_count: str = f" {self.killed_by_me}x" if self.killed_by_me > 1 else ""
+        kills: int = self.downed_by_me + self.killed_by_me
+        kill_count: str = f" {kills}x" if kills > 1 else ""
         return f"Killed {self.format_name()}{kill_count}"
 
     def format_deaths(self) -> str:
@@ -55,7 +56,8 @@ class Player(Serializable):
         Generate a formatted name with the amount of times this player killed the local player.
         :return: a color formatted string
         """
-        death_count: str = f" {self.killed_me}x" if self.killed_me > 1 else ""
+        deaths: int = self.downed_me + self.killed_me
+        death_count: str = f" {deaths}x" if deaths > 1 else ""
         return f"Died to {self.format_name(color_prefix=Fore.RED)}{death_count}"
 
     # Serialization
