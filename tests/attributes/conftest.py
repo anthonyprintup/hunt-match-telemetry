@@ -50,8 +50,7 @@ def _generate_player(name: str, is_quickplay: bool = False, is_partner: bool = F
     :return: a new Player instance
     """
     # Quickplay-specific checks and limits
-    if is_quickplay:
-        assert not is_partner, "is_partner cannot be True when is_quickplay is True."
+    assert not (is_quickplay and is_partner), "is_partner cannot be True when is_quickplay is True."
     kills_deaths_upper_limit: int = 5 if not is_quickplay else 1
 
     # Variables
