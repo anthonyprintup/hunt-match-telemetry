@@ -1,19 +1,19 @@
+import builtins
+import os.path
 import random
 import string
-import os.path
-import builtins
 from datetime import datetime
-from typing import Generator, Any
+from typing import Any, Generator
 from unittest.mock import MagicMock, mock_open as unittest_mock_open
 
 from colorama import Fore, Style
 from pytest import fixture, MonkeyPatch
 
-from hunt.formats import format_mmr
-from hunt.constants import MATCH_LOGS_PATH
-from hunt.attributes.match import Match, Accolade, Entry, Rewards, Team, Player
+from hunt.attributes.match import Accolade, Entry, Match, Player, Rewards, Team
 from hunt.attributes.team import SerializableTeam
-from hunt.attributes.xml.elements import XmlElement, append_element
+from hunt.attributes.xml.elements import append_element, XmlElement
+from hunt.constants import MATCH_LOGS_PATH
+from hunt.formats import format_mmr
 
 MAGIC_FILE_PATH: str = f"dummy_path_{''.join(random.choice(string.ascii_letters) for _ in range(16))}"
 

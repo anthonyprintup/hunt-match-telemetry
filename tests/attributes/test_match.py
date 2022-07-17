@@ -1,7 +1,6 @@
 import json
 
 from hunt.attributes.match import Match, DatabaseClient
-
 from .conftest import MAGIC_FILE_PATH, datetime, MagicMock
 
 

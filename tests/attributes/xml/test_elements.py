@@ -1,7 +1,6 @@
 import pytest
 
 from hunt.attributes.xml.elements import XmlElement, ParserError, append_element, get_element_value
-
 from .conftest import ElementDataType, ElementDataCollectionType
 
 
