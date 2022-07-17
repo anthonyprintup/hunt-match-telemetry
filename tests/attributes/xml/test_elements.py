@@ -1,6 +1,6 @@
 import pytest
 
-from hunt.attributes.xml.elements import XmlElement, ElementValueType, ParserError, append_element, get_element_value
+from hunt.attributes.xml.elements import XmlElement, ParserError, append_element, get_element_value
 
 from .conftest import ElementDataType, ElementDataCollectionType
 
@@ -11,9 +11,7 @@ def test_append_element(root_element: XmlElement, random_element_data: ElementDa
     :param root_element: the root element of the tree
     """
     # Element data
-    element_name: str
-    expected_value: ElementValueType
-    [element_name, expected_value] = random_element_data
+    element_name, expected_value = random_element_data
 
     # Append an element
     append_element(root_element, name=element_name, value=expected_value)
