@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .xml.serializable import Serializable, MappingGenerator, XmlElement
+from .xml.serializable import MappingGenerator, Serializable, XmlElement
 
 
 @dataclass(frozen=True)

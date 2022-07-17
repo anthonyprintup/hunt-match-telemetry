@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from sqlite3 import Connection, Cursor, connect as sqlite3_connect
-from dataclasses import dataclass
 from contextlib import closing
+from dataclasses import dataclass
+from sqlite3 import Connection, Cursor, connect as sqlite3_connect
 from types import TracebackType
 
 from ..constants import DATABASE_TABLE_QUERIES

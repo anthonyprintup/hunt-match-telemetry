@@ -1,14 +1,14 @@
 from __future__ import annotations
 
+import ctypes
 import os
 import sys
-import ctypes
+from ctypes import Array, CDLL, cdll
 from zipfile import ZipFile
-from ctypes import cdll, CDLL, Array
 
+from .type_aliases import AppId_t, char, char_pointer, uint32, void_pointer
 from ..constants import STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
-from ..exceptions import UnsupportedPlatformError, SteamworksError
-from .type_aliases import char, char_pointer, void_pointer, uint32, AppId_t
+from ..exceptions import SteamworksError, UnsupportedPlatformError
 
 
 class SteamworksApi:

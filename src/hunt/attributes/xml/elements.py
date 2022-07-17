@@ -1,5 +1,5 @@
 import builtins
-from typing import TypeVar, TypeAlias
+from typing import TypeAlias, TypeVar
 from xml.etree.ElementTree import Element as XmlElement
 
 from ...exceptions import ParserError

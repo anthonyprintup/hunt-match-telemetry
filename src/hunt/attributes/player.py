@@ -4,8 +4,8 @@ from dataclasses import dataclass
 
 from colorama import Fore, Style
 
+from .xml.serializable import MappingGenerator, Serializable, XmlElement
 from ..formats import format_mmr
-from .xml.serializable import Serializable, MappingGenerator, XmlElement
 
 
 @dataclass(frozen=True)

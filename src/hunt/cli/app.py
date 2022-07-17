@@ -1,23 +1,22 @@
+import logging
+import os.path
 import sys
 import time
-import os.path
-import logging
-from typing import Generator
-from functools import partial
 import xml.etree.ElementTree as ElementTree
+from functools import partial
+from typing import Generator
 
 from colorama import Fore, Style, colorama_text
 
-from hunt.constants import RESOURCES_PATH, MATCH_LOGS_PATH, STEAMWORKS_BINARIES_PATH, \
-    HUNT_SHOWDOWN_APP_ID, HUNT_SHOWDOWN_TEST_SERVER_APP_ID, \
-    DATABASE_PATH, DATABASE_TEST_SERVER_PATH, STEAMWORKS_SDK_PATH
-from hunt.database.client import Client as DatabaseClient
-from hunt.filesystem.watchdog import FileWatchdog
-from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
-from hunt.attributes.parser import XmlElement, Match, Player, parse_match
-from hunt.exceptions import SteamworksError, UnsupportedPlatformError, ParserError
+from hunt.attributes.parser import Match, Player, XmlElement, parse_match
 from hunt.cli.arguments.parser import Config, parse_arguments
 from hunt.cli.exit_codes import ExitCode
+from hunt.constants import DATABASE_PATH, DATABASE_TEST_SERVER_PATH, HUNT_SHOWDOWN_APP_ID, \
+    HUNT_SHOWDOWN_TEST_SERVER_APP_ID, MATCH_LOGS_PATH, RESOURCES_PATH, STEAMWORKS_BINARIES_PATH, STEAMWORKS_SDK_PATH
+from hunt.database.client import Client as DatabaseClient
+from hunt.exceptions import ParserError, SteamworksError, UnsupportedPlatformError
+from hunt.filesystem.watchdog import FileWatchdog
+from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 
 
 def setup_logger(config: Config) -> None:

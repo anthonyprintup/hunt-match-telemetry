@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .xml.serializable import Serializable, MappingGenerator, XmlElement
 from .player import Player
+from .xml.serializable import MappingGenerator, Serializable, XmlElement
 
 
 @dataclass(frozen=True)

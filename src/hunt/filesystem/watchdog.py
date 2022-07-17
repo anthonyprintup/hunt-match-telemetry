@@ -1,8 +1,8 @@
 import os.path
 from typing import Callable
 
+from watchdog.events import FileModifiedEvent, FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler, FileSystemEvent, FileModifiedEvent
 
 
 class FileWatchdog(FileSystemEventHandler):

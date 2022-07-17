@@ -1,9 +1,9 @@
 import builtins
 from abc import ABC, abstractmethod
 from dataclasses import is_dataclass
-from typing import TypeVar, Generator, TypeAlias
+from typing import Generator, TypeAlias, TypeVar
 
-from .elements import XmlElement, ElementValueType, append_element, get_element_value
+from .elements import ElementValueType, XmlElement, append_element, get_element_value
 
 _T = TypeVar("_T", bound="Serializable")
 MappingGenerator: TypeAlias = Generator[tuple[str, str], None, None]

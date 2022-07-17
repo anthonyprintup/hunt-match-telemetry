@@ -1,13 +1,13 @@
 import json
 import os.path
-from hashlib import sha256
-from datetime import datetime
 from dataclasses import dataclass
+from datetime import datetime
+from hashlib import sha256
 
 from .accolade import Accolade
 from .entry import Entry
 from .rewards import Rewards
-from .team import Team, Player
+from .team import Player, Team
 from ..constants import MATCH_LOGS_PATH
 from ..database.queries import DatabaseClient, data_hash_exists, insert_match_hash, update_player_data
 
