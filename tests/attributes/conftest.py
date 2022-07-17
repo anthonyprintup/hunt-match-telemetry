@@ -6,8 +6,10 @@ from datetime import datetime
 from typing import Generator, Any
 from unittest.mock import MagicMock, mock_open as unittest_mock_open
 
+from colorama import Fore, Style
 from pytest import fixture, MonkeyPatch
 
+from hunt.formats import format_mmr
 from hunt.constants import MATCH_LOGS_PATH
 from hunt.attributes.match import Match, Accolade, Entry, Rewards, Team, Player
 from hunt.attributes.team import SerializableTeam
@@ -225,3 +227,36 @@ def attributes_tree(expected_match: Match) -> XmlElement:
 
     # Return the attribute tree
     return attributes
+
+
+@fixture
+def mocked_player(monkeypatch: MonkeyPatch) -> Generator[Player, None, None]:
+    """
+    Wrap a Player instance with colorama patches to avoid having to match colors when testing formats.
+    :param monkeypatch: a MonkeyPatch instance
+    :return: a mocked Player instance
+    """
+    # Generate a player
+    player: Player = _generate_player("Person")
+
+    monkeypatch_context: MonkeyPatch
+    with monkeypatch.context() as monkeypatch_context:
+        # Set up the patches
+        monkeypatch_context.setattr(Player.format_name, "__defaults__", ("", False))
+        for key_name in vars(Fore).keys():
+            monkeypatch_context.setattr(Fore, key_name, "")
+        for key_name in vars(Style).keys():
+            monkeypatch_context.setattr(Style, key_name, "")
+
+        # Yield the player
+        yield player
+
+
+@fixture
+def expected_name_prefix(mocked_player: Player) -> str:
+    """
+    Generate the expected result from Player.format_name().
+    :param mocked_player: a mocked Player instance
+    :return: the expected result
+    """
+    return f"{mocked_player.name} ({format_mmr(mocked_player.mmr)})"
