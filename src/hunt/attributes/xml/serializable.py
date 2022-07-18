@@ -1,7 +1,6 @@
-import builtins
 from abc import ABC, abstractmethod
 from dataclasses import is_dataclass
-from typing import Generator, TypeAlias, TypeVar
+from typing import Generator, TypeAlias, TypeVar, get_type_hints
 
 from .elements import ElementValueType, XmlElement, append_element, get_element_value
 
@@ -43,10 +42,10 @@ class Serializable(ABC):
         assert is_dataclass(cls), "The class should be a dataclass."
 
         # Generate the data by fetching each element value
-        annotations: dict[str, str] = cls.__annotations__
+        type_hints: dict[str, type[ElementValueType]] = get_type_hints(cls)
         data: dict[str, ElementValueType] = dict(
-            (variable_name, get_element_value(root, name=f"{name_prefix}_{name_suffix}",
-                                              result_type=getattr(builtins, annotations[variable_name])))
+            (variable_name, get_element_value(  # type: ignore[type-var, misc]
+                root, name=f"{name_prefix}_{name_suffix}", result_type=type_hints[variable_name]))
             for variable_name, name_suffix in cls._data_mappings())
 
         # Construct and return the class
