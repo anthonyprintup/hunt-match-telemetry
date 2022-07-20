@@ -28,3 +28,4 @@ HUNTER_XP_REWARD_TYPE: int = 10
 HUNTER_LEVELS_CATEGORY: str = "accolade_hunter_points"
 UPGRADE_POINTS_DESCRIPTOR_NAME: str = "loot upgrade points"
 BLOODLINE_DESCRIPTOR_NAME: str = "loot bloodline xp"
+ASSISTS_CATEGORY: str = "accolade_players_killed_assist"
