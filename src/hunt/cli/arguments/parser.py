@@ -16,6 +16,9 @@ def setup_argument_parser() -> ArgumentParser:
     # Test server support
     argument_parser.add_argument("--test-server", action="store_true")
 
+    # Statistics
+    argument_parser.add_argument("--statistics", action="store_true")
+
     return argument_parser
 
 
@@ -29,4 +32,4 @@ def parse_arguments() -> Config:
     arguments: Namespace = argument_parser.parse_args()
 
     # Return a Config instance
-    return Config(arguments.debug, arguments.test_server)
+    return Config(arguments.debug, arguments.test_server, arguments.statistics)

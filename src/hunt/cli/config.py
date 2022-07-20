@@ -5,3 +5,4 @@ from dataclasses import dataclass
 class Config:
     debug: bool
     test_server: bool
+    statistics: bool
