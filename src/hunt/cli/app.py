@@ -231,7 +231,6 @@ def log_match_data(match: Match) -> None:
 
         # Log information about the local team
         logging.info("Team:")
-        player: Player
         for player in teammates:
             logging.info(f"  {player.format_name(is_local_player=player.name == match.player_name)}")
 
