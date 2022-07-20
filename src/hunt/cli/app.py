@@ -1,5 +1,6 @@
 import logging
 import os.path
+import statistics
 import sys
 import time
 import xml.etree.ElementTree as ElementTree
@@ -15,6 +16,8 @@ from hunt.constants import DATABASE_PATH, DATABASE_TEST_SERVER_PATH, HUNT_SHOWDO
 from hunt.database.client import Client as DatabaseClient
 from hunt.exceptions import ParserError, SteamworksError, UnsupportedPlatformError
 from hunt.filesystem.watchdog import FileWatchdog
+from hunt.formats import format_mmr
+from hunt.reward_constants import ASSISTS_CATEGORY
 from hunt.steam.api import SteamworksApi, fetch_hunt_attributes_path, try_extract_steamworks_binaries
 
 
@@ -196,6 +199,34 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
     :param match: a parsed Match instance
     :param log_statistical_data: True if statistical match data should be presented to the user
     """
+    # Log statistical data
+    def _log_stats() -> None:
+        logging.info("Statistics:")
+
+        # Player statistics
+        players: tuple[Player, ...] = tuple(player for team in match.teams for player in team.players)
+        kills: int = sum(player.downed_by_me + player.killed_by_me for player in players if not player.is_partner)
+        deaths: int = sum(player.downed_me + player.killed_me for player in players if not player.is_partner)
+        assists: int = sum(entry.amount for entry in match.entries if entry.category == ASSISTS_CATEGORY)
+
+        # Avoid ZeroDivisionError
+        if not deaths:
+            deaths += 1
+
+        logging.info(f"  Amount of players: {len(players)}")
+        logging.info(f"  KD: {kills/deaths:.2f}, KDA: {(kills + assists)/deaths:.2f}")
+
+        # Match statistics
+        mmr_data_set: tuple[int, ...] = tuple(player.mmr for player in players)
+        logging.info("  MMR:")
+        logging.info(f"    Average: {format_mmr(int(statistics.mean(mmr_data_set)))} ± "
+                     f"{int(statistics.pstdev(mmr_data_set))}")
+        logging.info(f"    Lowest: {format_mmr(min(mmr_data_set))}, "
+                     f"median: {format_mmr(int(statistics.median_high(mmr_data_set)))}, "
+                     f"highest: {format_mmr(max(mmr_data_set))}")
+    if log_statistical_data:
+        _log_stats()
+
     # Log interesting rewards
     def _log_rewards() -> None:
         logging.info("Rewards:")
