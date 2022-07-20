@@ -4,7 +4,6 @@ import sys
 import time
 import xml.etree.ElementTree as ElementTree
 from functools import partial
-from typing import Generator
 
 from colorama import Fore, Style, colorama_text
 
@@ -224,21 +223,21 @@ def log_match_data(match: Match) -> None:
 
     # Log players
     def _log_players() -> None:
-        teammates: Generator[Player, None, None] = (
-            player for team in match.teams for player in team.players if team.own_team)
-        enemies: tuple[Player, ...] = tuple(player for team in match.teams
-                                            for player in team.players if not team.own_team)
+        players: tuple[Player, ...] = tuple(player for team in match.teams for player in team.players)
 
         # Log information about the local team
         logging.info("Team:")
-        for player in teammates:
+        for player in players:
+            # Skip non-teammates
+            if not player.is_partner and not player.name == match.player_name:
+                continue
             logging.info(f"  {player.format_name(is_local_player=player.name == match.player_name)}")
 
         # Log information about the players the local player interacted with
         if any(player.downed_by_me or player.downed_me or player.killed_by_me or player.killed_me
-               for player in enemies):
+               for player in players if not player.is_partner):
             logging.info("Enemies:")
-            for player in enemies:
+            for player in players:
                 if player.downed_by_me or player.killed_by_me:
                     logging.info(f"  {player.format_kills()}")
                 if player.downed_me or player.killed_me:
