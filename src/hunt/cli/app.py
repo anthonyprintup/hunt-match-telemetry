@@ -119,7 +119,8 @@ def main(config: Config) -> ExitCode:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
             file_path=attributes_path,
-            callback=partial(attributes_file_modified, database=database, steamworks_api=steamworks_api))
+            callback=partial(attributes_file_modified,
+                             database=database, steamworks_api=steamworks_api, config=config))
         file_watchdog.start()
 
         # Inform the user that the program has started
@@ -140,7 +141,8 @@ def main(config: Config) -> ExitCode:
     return ExitCode.SUCCESS
 
 
-def attributes_file_modified(file_path: str, database: DatabaseClient, steamworks_api: SteamworksApi) -> None:
+def attributes_file_modified(file_path: str,
+                             database: DatabaseClient, steamworks_api: SteamworksApi, config: Config) -> None:
     """
     Invoked when the attributes file is modified;
       Parses the match data from the attributes file and
@@ -148,6 +150,7 @@ def attributes_file_modified(file_path: str, database: DatabaseClient, steamwork
     :param file_path: the path of the file to parse
     :param database: a DatabaseClient instance
     :param steamworks_api: a SteamworksApi instance
+    :param config: the configuration provided by the user
     """
     # Read the file contents
     with open(file_path, "rb") as file:
@@ -181,16 +184,17 @@ def attributes_file_modified(file_path: str, database: DatabaseClient, steamwork
         return  # Skip printing an already existing entry
 
     # Print useful data from the match
-    log_match_data(match)
+    log_match_data(match, log_statistical_data=config.statistics)
 
 
-def log_match_data(match: Match) -> None:
+def log_match_data(match: Match, log_statistical_data: bool) -> None:
     """
     Logs interesting data about the match such as:
       - rewards collected from the match,
       - players in the team, and
       - enemy players that the player interacted with.
     :param match: a parsed Match instance
+    :param log_statistical_data: True if statistical match data should be presented to the user
     """
     # Log interesting rewards
     def _log_rewards() -> None:
