@@ -258,17 +258,13 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
 
     # Log players
     def _log_players() -> None:
-        players: tuple[Player, ...] = tuple(player for team in match.teams for player in team.players)
-
         # Log information about the local team
         logging.info("Team:")
-        for player in players:
-            # Skip non-teammates
-            if not player.is_partner and not player.name == match.player_name:
-                continue
+        for player in (player for team in match.teams for player in team.players if team.own_team):
             logging.info(f"  {player.format_name(is_local_player=player.name == match.player_name)}")
 
         # Log information about the players the local player interacted with
+        players: tuple[Player, ...] = tuple(player for team in match.teams for player in team.players)
         if any(player.downed_by_me or player.downed_me or player.killed_by_me or player.killed_me
                for player in players if not player.is_partner):
             logging.info("Enemies:")
