@@ -15,12 +15,12 @@ colorama = "^0.4.5"
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.20.0"
 flake8 = "^4.0.1"
-pyupgrade = "^2.37.1"
+pyupgrade = "^2.37.2"
 pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
 pytest-order = "^1.0.1"
 pytest-custom-exit-code = "^0.3.0"
-mypy = "^0.961"
+mypy = "^0.971"
 
 [tool.poetry.scripts]
 hunt-match-telemetry-cli = "hunt.cli.app:console_main"
