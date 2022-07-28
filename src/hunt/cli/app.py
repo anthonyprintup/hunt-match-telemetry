@@ -252,6 +252,10 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
         # Bloodline XP
         if match.rewards.bloodline_xp:
             logging.info(f"  Collected {match.rewards.bloodline_xp} bloodline XP.")
+
+        # Event points
+        if match.rewards.event_points:
+            logging.info(f"  Collected {match.rewards.event_points} event points.")
     # Skip logging if there were no rewards
     if match.rewards:
         _log_rewards()

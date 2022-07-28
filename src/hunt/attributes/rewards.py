@@ -11,6 +11,7 @@ class Rewards:
     hunter_levels: int
     upgrade_points: int
     bloodline_xp: int
+    event_points: int
 
     def __bool__(self) -> bool:
         """

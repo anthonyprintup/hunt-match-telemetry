@@ -1,9 +1,9 @@
-from .xml.elements import XmlElement, get_element_value
-from .match import Match, Accolade, Entry, Rewards, Team, Player
+from .match import Accolade, Entry, Match, Player, Rewards, Team
 from .team import SerializableTeam
-from ..reward_constants import BOUNTY_CATEGORIES, XP_CATEGORIES, HUNT_DOLLARS_CATEGORY, BLOODBONDS_CATEGORY, \
-    HUNTER_XP_DESCRIPTOR_NAME, HUNTER_XP_REWARD_TYPE, HUNTER_LEVELS_CATEGORY, \
-    UPGRADE_POINTS_DESCRIPTOR_NAME, BLOODLINE_DESCRIPTOR_NAME
+from .xml.elements import XmlElement, get_element_value
+from ..reward_constants import BLOODBONDS_CATEGORY, BLOODLINE_DESCRIPTOR_NAME, BOUNTY_CATEGORIES, \
+    HUNTER_LEVELS_CATEGORY, HUNTER_XP_DESCRIPTOR_NAME, HUNTER_XP_REWARD_TYPE, HUNT_DOLLARS_CATEGORY, \
+    UPGRADE_POINTS_DESCRIPTOR_NAME, XP_CATEGORIES
 
 
 def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ...],
@@ -27,9 +27,10 @@ def _calculate_rewards(accolades: tuple[Accolade, ...], entries: tuple[Entry, ..
                               if entry.descriptor_name == UPGRADE_POINTS_DESCRIPTOR_NAME)
     bloodline_xp: int = sum(entry.reward_size for entry in entries
                             if entry.descriptor_name == BLOODLINE_DESCRIPTOR_NAME)
+    event_points: int = sum(accolade.event_points for accolade in accolades)
 
     return Rewards(bounty, xp + hunter_xp_bonus, hunt_dollars + hunt_dollar_bonus, generated_bloodbonds + bloodbonds,
-                   hunter_xp, hunter_levels, upgrade_points, bloodline_xp)
+                   hunter_xp, hunter_levels, upgrade_points, bloodline_xp, event_points)
 
 
 def parse_match(root: XmlElement, steam_name: str) -> Match:
