@@ -7,11 +7,11 @@ from typing import Any, Generator
 from unittest.mock import MagicMock, mock_open as unittest_mock_open
 
 from colorama import Fore, Style
-from pytest import fixture, MonkeyPatch
+from pytest import MonkeyPatch, fixture
 
 from hunt.attributes.match import Accolade, Entry, Match, Player, Rewards, Team
 from hunt.attributes.team import SerializableTeam
-from hunt.attributes.xml.elements import append_element, XmlElement
+from hunt.attributes.xml.elements import XmlElement, append_element
 from hunt.constants import MATCH_LOGS_PATH
 from hunt.formats import format_mmr
 
@@ -100,7 +100,8 @@ def expected_match() -> Match:
     # Return a Match instance
     local_player: Player = _generate_player("Player")
     return Match(player_name=local_player.name, is_hunter_dead=False, is_quickplay=False,
-                 accolades=(Accolade(0, 0, "accolade_extraction", 0, 0, 10, 0, 0, 0, 0, 0, 0),),
+                 accolades=(Accolade(0, 0, "accolade_extraction", 0, 0, 10, 0, 0, 0, 0, 0, 0),
+                            Accolade(0, 0, "accolade_gained_serpent2022_event_points", 200, 0, 0, 0, 0, 0, 0, 0, 0),),
                  entries=(
                      # bounty
                      Entry(amount=30, category="accolade_clues_found", descriptor_name="found spider clue 1st",
@@ -124,7 +125,7 @@ def expected_match() -> Match:
                      Entry(amount=1, category="UNKNOWN", descriptor_name="loot bloodline xp",
                            descriptor_score=0, descriptor_type=0, reward_type=12, reward_size=500)),
                  rewards=Rewards(bounty=1500, xp=12000, hunt_dollars=600, bloodbonds=10, hunter_xp=2000,
-                                 hunter_levels=38, upgrade_points=4, bloodline_xp=500),
+                                 hunter_levels=38, upgrade_points=4, bloodline_xp=500, event_points=200),
                  teams=(Team(handicap=0, is_invite=True, mmr=3000, own_team=True,
                              players=(local_player, _generate_player("Ada", is_partner=True),
                                       _generate_player("Henry", is_partner=True))),
