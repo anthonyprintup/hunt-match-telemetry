@@ -60,10 +60,12 @@ def parse_match(root: XmlElement, steam_name: str) -> Match:
     hunter_xp_bonus: int = get_element_value(root, "MissionBagFbeHunterXpBonus", result_type=int)
     is_hunter_dead: bool = get_element_value(root, "MissionBagIsHunterDead", result_type=bool)
     is_quickplay: bool = get_element_value(root, "MissionBagIsQuickPlay", result_type=bool)
+    region: str = get_element_value(root, "Region")
+    secondary_region: str = get_element_value(root, "SecondaryRegion")
 
     accolades_tuple: tuple[Accolade, ...] = tuple(accolades)
     entries_tuple: tuple[Entry, ...] = tuple(entries)
-    return Match(steam_name, is_hunter_dead, is_quickplay, accolades_tuple, entries_tuple,
+    return Match(steam_name, is_hunter_dead, is_quickplay, region, secondary_region, accolades_tuple, entries_tuple,
                  _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
                  parse_teams(root=root))
 
