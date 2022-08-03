@@ -17,6 +17,8 @@ class Match:
     player_name: str
     is_hunter_dead: bool
     is_quickplay: bool
+    region: str
+    secondary_region: str
     accolades: tuple[Accolade, ...]
     entries: tuple[Entry, ...]
     rewards: Rewards
