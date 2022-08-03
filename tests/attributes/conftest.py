@@ -100,6 +100,7 @@ def expected_match() -> Match:
     # Return a Match instance
     local_player: Player = _generate_player("Player")
     return Match(player_name=local_player.name, is_hunter_dead=False, is_quickplay=False,
+                 region="eu", secondary_region="",
                  accolades=(Accolade(0, 0, "accolade_extraction", 0, 0, 10, 0, 0, 0, 0, 0, 0),
                             Accolade(0, 0, "accolade_gained_serpent2022_event_points", 200, 0, 0, 0, 0, 0, 0, 0, 0),),
                  entries=(
