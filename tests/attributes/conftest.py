@@ -226,6 +226,10 @@ def attributes_tree(expected_match: Match) -> XmlElement:
         serializable_team: SerializableTeam = team.to_serializable_team()
         serializable_team.serialize(attributes, team_id=i)
 
+    # Region information
+    append_element(attributes, name="Region", value="eu")
+    append_element(attributes, name="SecondaryRegion", value="")
+
     # Return the attribute tree
     return attributes
 
