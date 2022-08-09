@@ -214,14 +214,17 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
             deaths += 1
 
         logging.info(f"  Amount of players: {len(players)}")
-        logging.info(f"  KD: {kills/deaths:.2f}, KDA: {(kills + assists)/deaths:.2f}")
+
+        kd_ratio: float = kills / deaths
+        kda_ratio: float = (kills + assists) / deaths
+        if kd_ratio or kda_ratio:
+            logging.info(f"  KD: {kd_ratio:.2f}, KDA: {kda_ratio:.2f}")
 
         # Match statistics
         mmr_data_set: tuple[int, ...] = tuple(player.mmr for player in players)
-        logging.info("  MMR:")
-        logging.info(f"    Average: {format_mmr(int(statistics.mean(mmr_data_set)))} ± "
-                     f"{int(statistics.pstdev(mmr_data_set))}")
-        logging.info(f"    Lowest: {format_mmr(min(mmr_data_set))}, "
+        logging.info(f"  MMR: average: {format_mmr(int(statistics.mean(mmr_data_set)))} ± "
+                     f"{int(statistics.pstdev(mmr_data_set))}, "
+                     f"lowest: {format_mmr(min(mmr_data_set))}, "
                      f"median: {format_mmr(int(statistics.median_high(mmr_data_set)))}, "
                      f"highest: {format_mmr(max(mmr_data_set))}")
     if log_statistical_data:
