@@ -1,6 +1,6 @@
 import json
 import os.path
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from hashlib import sha256
 
@@ -36,6 +36,21 @@ class Match:
                                              "quickplay" if self.is_quickplay else "bounty_hunt",
                                              f"{time.hour:02d}-{time.minute:02d}-{time.second:02d}.json")
 
+    def generate_hash(self) -> str:
+        """
+        Generates a sha256 hash of the match.
+        Some variables are removed to prevent duplicates.
+        :return: a sha256 hash digest
+        """
+        # Convert the current instance to a dictionary
+        match_data: dict = asdict(self)
+
+        # Remove certain variables to prevent entry spamming
+        del match_data["region"]
+        del match_data["secondary_region"]
+
+        return sha256(json.dumps(match_data).encode()).hexdigest()
+
     def try_save_to_file(self, database: DatabaseClient) -> bool:
         """
         Converts the match data to json and saves it to the file path,
@@ -46,9 +61,8 @@ class Match:
         # Generate a datetime instance
         current_time: datetime = datetime.now()
 
-        # Generate the match data and its hash
-        match_data: str = json.dumps(self, indent=2, default=vars)
-        match_hash: str = sha256(match_data.encode()).hexdigest()
+        # Generate the match hash
+        match_hash: str = self.generate_hash()
 
         # Check if the hash already exists in the database to prevent duplicates
         if data_hash_exists(database, match_hash=match_hash):
@@ -69,6 +83,9 @@ class Match:
         # Create the directories
         directory_path: str = os.path.dirname(generated_file_path)
         os.makedirs(name=directory_path, exist_ok=True)
+
+        # Generate the match data as JSON
+        match_data: str = json.dumps(self, indent=2, default=vars)
 
         # Save the data to a file
         with open(generated_file_path, mode="w") as file:
