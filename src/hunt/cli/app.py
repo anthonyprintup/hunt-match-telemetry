@@ -49,8 +49,6 @@ def setup_logger(config: Config) -> None:
         (logging.CRITICAL, Style.BRIGHT + Fore.RED))
 
     # Setup the color levels
-    logger_level: int
-    level_color: str
     for logger_level, level_color in color_config:
         setup_level_color(logger_level, level_color)
 
