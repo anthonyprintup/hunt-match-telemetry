@@ -2,10 +2,10 @@ name: Run Tests CI
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   test:
     name: Test Python ${{ matrix.python-version }} ${{ matrix.os }}
