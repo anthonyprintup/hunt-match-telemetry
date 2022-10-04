@@ -20,7 +20,7 @@ pytest = "^7.1.3"
 pytest-cov = "^4.0.0"
 pytest-order = "^1.0.1"
 pytest-custom-exit-code = "^0.3.0"
-mypy = "^0.981"
+mypy = "^0.982"
 
 [tool.poetry.scripts]
 hunt-match-telemetry-cli = "hunt.cli.app:console_main"
