@@ -211,6 +211,7 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
         if not deaths:
             deaths += 1
 
+        logging.info(f"  Bloodline rank: {match.bloodline_rank}")
         logging.info(f"  Amount of players: {len(players)}")
 
         kd_ratio: float = kills / deaths
