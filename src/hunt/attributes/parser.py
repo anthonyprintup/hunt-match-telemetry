@@ -56,6 +56,7 @@ def parse_match(root: XmlElement, steam_name: str) -> Match:
     for i in range(entries_count):
         entries.append(Entry.deserialize(root, entry_id=i))
 
+    bloodline_rank: int = get_element_value(root, "Unlocks/UnlockRank", result_type=int)
     hunt_dollar_bonus: int = get_element_value(root, "MissionBagFbeGoldBonus", result_type=int)
     hunter_xp_bonus: int = get_element_value(root, "MissionBagFbeHunterXpBonus", result_type=int)
     is_hunter_dead: bool = get_element_value(root, "MissionBagIsHunterDead", result_type=bool)
@@ -65,7 +66,8 @@ def parse_match(root: XmlElement, steam_name: str) -> Match:
 
     accolades_tuple: tuple[Accolade, ...] = tuple(accolades)
     entries_tuple: tuple[Entry, ...] = tuple(entries)
-    return Match(steam_name, is_hunter_dead, is_quickplay, region, secondary_region, accolades_tuple, entries_tuple,
+    return Match(steam_name, bloodline_rank, is_hunter_dead, is_quickplay, region, secondary_region,
+                 accolades_tuple, entries_tuple,
                  _calculate_rewards(accolades_tuple, entries_tuple, hunt_dollar_bonus, hunter_xp_bonus),
                  parse_teams(root=root))
 

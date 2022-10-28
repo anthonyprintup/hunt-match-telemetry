@@ -99,7 +99,7 @@ def expected_match() -> Match:
     """
     # Return a Match instance
     local_player: Player = _generate_player("Player")
-    return Match(player_name=local_player.name, is_hunter_dead=False, is_quickplay=False,
+    return Match(player_name=local_player.name, bloodline_rank=100, is_hunter_dead=False, is_quickplay=False,
                  region="eu", secondary_region="",
                  accolades=(Accolade(0, 0, "accolade_extraction", 0, 0, 10, 0, 0, 0, 0, 0, 0),
                             Accolade(0, 0, "accolade_gained_serpent2022_event_points", 200, 0, 0, 0, 0, 0, 0, 0, 0),),
@@ -207,6 +207,7 @@ def attributes_tree(expected_match: Match) -> XmlElement:
     append_element(attributes, name="MissionBagFbeHunterXpBonus", value=xp_bonus)
 
     # Other information
+    append_element(attributes, name="Unlocks/UnlockRank", value=100)
     append_element(attributes, name="MissionBagIsHunterDead", value=expected_match.is_hunter_dead)
     append_element(attributes, name="MissionBagIsQuickPlay", value=expected_match.is_quickplay)
 

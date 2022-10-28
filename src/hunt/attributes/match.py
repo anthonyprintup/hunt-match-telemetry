@@ -15,6 +15,7 @@ from ..database.queries import DatabaseClient, data_hash_exists, insert_match_ha
 @dataclass(frozen=True)
 class Match:
     player_name: str
+    bloodline_rank: int
     is_hunter_dead: bool
     is_quickplay: bool
     region: str
