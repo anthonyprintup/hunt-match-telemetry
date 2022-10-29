@@ -47,6 +47,7 @@ class Match:
         match_data: dict = asdict(self)
 
         # Remove certain variables to prevent entry spamming
+        del match_data["bloodline_rank"]
         del match_data["region"]
         del match_data["secondary_region"]
 
