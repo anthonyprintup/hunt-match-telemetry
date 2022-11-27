@@ -23,7 +23,6 @@ class Client:
         cursor: Cursor
         with closing(self.cursor()) as cursor:
             # Setup each table
-            table: str
             for table_query in DATABASE_TABLE_QUERIES:
                 cursor.execute(table_query)
         self.save()
