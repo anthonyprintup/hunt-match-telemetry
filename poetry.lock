@@ -288,7 +288,7 @@ pytest = {version = ">=6.2.4", markers = "python_version >= \"3.10\""}
 
 [[package]]
 name = "pyupgrade"
-version = "3.3.0"
+version = "3.3.1"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -381,7 +381,7 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "fec364e4c75a4f9ba66f4e58892d01d03332c5f07c7502cbd5c8d64a749d4245"
+content-hash = "df1d93fa62ba0872760460d6d9783cd95c91e4175b6843bfcf1a35f930b7ca0d"
 
 [metadata.files]
 attrs = [
@@ -561,8 +561,8 @@ pytest-order = [
     {file = "pytest_order-1.0.1-py3-none-any.whl", hash = "sha256:bbe6e63a8e23741ab3e810d458d1ea7317e797b70f9550512d77d6e9e8fd1bbb"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-3.3.0-py2.py3-none-any.whl", hash = "sha256:42e0388edfef61a4bdab109e65e63e31300f484f2a2d026af91cfae457f1d74d"},
-    {file = "pyupgrade-3.3.0.tar.gz", hash = "sha256:2e494ea16a07b8f5c98d1b0e79cf2107fb561b58dac5066e312f64caf4505ad3"},
+    {file = "pyupgrade-3.3.1-py2.py3-none-any.whl", hash = "sha256:3b93641963df022d605c78aeae4b5956a5296ea24701eafaef9c487527b77e60"},
+    {file = "pyupgrade-3.3.1.tar.gz", hash = "sha256:f88bce38b0ba92c2a9a5063c8629e456e8d919b67d2d42c7ecab82ff196f9813"},
 ]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
