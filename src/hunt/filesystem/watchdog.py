@@ -19,17 +19,18 @@ class FileWatchdog(FileSystemEventHandler):
         self.file_path = os.path.realpath(file_path)
         self.callback = callback
 
-        self._observer = Observer()
-        self._observer.schedule(event_handler=self, path=os.path.dirname(file_path))
+        # https://github.com/python/mypy/issues/10757
+        self._observer = Observer()  # type: ignore[no-untyped-call]
+        self._observer.schedule(event_handler=self, path=os.path.dirname(file_path))  # type: ignore[no-untyped-call]
 
     def start(self) -> None:
         """Start the observer."""
-        self._observer.start()
+        # https://github.com/python/mypy/issues/10757
+        self._observer.start()  # type: ignore[no-untyped-call]
 
     def join(self) -> None:
         """Wait until the observer thread terminates."""
-        # https://github.com/python/mypy/issues/10757
-        self._observer.join()  # type: ignore[no-untyped-call]
+        self._observer.join()
 
     def stop(self) -> None:
         """Stop the observer."""
