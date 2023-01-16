@@ -28,11 +28,13 @@ class FileWatchdog(FileSystemEventHandler):
 
     def join(self) -> None:
         """Wait until the observer thread terminates."""
-        self._observer.join()
+        # https://github.com/python/mypy/issues/10757
+        self._observer.join()  # type: ignore[no-untyped-call]
 
     def stop(self) -> None:
         """Stop the observer."""
-        self._observer.stop()
+        # https://github.com/python/mypy/issues/10757
+        self._observer.stop()  # type: ignore[no-untyped-call]
 
     def on_modified(self, event: FileSystemEvent) -> None:
         """
