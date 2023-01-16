@@ -7,7 +7,7 @@ from hashlib import sha256
 from .accolade import Accolade
 from .entry import Entry
 from .rewards import Rewards
-from .team import Player, Team
+from .team import Team
 from ..constants import MATCH_LOGS_PATH
 from ..database.queries import DatabaseClient, data_hash_exists, insert_match_hash, update_player_data
 
@@ -77,7 +77,6 @@ class Match:
         insert_match_hash(database, match_hash=match_hash, file_path=generated_file_path)
 
         # Update the player log
-        player: Player
         for player in (player for team in self.teams for player in team.players):
             update_player_data(database, profile_id=player.profile_id, name=player.name, mmr=player.mmr,
                                kills=player.killed_by_me, deaths=player.killed_me, is_quickplay=self.is_quickplay)
