@@ -9,8 +9,8 @@ from unittest.mock import MagicMock, mock_open as unittest_mock_open
 from colorama import Fore, Style
 from pytest import MonkeyPatch, fixture
 
-from hunt.attributes.match import Accolade, Entry, Match, Player, Rewards, Team
-from hunt.attributes.team import SerializableTeam
+from hunt.attributes.match import Accolade, Entry, Match, Rewards, Team
+from hunt.attributes.team import Player, SerializableTeam
 from hunt.attributes.xml.elements import XmlElement, append_element
 from hunt.constants import MATCH_LOGS_PATH
 from hunt.formats import format_mmr
