@@ -1,5 +1,5 @@
-from .match import Accolade, Entry, Match, Player, Rewards, Team
-from .team import SerializableTeam
+from .match import Accolade, Entry, Match, Rewards, Team
+from .team import Player, SerializableTeam
 from .xml.elements import XmlElement, get_element_value
 from ..reward_constants import BLOODBONDS_CATEGORY, BLOODLINE_DESCRIPTOR_NAME, BOUNTY_CATEGORIES, \
     HUNTER_LEVELS_CATEGORY, HUNTER_XP_DESCRIPTOR_NAME, HUNTER_XP_REWARD_TYPE, HUNT_DOLLARS_CATEGORY, \
