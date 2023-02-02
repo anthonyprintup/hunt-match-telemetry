@@ -13,7 +13,7 @@ watchdog = "^2.1.9"
 colorama = "^0.4.5"
 
 [tool.poetry.dev-dependencies]
-pre-commit = "^3.0.2"
+pre-commit = "^3.0.3"
 flake8 = "^6.0.0"
 pyupgrade = "^3.3.1"
 pytest = "^7.2.0"
