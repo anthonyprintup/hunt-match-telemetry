@@ -46,7 +46,7 @@ class Serializable(ABC):
         data: dict[str, ElementValueType] = dict(
             (variable_name, get_element_value(  # type: ignore[type-var, misc]
                 root, name=f"{name_prefix}_{name_suffix}", result_type=type_hints[variable_name]))
-            for variable_name, name_suffix in cls._data_mappings())
+            for variable_name, name_suffix in cls._data_mappings())  # type: ignore[attr-defined]
 
         # Construct and return the class
-        return cls(**data)
+        return cls(**data)  # type: ignore[return-value]
