@@ -12,7 +12,10 @@ python = "^3.11"
 watchdog = ">=2.1.9,<4.0.0"
 colorama = "^0.4.5"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.scripts]
+hunt-match-telemetry-cli = "hunt.cli.app:console_main"
+
+[tool.poetry.group.dev.dependencies]
 pre-commit = "^3.2.1"
 flake8 = "^6.0.0"
 pyupgrade = "^3.3.1"
@@ -21,11 +24,6 @@ pytest-cov = "^4.0.0"
 pytest-order = "^1.1.0"
 pytest-custom-exit-code = "^0.3.0"
 mypy = "^1.1"
-
-[tool.poetry.scripts]
-hunt-match-telemetry-cli = "hunt.cli.app:console_main"
-
-[tool.poetry.group.dev.dependencies]
 types-colorama = "^0.4.15.9"
 
 [build-system]
