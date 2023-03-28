@@ -8,7 +8,7 @@ from watchdog.observers import Observer
 class FileWatchdog(FileSystemEventHandler):
     file_path: str
     callback: Callable[..., None]
-    _observer: Observer
+    _observer: Observer   # type: ignore[valid-type]
 
     def __init__(self, file_path: str, callback: Callable[..., None]):
         """
@@ -19,23 +19,20 @@ class FileWatchdog(FileSystemEventHandler):
         self.file_path = os.path.realpath(file_path)
         self.callback = callback
 
-        # https://github.com/python/mypy/issues/10757
-        self._observer = Observer()  # type: ignore[no-untyped-call]
-        self._observer.schedule(event_handler=self, path=os.path.dirname(file_path))  # type: ignore[no-untyped-call]
+        self._observer = Observer()
+        self._observer.schedule(event_handler=self, path=os.path.dirname(file_path))   # type: ignore[no-untyped-call]
 
     def start(self) -> None:
         """Start the observer."""
-        # https://github.com/python/mypy/issues/10757
-        self._observer.start()  # type: ignore[no-untyped-call]
+        self._observer.start()  # type: ignore[attr-defined]
 
     def join(self) -> None:
         """Wait until the observer thread terminates."""
-        self._observer.join()
+        self._observer.join()  # type: ignore[attr-defined]
 
     def stop(self) -> None:
         """Stop the observer."""
-        # https://github.com/python/mypy/issues/10757
-        self._observer.stop()  # type: ignore[no-untyped-call]
+        self._observer.stop()  # type: ignore[attr-defined]
 
     def on_modified(self, event: FileSystemEvent) -> None:
         """
