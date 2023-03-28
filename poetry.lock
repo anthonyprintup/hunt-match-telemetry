@@ -296,6 +296,14 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "types-colorama"
+version = "0.4.15.9"
+description = "Typing stubs for colorama"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.5.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -334,7 +342,7 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11"
-content-hash = "03347afa4da9f815e204d82ffc3bb8d0675f9556aa4b97aa4e5d4c1f6ff50c0a"
+content-hash = "2dc8b4dfd6c47152dfa48dd02af02089bb7fbeb8489e5ae73eeedde38013ec1d"
 
 [metadata.files]
 attrs = [
@@ -555,6 +563,10 @@ setuptools = [
 tokenize-rt = [
     {file = "tokenize_rt-5.0.0-py2.py3-none-any.whl", hash = "sha256:c67772c662c6b3dc65edf66808577968fb10badfc2042e3027196bed4daf9e5a"},
     {file = "tokenize_rt-5.0.0.tar.gz", hash = "sha256:3160bc0c3e8491312d0485171dea861fc160a240f5f5766b72a1165408d10740"},
+]
+types-colorama = [
+    {file = "types-colorama-0.4.15.9.tar.gz", hash = "sha256:fb6e6d21ad3b01b1878fc6a7d3f266d1f8458b013d7145933bd908eb1e668fb2"},
+    {file = "types_colorama-0.4.15.9-py3-none-any.whl", hash = "sha256:ef41da74c762a80d7b32061aeeef7da50e86f025788b974896f197c23a64828d"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.5.0-py3-none-any.whl", hash = "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4"},

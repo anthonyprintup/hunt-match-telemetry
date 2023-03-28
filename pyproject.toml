@@ -25,6 +25,9 @@ mypy = "^1.1"
 [tool.poetry.scripts]
 hunt-match-telemetry-cli = "hunt.cli.app:console_main"
 
+[tool.poetry.group.dev.dependencies]
+types-colorama = "^0.4.15.9"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
