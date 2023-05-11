@@ -14,7 +14,7 @@ STEAMWORKS_SDK_PATH: str = os.path.join(STEAMWORKS_BINARIES_PATH, "steamworks_sd
 
 # Formatting
 STAR_SYMBOL: str = "★"
-MMR_RANGES: tuple[int, ...] = (0, 2000, 2300, 2600, 2750, 3000)
+MMR_RANGES: tuple[int, ...] = (0, 2000, 2300, 2600, 2750, 3001)
 
 # Database
 DATABASE_PATH: str = os.path.join(RESOURCES_PATH, "match_data.db")
