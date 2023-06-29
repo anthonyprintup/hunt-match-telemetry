@@ -1,7 +1,8 @@
 import random
 import sqlite3
-from hashlib import sha256
 from contextlib import closing, nullcontext as does_not_raise
+from hashlib import sha256
+from pathlib import Path
 
 import pytest
 from _pytest.python_api import RaisesContext
@@ -11,7 +12,7 @@ from hunt.database.queries import data_hash_exists, insert_match_hash, update_pl
 
 # Global variables for data_hashes
 _DUMMY_HASH: str = sha256(b"dummy").hexdigest()
-_DUMMY_PATH: str = "/tmp/dummy.json"
+_DUMMY_PATH: Path = Path("/tmp/dummy.json")
 
 
 @pytest.mark.order(-1)
@@ -29,7 +30,7 @@ def test_data_hash_exists(database_client: DatabaseClient, match_hash: str) -> N
         (_DUMMY_HASH, _DUMMY_PATH, does_not_raise()),
         (_DUMMY_HASH, _DUMMY_PATH, pytest.raises(sqlite3.IntegrityError))))
 def test_insert_match_hash(database_client: DatabaseClient,
-                           match_hash: str, file_path: str, context: does_not_raise | RaisesContext) -> None:
+                           match_hash: str, file_path: Path, context: does_not_raise | RaisesContext) -> None:
     """
     Test insert_match_hash by inserting a dummy hash into the database and querying it.
     :param database_client: a Database instance
@@ -44,7 +45,7 @@ def test_insert_match_hash(database_client: DatabaseClient,
     cursor: Cursor
     with closing(database_client.cursor()) as cursor:
         query: str = "SELECT path FROM data_hashes where hash = ?"
-        assert cursor.execute(query, (match_hash,)).fetchone()[0] == file_path
+        assert cursor.execute(query, (match_hash,)).fetchone()[0] == str(file_path)
     database_client.save()
 
 

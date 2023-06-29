@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from contextlib import closing
 from dataclasses import dataclass
+from pathlib import Path
 from sqlite3 import Connection, Cursor, connect as sqlite3_connect
 from types import TracebackType
 
@@ -10,7 +11,7 @@ from ..constants import DATABASE_TABLE_QUERIES
 
 @dataclass(kw_only=True)
 class Client:
-    file_path: str
+    file_path: Path
     _connection: Connection | None = None
 
     def __post_init__(self) -> None:

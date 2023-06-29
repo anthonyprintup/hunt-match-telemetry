@@ -1,4 +1,5 @@
 from contextlib import closing
+from pathlib import Path
 
 from .client import Client as DatabaseClient, Cursor
 
@@ -16,7 +17,7 @@ def data_hash_exists(database: DatabaseClient, match_hash: str) -> bool:
         return cursor.execute(query, (match_hash,)).fetchone()[0] >= 1
 
 
-def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str) -> None:
+def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: Path) -> None:
     """
     Saves a match hash to the database.
     :param database: a DatabaseClient instance
@@ -26,7 +27,7 @@ def insert_match_hash(database: DatabaseClient, match_hash: str, file_path: str)
     cursor: Cursor
     with closing(database.cursor()) as cursor:
         query: str = "INSERT INTO data_hashes (hash, path) VALUES (?, ?)"
-        cursor.execute(query, (match_hash, file_path))
+        cursor.execute(query, (match_hash, str(file_path)))
     database.save()
 
 

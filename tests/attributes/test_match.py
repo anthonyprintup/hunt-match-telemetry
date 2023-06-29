@@ -1,10 +1,11 @@
 import json
+from pathlib import Path
 
-from hunt.attributes.match import Match, DatabaseClient
-from .conftest import MAGIC_FILE_PATH, datetime, MagicMock
+from hunt.attributes.match import DatabaseClient, Match
+from .conftest import MAGIC_FILE_PATH, MagicMock, datetime
 
 
-def test_match_generate_file_path(expected_match: Match, static_time: datetime, expected_file_path: str) -> None:
+def test_match_generate_file_path(expected_match: Match, static_time: datetime, expected_file_path: Path) -> None:
     """
     Test Match.generate_file_path by comparing the generated file path to the expected file path.
     :param expected_match: a Match instance

@@ -1,10 +1,10 @@
 import logging
-import os.path
 import statistics
 import sys
 import time
 import xml.etree.ElementTree as ElementTree
 from functools import partial
+from pathlib import Path
 
 from colorama import Fore, Style, colorama_text
 
@@ -77,9 +77,9 @@ def main(config: Config) -> ExitCode:
     :return: an exit code.
     """
     try:
-        os.makedirs(name=RESOURCES_PATH, exist_ok=True)  # Create the resource directory if it doesn't exist
-        os.makedirs(name=MATCH_LOGS_PATH, exist_ok=True)  # Create the match logs directory if it doesn't exist
-        os.makedirs(name=STEAMWORKS_BINARIES_PATH, exist_ok=True)  # Create the bin directory if it doesn't exist
+        RESOURCES_PATH.mkdir(parents=True, exist_ok=True)  # Create the resource directory if it doesn't exist
+        MATCH_LOGS_PATH.mkdir(parents=True, exist_ok=True)  # Create the match logs directory if it doesn't exist
+        STEAMWORKS_BINARIES_PATH.mkdir(parents=True, exist_ok=True)  # Create the bin directory if it doesn't exist
     except OSError as exception:
         logging.critical("Failed to create create application-critical directories in the current working directory. "
                          "Are write permissions missing?")
@@ -88,7 +88,7 @@ def main(config: Config) -> ExitCode:
 
     try:
         # Extract the Steamworks binaries to disk
-        steamworks_api_path: str = try_extract_steamworks_binaries()
+        steamworks_api_path: Path = try_extract_steamworks_binaries()
     except SteamworksError as exception:
         logging.critical("Failed to extract the Steamworks binaries, are you missing the Steamworks SDK?")
         logging.info(f"The Steamworks SDK should be located at: {STEAMWORKS_SDK_PATH!r}")
@@ -111,11 +111,11 @@ def main(config: Config) -> ExitCode:
         logging.info("Steamworks API initialized.")
 
     # Locate the attributes file
-    attributes_path: str = fetch_hunt_attributes_path(steamworks_api, app_id=app_id)
-    assert os.path.exists(attributes_path), "Attributes file does not exist."
+    attributes_path: Path = fetch_hunt_attributes_path(steamworks_api, app_id=app_id)
+    assert attributes_path.exists(), "Attributes file does not exist."
 
     database: DatabaseClient
-    database_path: str = DATABASE_PATH if not config.test_server else DATABASE_TEST_SERVER_PATH
+    database_path: Path = DATABASE_PATH if not config.test_server else DATABASE_TEST_SERVER_PATH
     with DatabaseClient(file_path=database_path) as database:
         # Set up a file watcher to listen for changes on the attributes file
         file_watchdog: FileWatchdog = FileWatchdog(
@@ -142,7 +142,7 @@ def main(config: Config) -> ExitCode:
     return ExitCode.SUCCESS
 
 
-def attributes_file_modified(file_path: str,
+def attributes_file_modified(file_path: Path,
                              database: DatabaseClient, steamworks_api: SteamworksApi, config: Config) -> None:
     """
     Invoked when the attributes file is modified;
@@ -154,8 +154,7 @@ def attributes_file_modified(file_path: str,
     :param config: the configuration provided by the user
     """
     # Read the file contents
-    with open(file_path, "rb") as file:
-        file_contents: bytes = file.read()
+    file_contents: bytes = file_path.read_bytes()
 
     # If the file contents are empty, skip parsing
     if not file_contents:
@@ -197,6 +196,7 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
     :param match: a parsed Match instance
     :param log_statistical_data: True if statistical match data should be presented to the user
     """
+
     # Log statistical data
     def _log_stats() -> None:
         logging.info("Statistics:")
@@ -226,6 +226,7 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
                      f"lowest: {format_mmr(min(mmr_data_set))}, "
                      f"median: {format_mmr(int(statistics.median_high(mmr_data_set)))}, "
                      f"highest: {format_mmr(max(mmr_data_set))}")
+
     if log_statistical_data:
         _log_stats()
 
@@ -258,6 +259,7 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
         # Event points
         if match.rewards.event_points:
             logging.info(f"  Collected {match.rewards.event_points} event points.")
+
     # Skip logging if there were no rewards
     if match.rewards:
         _log_rewards()
@@ -279,6 +281,7 @@ def log_match_data(match: Match, log_statistical_data: bool) -> None:
                     logging.info(f"  {player.format_kills()}")
                 if player.downed_me or player.killed_me:
                     logging.info(f"  {player.format_deaths()}")
+
     _log_players()
 
 

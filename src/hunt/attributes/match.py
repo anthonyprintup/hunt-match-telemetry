@@ -1,8 +1,8 @@
 import json
-import os.path
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from hashlib import sha256
+from pathlib import Path
 
 from .accolade import Accolade
 from .entry import Entry
@@ -25,7 +25,7 @@ class Match:
     rewards: Rewards
     teams: tuple[Team, ...]
 
-    def generate_file_path(self, time: datetime | None = None) -> str:
+    def generate_file_path(self, time: datetime | None = None) -> Path:
         """
         Generates a file path for the match.
         :param time: the time to use in this context
@@ -33,9 +33,9 @@ class Match:
         """
         if time is None:
             time = datetime.now()
-        return os.path.join(MATCH_LOGS_PATH, f"{time.year}-{time.month:02d}-{time.day:02d}",
-                                             "quickplay" if self.is_quickplay else "bounty_hunt",
-                                             f"{time.hour:02d}-{time.minute:02d}-{time.second:02d}.json")
+        return MATCH_LOGS_PATH / f"{time.year}-{time.month:02d}-{time.day:02d}" / (
+            "quickplay" if self.is_quickplay else "bounty_hunt") / (
+            f"{time.hour:02d}-{time.minute:02d}-{time.second:02d}.json")
 
     def generate_hash(self) -> str:
         """
@@ -71,7 +71,7 @@ class Match:
             return True
 
         # Generate the file path
-        generated_file_path: str = self.generate_file_path(time=current_time)
+        generated_file_path: Path = self.generate_file_path(time=current_time)
 
         # Save the hash to the database
         insert_match_hash(database, match_hash=match_hash, file_path=generated_file_path)
@@ -84,8 +84,8 @@ class Match:
                                is_quickplay=self.is_quickplay)
 
         # Create the directories
-        directory_path: str = os.path.dirname(generated_file_path)
-        os.makedirs(name=directory_path, exist_ok=True)
+        directory_path: Path = generated_file_path.parent
+        directory_path.mkdir(parents=True, exist_ok=True)
 
         # Generate the match data as JSON
         match_data: str = json.dumps(self, indent=2, default=vars)

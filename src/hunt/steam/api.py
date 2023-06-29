@@ -4,6 +4,7 @@ import ctypes
 import os
 import sys
 from ctypes import Array, CDLL, cdll
+from pathlib import Path
 from zipfile import ZipFile
 
 from .type_aliases import AppId_t, char, char_pointer, uint32, void_pointer
@@ -14,12 +15,12 @@ from ..exceptions import SteamworksError, UnsupportedPlatformError
 class SteamworksApi:
     _api: CDLL
 
-    def __init__(self, api_binary_path: str):
+    def __init__(self, api_binary_path: Path):
         """
         Loads the Steamworks API binary.
         :param api_binary_path: the path to the API binary
         """
-        self._api = cdll.LoadLibrary(name=api_binary_path)
+        self._api = cdll.LoadLibrary(name=str(api_binary_path))
 
     def setup_types(self) -> None:
         """Sets up native function types."""
@@ -66,7 +67,7 @@ class SteamworksApi:
             raise SteamworksError("The pointer to ISteamFriends was null.")
         return steam_friends
 
-    def get_install_directory(self, app_id: int) -> str:
+    def get_install_directory(self, app_id: int) -> Path:
         """
         Gets the installation path of the app id.
         :param app_id: the app id of the game
@@ -91,7 +92,7 @@ class SteamworksApi:
             raise SteamworksError("ISteamApps::GetAppInstallDir returned zero bytes.")
 
         # Strip the trailing null bytes and return the installation path
-        return install_directory_buffer.raw.rstrip(b"\x00").decode()
+        return Path(install_directory_buffer.raw.rstrip(b"\x00").decode())
 
     def get_persona_name(self) -> str:
         """
@@ -110,7 +111,7 @@ class SteamworksApi:
         self._api.SteamAPI_Shutdown()
 
     @staticmethod
-    def prepare_and_initialize(api_binary_path: str, app_id: int) -> SteamworksApi:
+    def prepare_and_initialize(api_binary_path: Path, app_id: int) -> SteamworksApi:
         """
         This function will set up everything required to use the Steamworks API.
         :param api_binary_path: the path of the API binary
@@ -140,7 +141,7 @@ class SteamworksApi:
         return api
 
 
-def generate_api_binary_path() -> str:
+def generate_api_binary_path() -> Path:
     """
     Generates a path to the Steamworks API binary depending on the platform.
     :return: a path to the Steamworks API binary
@@ -157,11 +158,10 @@ def generate_api_binary_path() -> str:
             file_name = f"libsteam_api{bits}.dylib"
         case _:
             raise UnsupportedPlatformError(f"Unsupported platform: {sys.platform}")
+    return STEAMWORKS_BINARIES_PATH / file_name
 
-    return os.path.join(STEAMWORKS_BINARIES_PATH, file_name)
 
-
-def try_extract_steamworks_binaries() -> str:
+def try_extract_steamworks_binaries() -> Path:
     """
     Downloads the Steamworks SDK and extracts the API binary to the API path.
     :return: a path to the Steamworks API binary
@@ -169,11 +169,11 @@ def try_extract_steamworks_binaries() -> str:
     :raises UnsupportedPlatformError: if the current platform isn't supported (generate_api_binary_path)
     """
     # Check if the binary has already been downloaded
-    expected_api_binary_path: str = generate_api_binary_path()
-    if os.path.exists(expected_api_binary_path):
+    expected_api_binary_path: Path = generate_api_binary_path()
+    if expected_api_binary_path.exists():
         return expected_api_binary_path
 
-    if not os.path.exists(STEAMWORKS_SDK_PATH):
+    if not STEAMWORKS_SDK_PATH.exists():
         raise SteamworksError("Missing the Steamworks SDK.")
 
     # Extract the correct binary to the disk
@@ -203,12 +203,12 @@ def try_extract_steamworks_binaries() -> str:
     return expected_api_binary_path
 
 
-def fetch_hunt_attributes_path(steamworks_api: SteamworksApi, app_id: int) -> str:
+def fetch_hunt_attributes_path(steamworks_api: SteamworksApi, app_id: int) -> Path:
     """
     Locates the game's install path and appends the attributes file path to it.
     :param steamworks_api: a Steamworks API instance
     :param app_id: the app id of the game
     :return: A path to the attributes file
     """
-    install_directory: str = steamworks_api.get_install_directory(app_id=app_id)
-    return install_directory + r"\user\profiles\default\attributes.xml"
+    install_directory: Path = steamworks_api.get_install_directory(app_id=app_id)
+    return install_directory / r"user/profiles/default/attributes.xml"

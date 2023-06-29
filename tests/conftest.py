@@ -1,11 +1,12 @@
-from sqlite3 import connect as sqlite3_connect, Connection
+from pathlib import Path
+from sqlite3 import Connection, connect as sqlite3_connect
 from typing import Any, Generator
 
-from pytest import fixture, MonkeyPatch
+from pytest import MonkeyPatch, fixture
 
 from hunt.database.client import Client as DatabaseClient
 
-_DUMMY_FILE_PATH: str = "dummy_file_path"
+_DUMMY_FILE_PATH: Path = Path("dummy_file_path")
 
 
 # noinspection PyUnusedLocal

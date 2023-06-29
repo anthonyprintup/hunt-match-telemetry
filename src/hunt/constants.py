@@ -1,24 +1,24 @@
-import os.path
+from pathlib import Path
 
 HUNT_SHOWDOWN_APP_ID: int = 594650  # Hunt: Showdown App ID
 HUNT_SHOWDOWN_TEST_SERVER_APP_ID: int = 770720  # Hunt: Showdown (Test Server) App ID
 
 # The path (directory) to where match logs are stored
-WORKING_DIRECTORY: str = os.getcwd()
-RESOURCES_PATH: str = os.path.realpath(os.path.join(WORKING_DIRECTORY, "resources"))
-MATCH_LOGS_PATH: str = os.path.join(RESOURCES_PATH, "logs")
+WORKING_DIRECTORY: Path = Path.cwd()
+RESOURCES_PATH: Path = WORKING_DIRECTORY / "resources"
+MATCH_LOGS_PATH: Path = RESOURCES_PATH / "logs"
 
 # Steam
-STEAMWORKS_BINARIES_PATH: str = os.path.join(RESOURCES_PATH, "steam")
-STEAMWORKS_SDK_PATH: str = os.path.join(STEAMWORKS_BINARIES_PATH, "steamworks_sdk.zip")
+STEAMWORKS_BINARIES_PATH: Path = RESOURCES_PATH / "steam"
+STEAMWORKS_SDK_PATH: Path = STEAMWORKS_BINARIES_PATH / "steamworks_sdk.zip"
 
 # Formatting
 STAR_SYMBOL: str = "★"
 MMR_RANGES: tuple[int, ...] = (0, 2000, 2300, 2600, 2750, 3001)
 
 # Database
-DATABASE_PATH: str = os.path.join(RESOURCES_PATH, "match_data.db")
-DATABASE_TEST_SERVER_PATH: str = os.path.join(RESOURCES_PATH, "match_data_ts.db")
+DATABASE_PATH: Path = RESOURCES_PATH / "match_data.db"
+DATABASE_TEST_SERVER_PATH: Path = RESOURCES_PATH / "match_data_ts.db"
 
 
 # Helper function to generate create table queries
