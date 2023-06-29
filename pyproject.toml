@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hunt-match-telemetry"
-version = "1.7.2"
+version = "1.7.3"
 description = "Automatically extract match data from Hunt: Showdown matches."
 authors = ["Anthony Printup <anthony@printup.io>"]
 readme = "README.md"
