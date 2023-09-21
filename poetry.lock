@@ -382,13 +382,13 @@ pytest = {version = ">=6.2.4", markers = "python_version >= \"3.10\""}
 
 [[package]]
 name = "pyupgrade"
-version = "3.10.1"
+version = "3.11.2"
 description = "A tool to automatically upgrade syntax for newer versions."
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "pyupgrade-3.10.1-py2.py3-none-any.whl", hash = "sha256:f565b4d26daa46ed522e98746834e77e444269103f8bc04413d77dad95169a24"},
-    {file = "pyupgrade-3.10.1.tar.gz", hash = "sha256:1d8d138c2ccdd3c42b1419230ae036d5607dc69465a26feacc069642fc8d1b90"},
+    {file = "pyupgrade-3.11.2-py2.py3-none-any.whl", hash = "sha256:f2291925693902afda3c1b7b4a255cd7083db45356b8aff5b1e6e209c4690322"},
+    {file = "pyupgrade-3.11.2.tar.gz", hash = "sha256:951b9020c6b9155b7d5a3cb7bd0a2e6395a1a066677fc25038abbaf4e3e5a0de"},
 ]
 
 [package.dependencies]
